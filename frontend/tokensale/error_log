@@ -1,0 +1,9 @@
+[01-Nov-2017 18:55:54 UTC] PHP Notice:  Undefined index: status in /home/pittiavinash/public_html/tokensale/status-view.php on line 49
+[01-Nov-2017 19:30:24 UTC] PHP Parse error:  syntax error, unexpected 'js' (T_STRING) in /home/pittiavinash/public_html/tokensale/status.php on line 71
+[01-Nov-2017 19:30:33 UTC] PHP Parse error:  syntax error, unexpected 'js' (T_STRING) in /home/pittiavinash/public_html/tokensale/status.php on line 71
+[01-Nov-2017 19:30:51 UTC] PHP Parse error:  syntax error, unexpected 'js' (T_STRING) in /home/pittiavinash/public_html/tokensale/status.php on line 71
+[01-Nov-2017 19:35:23 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/pittiavinash/public_html/tokensale/status-view.php on line 50
+[02-Nov-2017 01:53:43 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/pittiavinash/public_html/tokensale/test.php on line 8
+[02-Nov-2017 05:50:00 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/pittiavinash/public_html/tokensale/testmail.php on line 107
+[02-Nov-2017 05:52:34 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/pittiavinash/public_html/tokensale/testmail.php on line 107
+[02-Nov-2017 05:52:59 UTC] PHP Parse error:  syntax error, unexpected '}' in /home/pittiavinash/public_html/tokensale/testmail.php on line 108

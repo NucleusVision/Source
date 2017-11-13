@@ -1,0 +1,75 @@
+/* Bootstrap 4 for IE9 */
+/** https://github.com/coliff/bootstrap-ie8 */
+
+.card-group .card,.col-1,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-10,.col-11,.col-12,
+.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-10,.col-sm-11,.col-sm-12,
+.col-md-1,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-10,.col-md-11,.col-md-12,
+.col-lg-1,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-10,.col-lg-11,.col-lg-12,
+.col-xl-1,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-10,.col-xl-11,.col-xl-12{float:left}
+.row,.container-fluid,.container, section, footer, main, aside{clear:both;display:block;width:100%;height:100%;overflow:hidden}
+
+.custom-select{background-image:none;padding-right:.75rem}
+.table-responsive{min-height: 0%; // (see https://github.com/twbs/bootstrap/issues/14837)}
+
+.n-btn.ie9{
+	text-align: center;
+	font-size: 18px !important;
+}
+.offset-2-ie9{
+    margin-left: 16.666667%;
+}
+.clearfix.hidden-sm-up{
+	display: none;
+}
+.ms-mrl-15{
+	margin-left: 15%;
+}
+#subscribeForm .input-group .form-control, #subscribeForm1 .input-group .form-control{
+	width: 65%;
+}
+.sweet-alert .sa-icon{
+	background: url(../img/sw-success-icon.png?v=2.0) no-repeat center center !important;
+	border: none !important;
+	width: 260px !important;
+	height: 115px !important;
+}
+.sweet-alert .sa-icon span, .sweet-alert .sa-icon .sa-placeholder{
+	display: none !important;
+}
+
+/*.top-nav-bg .left-corners:before, .top-nav-bg .left-corners:after, .top-nav-bg .right-corners:before, .top-nav-bg .right-corners:after{
+	display: none;
+}*/
+.connect-unconnected .add:after {
+  position: absolute;
+  top: 20%;
+  font-size: 36px;
+}
+.connect-unconnected span{
+	font-size: 21px;
+}
+.ie-9-height{
+	height: 500px;
+}
+.ie9-btn{
+	margin-top: 3px;	
+}
+.ie9-timeline{
+	display: block;
+}
+.rest-timeline{
+	display: none;
+}
+.tm-title2{
+	min-height: 100px;
+}
+.top-nav-bg{
+	float: left !important;
+}
+.notify-btn, .notify-btn:focus{
+	margin-top: 2px;
+}
+
+.mm-opened .fixed-social-icons{
+	display: none;
+}

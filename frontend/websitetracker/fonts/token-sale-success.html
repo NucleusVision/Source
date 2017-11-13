@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Nucleus - Token Sale</title>  
+    <link rel="stylesheet" href="css/global.css">
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/sweetalert.min.js"></script>
+    <script src="js/form-scripts.js"></script>
+    <script src="js/app.js"></script>
+    <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16">
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107563572-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-107563572-1');
+    </script>
+    <script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var onloadCallback = function() {
+        grecaptcha.render('recaptcha', {
+          'sitekey' : 'your_site_key',
+          'callback' : verifyCallback,
+          'theme' : 'dark'
+        });
+      };
+    </script>
+  </head>
+  <body class="all-sections-bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 align-self-center">
+            <div class="tsr-container">
+              <form>
+                <p align="center"><img src="img/nucleus-icon.png"></p>
+                <h1 align="center" class="heading-1 green">Success</h1>
+                <p class="mrt30" align="center">you've completed the registration process. You will be able to check your status at <a href="token-sale-registration-status.html" class="yellow-link"><u>https://nucleus.vision/status</u></a> to see if you're approved to participate in the Nucleus Token Crowdsale. The crowdsale begins November 7th, 2017 at 6AM PST.Please check <a href="#" class="yellow-link">https://nucleus.vision/tokensale</a> for futher updates.</p>
+              </form>
+            </div>
+            <p align="center" class="mrt60"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 Nucleus Vision (formerly Bell Boi, Inc.)</p>
+        </div>    
+      </div>
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+  </body>
+</html>
