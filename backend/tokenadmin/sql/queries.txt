@@ -1,0 +1,12 @@
+SELECT `mill` FROM `stocks` GROUP BY `mill` ORDER BY `mill` ASC
+
+SELECT `variety`, `variety_code` FROM `stocks` GROUP BY `variety` ORDER BY `variety` ASC
+
+SELECT `mill`,`variety`,`quality_code`,`quality` FROM `stocks` GROUP BY `mill`,`variety`,`quality_code`,`quality`
+
+SELECT mill, variety, `quality`, `quality_code`, `finish` FROM `stocks` WHERE finish IS NOT NULL GROUP BY `quality`, `quality_code`, `finish`
+
+select `stocks`.*, SUM(stock_quantity.quantity) as quantity from `stocks` inner join `stock_quantity` on `stocks`.`stock_code` = `stock_quantity`.`stock_code` group by `stock_quantity`.`stock_code`
+
+minDate: moment()
+
