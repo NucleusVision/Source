@@ -14,8 +14,8 @@
 Route::group(['middlewareGroups' => 'web'], function () {
     // your routes
 
-	Route::post('investors/verify/email', ['uses' => 'Admin\InvestorController@verifyEmail', 'as' => 'investorsverifyEmail']);
-	Route::post('investors/kyc/email', ['uses' => 'Admin\InvestorController@kycEmail', 'as' => 'investorskycEmail']);
+    Route::post('investors/verify/email', ['uses' => 'Admin\InvestorController@verifyEmail', 'as' => 'investorsverifyEmail']);
+    Route::post('investors/kyc/email', ['uses' => 'Admin\InvestorController@kycEmail', 'as' => 'investorskycEmail']);
 
 	
     Route::get('/', ['middleware' => 'guest', 'uses' => 'HomeController@index', 'as' => 'admin.home']);
@@ -61,6 +61,14 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::get('investors-new/delete/{id}', ['uses' => 'InvestorNewController@delete', 'as' => 'investorsNewDelete']);
         Route::post('investors-new/status/change', ['uses' => 'InvestorNewController@changeStatus', 'as' => 'investorschangeStatus']);
         
+        
+         //PR Investors New
+        Route::get('pr-investors', ['uses' => 'InvestorNewController@prInvestors', 'as' => 'prInvestors']); 
+        Route::get('pr-investors.list', ['uses' => 'InvestorNewController@getprInvestorsList', 'as' => 'prInvestorsList']);        
+        Route::get('pr-investors/{id}/edit', ['uses' => 'InvestorNewController@prInvestorEdit', 'as' => 'prInvestorEdit']);
+        Route::post('pr-investors/update', ['uses' => 'InvestorNewController@prInvestorUpdate', 'as' => 'prInvestorUpdate']);        
+        
+
         //Investors New
         Route::get('entries', ['uses' => 'EntriesController@index', 'as' => 'entries']); 
         Route::get('entries.list', ['uses' => 'EntriesController@getEntriesList', 'as' => 'entriesList']);        

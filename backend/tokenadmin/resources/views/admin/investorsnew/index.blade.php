@@ -14,12 +14,26 @@
         <div class="box-header with-border">
           <h3 class="box-title">List of Investors</h3>
         </div>
+          <div class="row" style="margin-left: 3px;">  
+        <form name="form1" id="form1" method="get">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="call_status">Type</label>
+                    <select class="form-control" id="type" name="type" style="width:200px;">
+                        <option value="" selected="selected">Select Type</option>
+                        <option value="whitelisted">White Listed</option>
+                        <option value="public">Public</option>
+                    </select>
+                </div>
+            </div>
+        </form>   
+        </div>
         <div class="box-body">  
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
                 <th width="100px;">ID</th>
-				<th width="100px;">Selfie with ID</th>
+                <th width="100px;">Selfie with ID</th>
                 <th>Name</th>
                 <th>Country</th>
                 <th>Status</th>
@@ -70,13 +84,17 @@
                         }
                 });
                 
-                $('#investors-list').DataTable({
+                var investors_table = $('#investors-list').DataTable({
                     "ordering": false,
                   "ajax": {
                         "processing": true,
                          "serverSide": true,
-                         "url": "{{ route('admin::investorsList') }}", 
-                         "dataSrc": ""
+                         "url": "{{ route('admin::investorsNewList') }}", 
+                         "dataSrc": "",
+                        "type": 'GET',
+                        "data": function (d) {
+                            return $('#form1').serialize();
+                        }
                     },
                     "columns": [
                         { "data": "doc1",
@@ -116,6 +134,10 @@
                     ]
                 });
                 
+                
+                $('#type').on('change', function() {
+                    investors_table.ajax.reload();
+                });
                 
                 $(document).on('click', '.content .investor-status', function (e) {
                     

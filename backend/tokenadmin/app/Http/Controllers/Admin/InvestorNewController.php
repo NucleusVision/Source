@@ -35,12 +35,15 @@ class InvestorNewController extends Controller
         return \View::make('admin.investorsnew.index');
     }
 
-    /**
-     * get list of teams
-     * @return json array
-     */
-    public function getInvestorsList() {
-        return Investor::orderBy('investor_id','DESC')->get()->toArray();
+    
+    public function getInvestorsList(Request $request) {
+        $oSelect = Investor::where('prflag', '!=', 1);
+        if($request->type){
+            if($request->type == "whitelisted"){
+                $oSelect->where('status', 'Approved');
+            }
+        }
+        return $oSelect->get()->toArray();
     }
 
     public function create() {
@@ -459,7 +462,36 @@ class InvestorNewController extends Controller
     }
     
     
+    public function prInvestors() {
+        return \View::make('admin.prinvestors.index');
+    }
     
-	
+    public function getprInvestorsList() {
+        return Investor::where('prflag', '1')->orderBy('investor_id','DESC')->get()->toArray();
+    }
+    
+    public function prInvestorEdit($iInvestorId) {
+        return view('admin.prinvestors.edit')
+                ->with('oInvestor', Investor::find($iInvestorId));
+    }
+    
+    
+    public function prInvestorUpdate(Request $request) {
+        $aRules = Investor::$pr_rules;
+
+        $this->validate($request, $aRules);
+        
+        $oInvestor = Investor::find($request->input("investor_id"));
+               
+        $oInvestor->update([
+            'bonus_per'  =>  $request->bonus_per,
+            'lock_in_period'  =>  $request->lock_in_period
+        ]);
+        
+        \Session::flash('status', 'Updated Successfully.');
+
+        return redirect()->back();
+    }
+    
 	
 }

@@ -22,6 +22,11 @@ class Investor extends Model
         'email' => 'required'
     ];
     
+    public static $pr_rules = [
+        'bonus_per' => 'required|numeric',
+        'lock_in_period' => 'required|numeric'
+    ];
+    
     public static $messages = [
     ];
     

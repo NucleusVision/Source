@@ -24,6 +24,13 @@
                     <i class="icon-users"></i> <span>Investors New</span>
                 </a>
             </li>
+            
+            <li class="<?php echo e(Request::is('admin/pr-investors', 'admin/pr-investors/*') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route("admin::prInvestors")); ?>">
+                    <i class="icon-users"></i> <span>PR Investors</span>
+                </a>
+            </li>
+            
             <li class="<?php echo e(Request::is('admin/settings', 'admin/settings/*') ? 'active' : ''); ?>">
                 <a href="<?php echo e(route("admin::settings")); ?>">
                     <i class="icon-users"></i> <span>Settings</span>
