@@ -130,6 +130,9 @@
                       Ethereum wallet address you will receive the
                       Nucleus tokens.
                     </p>
+                    
+                    
+                    <!--
                     <h3 class="announcement">
                       <span class="bold">DO NOT USE</span>
                       COINBASE, BITTREX OR ANY OTHER
@@ -137,6 +140,23 @@
                       TOKEN FRIENDLY. WE HIGHLY RECOMMEND
                       https://myetherwallet.com/.
                     </h3>
+                    -->
+                    <div class="form-group">
+                        <div class="eth-box-cnt">  
+                            <div class="eth-box-cnt-b1">
+                                ETH Wallet (Required)
+                            </div>
+                            <div class="eth-box-cnt-b2">
+                                <input class="form-control acct-input" id=
+                                "addressInput" placeholder="0xj900900" />
+                            </div>
+                            <div class="eth-box-cnt-b3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--
                     <p>
                       Do not use addresses from exchanges you may
                       not receive any Nucleus Token from. CakeCodes
@@ -145,10 +165,28 @@
                       use exchange wallet, or other intermediary
                       and do not receive Nucleus Tokens.
                     </p>
+                    -->
+                    
+                    <p>
+                     The Bitcoin Wallet Address Should be the one you will be contributing BTC from.Please enter a valid Ethereum wallet address above to receive the Nucleus tokens.
+                    </p>
+                    
                     <div class="form-group">
-                      <input class="form-control acct-input" id=
-                      "addressInput" placeholder="0xj900900" />
-                    </div><button class="btn next-btn" type=
+                        <div class="bitcoin-box-cnt">  
+                            <div class="bitcoin-box-cnt-b1">
+                                BTC Wallet (Optional)
+                            </div>
+                            <div class="bitcoin-box-cnt-b2">
+                                <input class="form-control bc-acct-input" id=
+                                "bcaddressInput" placeholder="1HB5XM" />
+                            </div>
+                            <div class="bitcoin-box-cnt-b3">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn next-btn" type=
                     "button" onclick="nextStep1()">Next</button>
                     <p id="eth-address-msg"></p>
                   </div>
@@ -1933,8 +1971,8 @@
                         approved or rejected.
                       </p>
                       <p>
-                        Only approved people people will be allowed
-                        to participate in the sale on October 20th.
+                        Only approved people will be allowed
+                        to participate in the sale.
                       </p>
                     </div>
                     <div class="form-group">

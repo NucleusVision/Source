@@ -25,6 +25,7 @@
                 <th>Country</th>
                 <th>Status</th>
                 <th>PR Flag</th>
+                <th>BTC Wallet</th>
                 <th style="width:70px;">Bonus %</th>
                 <th>Lock-in period</th>
                 <th>Actions</th>
@@ -84,12 +85,12 @@
                     "columns": [
                         { "data": "doc1",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc1 + '" alt="' + row.email + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
 					   { "data": "doc2",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc2 + '" alt="' + row.email + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
                         { "data": "name",
@@ -106,7 +107,15 @@
                                 else if(row.prflag == 0)
                                     return 'No';
                                 else
-                                    return '';
+                                    return 'No';
+                            }
+                        },
+                        { "data": "bitcoin_id",
+                            "render": function(data, type, row, meta) {
+                                if(row.bitcoin_id)
+                                    return 'Yes';
+                                else
+                                    return 'No';
                             }
                         },
                         { "data": "bonus_per" },

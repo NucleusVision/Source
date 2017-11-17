@@ -113,6 +113,7 @@ if($response["success"] === true)
         if (mysqli_num_rows($user_verify_result) > 0) {
             
             $eth = clean_data($_POST['eth']);
+            $bc = clean_data($_POST['bc']);
             $fName = clean_data($_POST['fName']);
             $lName = clean_data($_POST['lName']);
             $dob = date("Y-m-d", strtotime(clean_data($_POST['dob'])));
@@ -127,9 +128,15 @@ if($response["success"] === true)
             $thumb2 = makeThumbnails($selfie);
             if($document && $selfie && $thumb1 && $thumb2){
             
-			$cur_time=date('Y-m-d H:i:s');
-			
-            $insert_investors = "insert into investors (`id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
+            $cur_time=date('Y-m-d H:i:s');
+		
+            $insert_investors =  "";         
+                        
+            if(!empty($bc)){            
+            $insert_investors = "insert into investors (`id`, `bitcoin_id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$bc."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
+            }else{
+                $insert_investors = "insert into investors (`id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
+            }
 
 				if(mysqli_query($conn, $insert_investors)){
 					

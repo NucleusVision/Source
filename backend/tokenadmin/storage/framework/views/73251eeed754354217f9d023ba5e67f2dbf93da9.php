@@ -21,6 +21,7 @@
                         <option value="" selected="selected">Select Type</option>
                         <option value="whitelisted">White Listed</option>
                         <option value="public">Public</option>
+                        <option value="btc">BTC Wallet Investors</option>
                     </select>
                 </div>
             </div>
@@ -36,6 +37,7 @@
                 <th>Country</th>
                 <th>Status</th>
                 <th>PR Flag</th>
+                <th>BTC Wallet</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -97,12 +99,12 @@
                     "columns": [
                         { "data": "doc1",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc1 + '" alt="' + row.email + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
 					   { "data": "doc2",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc2 + '" alt="' + row.email + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
                         { "data": "name",
@@ -119,13 +121,21 @@
                                 else if(row.prflag == 0)
                                     return 'No';
                                 else
-                                    return '';
+                                    return 'No';
                             }
                         },
+                        { "data": "bitcoin_id",
+                            "render": function(data, type, row, meta) {
+                                if(row.bitcoin_id)
+                                    return 'Yes';
+                                else
+                                    return 'No';
+                            }
+                        },    
                         { "data": "investor_id",
                             "render": function(data, type, row, meta) {     
-                                var out='<a id="' + row.investor_id + '" data-status="Approve"  class="btn btn-success btn-sm investor-status">Approve</a>&nbsp';
-                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status">Reject</a>&nbsp'; 
+                                var out='<a id="' + row.investor_id + '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp';
+                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp'; 
                                 return out;
                             }
                         }

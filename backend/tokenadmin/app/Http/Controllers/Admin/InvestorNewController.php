@@ -37,12 +37,18 @@ class InvestorNewController extends Controller
 
     
     public function getInvestorsList(Request $request) {
-        $oSelect = Investor::where('prflag', '!=', 1);
+        $oSelect = Investor::where(function ($query) {
+                        $query->where('prflag', '<>', 1)
+                              ->orWhereNull('prflag');
+                    });
         if($request->type){
             if($request->type == "whitelisted"){
                 $oSelect->where('status', 'Approved');
+            }elseif($request->type == "btc"){
+                $oSelect->whereNotNull('bitcoin_id');
             }
         }
+        
         return $oSelect->get()->toArray();
     }
 

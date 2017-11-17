@@ -7,20 +7,33 @@
     }
 }
 
- /* already defined in bootstrap4 */
-    .text-xs-center {
-        text-align: center;
+@media (max-width:767px) {
+    .eth-box-cnt .eth-box-text {
+        width: 170px
     }
+    .bitcoin-box-cnt .bitcoin-box-text{
+        width: 130px
+    }
+}
 
-    .g-recaptcha{
-        margin: 15px auto !important;
-        width: auto !important;
-        height: auto !important;
-        text-align: -webkit-center;
-        text-align: -moz-center;
-        text-align: -o-center;
-        text-align: -ms-center;
-    }
+.eth-box-cnt, .bitcoin-box-cnt {
+    position: relative;
+}
+
+/* already defined in bootstrap4 */
+.text-xs-center {
+    text-align: center;
+}
+
+.g-recaptcha{
+    margin: 15px auto !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: -webkit-center;
+    text-align: -moz-center;
+    text-align: -o-center;
+    text-align: -ms-center;
+}
 
 #countdownExample1 {
     font-family: 'Open Sans', sans-serif;
