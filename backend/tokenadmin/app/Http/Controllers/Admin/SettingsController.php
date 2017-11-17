@@ -40,6 +40,67 @@ class SettingsController extends Controller
 
     }
 
+    public function loadIcoSettings(){
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/getSettings");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output1 = curl_exec ($ch);
+        curl_close ($ch);
+        
+        $aResp = ['message' => '', 'success' => '1', 'serverTime' => '-'];
+        $aResp['whiteTime'] = '-';
+        $aResp['publicTime'] = '-';
+        $aResp['endTime'] = '-';
+        $aResp['ePrice'] = '-';
+        $aResp['bPrice'] = '-';
+        $aResp['minEth'] = '-';
+        $aResp['minGas'] = '-';
+        $aResp['maxGas'] = '-';
+        $aResp['minGasPrice'] = '-';
+        $aResp['maxGasPrice'] = '-';
+        $aResp['bonus'] = '-';
+        $aResp['bonusBuyers'] = '-';
+        $aResp['softCap'] = '-';
+        $aResp['hardCap'] = '-';
+        
+        $aObj = json_decode($server_output1, true);
+        if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
+        if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
+            if(!empty($aObj['data'][0]))$aResp['ePrice'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][1]))$aResp['bPrice'] = bcdiv($aObj['data'][1], bcpow('10', '8'), 8);
+            if(!empty($aObj['data'][2]))$aResp['minEth'] = bcdiv($aObj['data'][2], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][3]))$aResp['minGas'] = $aObj['data'][3];
+            if(!empty($aObj['data'][4]))$aResp['maxGas'] = $aObj['data'][4];
+            if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
+            if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
+            if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
+            if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
+            if(!empty($aObj['data'][9]))$aResp['softCap'] = bcdiv($aObj['data'][9], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][10]))$aResp['hardCap'] = bcdiv($aObj['data'][10], bcpow('10', '18'), 18);
+        }
+        $server_output2 = "";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/GetStartTimes");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output2 = curl_exec ($ch);
+        curl_close ($ch);
+        $aObj = json_decode($server_output2, true);
+        if(!empty($aObj['data'][1]))$aResp['whiteTime'] = date("m/d/Y h:i a", $aObj['data'][1]);
+        if(!empty($aObj['data'][2]))$aResp['publicTime'] = date("m/d/Y h:i a", $aObj['data'][2]);
+        if(!empty($aObj['data'][3]))$aResp['endTime'] = date("m/d/Y h:i a", $aObj['data'][3]);
+        
+        $data = ['data' => $aResp, 'status' => 'ok', 'message' => ''];
+        echo json_encode($data);
+        exit;
+    }
+    
+    
     /**
      * get list of teams
      * @return json array
@@ -70,6 +131,42 @@ class SettingsController extends Controller
             }else{
                 Settings::create($aData);
             }
+            
+                $post = [];
+                if(!empty($_REQUEST['dt_sales_users']))$post[] = "whiteTime=".strtotime($_REQUEST['dt_sales_users']);
+                if(!empty($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
+                if(!empty($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
+                if(!empty($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
+                if(!empty($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
+                if(!empty($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);
+
+                if(!empty($_REQUEST['minGas']))$post[] = "minGas=".urlencode($_REQUEST['minGas']);
+                if(!empty($_REQUEST['maxGas']))$post[] = "maxGas=".urlencode($_REQUEST['maxGas']);
+                if(!empty($_REQUEST['minGasPrice']))$post[] = "minGasPrice=".urlencode($_REQUEST['minGasPrice']);
+                if(!empty($_REQUEST['maxGasPrice']))$post[] = "maxGasPrice=".urlencode($_REQUEST['maxGasPrice']);
+
+                if(!empty($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
+                if(!empty($_REQUEST['bonus']))$post[] = "bonusBuyers=".urlencode($_REQUEST['bonus']);
+                if(!empty($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
+                if(!empty($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
+
+                if(!empty($post)){
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/setSettings");
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $server_output = curl_exec ($ch);
+                    curl_close ($ch);
+
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/setStartTimes");
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post));
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $server_output = curl_exec ($ch);
+                    curl_close ($ch);
+                }
 
             \Session::flash('status', trans('notifications.success'));
             \Session::flash('message', trans('notifications.settings.update_message'));

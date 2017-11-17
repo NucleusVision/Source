@@ -33,6 +33,10 @@
                       <div class="col-md-4">
                           <input class="form-control" tabindex="3" name="dt_sales_users" id="dt_sales_users" type="text" value="{{  \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $oSetting->dt_sales_users)->format('m/d/Y h:i a') }}">
                       </div>
+                      <div class="col-md-2">
+                        <a href="#" id="load-ico-link" onclick="loadIcoSettings(); return false;"> Load ICO Settings</a>
+                        <div id="loading-ico-cnt" style="display:none">Loading...</div>
+                      </div>
                     </div>
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Date/Time for start sales for public (any user)</label>
@@ -76,6 +80,57 @@
                         <input class="form-control" tabindex="5" name="max_limit" type="text" value="{{ $oSetting->max_limit }}">
                       </div>
                     </div>
+                    <br>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">Min Gas</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="minGas" type="text" value="{{ $oSetting->minGas }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">Max Gas</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="maxGas" type="text" value="{{ $oSetting->MaxGas }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">Min Gas Price</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="minGasPrice" type="text" value="{{ $oSetting->minGasPrice }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">Max Gas Price</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="maxGasPrice" type="text" value="{{ $oSetting->maxGasPrice }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">Token price in BTC</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="bPrice" type="text" value="{{ $oSetting->bPrice }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">softCap</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="softCap" type="text" value="{{ $oSetting->softCap }}">
+                      </div>
+                    </div>
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">hardCap</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="5" name="hardCap" type="text" value="{{ $oSetting->hardCap }}">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">sale End Time</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="3" name="endTime" id="dt_sales_public" type="text" value="">
+                      </div>
+                    </div>
+                      
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5"></label>
                       <div class="col-md-4">
@@ -92,6 +147,84 @@
     <script src="/assets/js/dataTables.bootstrap.min.js"></script>
     <script src="/assets/js/dataTables.alphabetSearch.js"></script>
       <script>
+          
+          function loadIcoSettings(){
+
+            var autoFields = ['minGas', 'maxGas', 'minGasPrice', 'maxGasPrice', 'maxGasPrice', 'bPrice', 'softCap', 'hardCap', 'endTime'];
+            $("#load-ico-link").hide();
+            $("#loading-ico-cnt").show();
+            $.ajax({
+                url: 'http://13.56.240.73:8080/admin/settings/load-ico-settings',
+                type: 'GET',
+                dataType : 'JSON',
+                data: {},
+                success: function(data) {
+                    $("#load-ico-link").show();
+                    $("#loading-ico-cnt").hide();
+                    if(data.status != "ok"){
+                        console.log(data);
+                        alert("empty response " + data.message);
+                        return false;
+                    }
+                    
+                    if(typeof data.data.whiteTime !== 'undefined'){
+                         if(data.data.whiteTime != '-'){
+                             document.getElementsByName("dt_sales_users")[0].value = data.data.whiteTime;
+                         }
+                    }
+
+                    if(typeof data.data.publicTime !== 'undefined'){
+                         if(data.data.publicTime != '-'){
+                             document.getElementsByName("dt_sales_public")[0].value = data.data.publicTime;
+                         }
+                    }
+                    
+                    if(typeof data.data.bonus !== 'undefined'){
+                         if(data.data.bonus != '-'){
+                             document.getElementsByName("bonus_percentage")[0].value = data.data.bonus;
+                         }
+                    }
+                    
+                    if(typeof data.data.bonusBuyers !== 'undefined'){
+                         if(data.data.bonusBuyers != '-'){
+                             document.getElementsByName("no_first_buyers")[0].value = data.data.bonusBuyers;
+                         }
+                    }
+                    
+                    if(typeof data.data.ePrice !== 'undefined'){
+                         if(data.data.ePrice != '-'){
+                             document.getElementsByName("token_price")[0].value = data.data.ePrice;
+                         }
+                    }
+                    
+                    if(typeof data.data.minEth !== 'undefined'){
+                         if(data.data.minEth != '-'){
+                             document.getElementsByName("min_amount")[0].value = data.data.minEth;
+                         }
+                    }
+                    
+                    
+                    for(var c = 0; typeof autoFields[c] !== 'undefined'; c++){
+                        if(typeof data.data[autoFields[c]] !== 'undefined'){
+                         if(data.data[autoFields[c]] != '-'){
+                             document.getElementsByName(autoFields[c])[0].value = data.data[autoFields[c]];
+                         }
+                        }
+                    }
+                    
+                    
+                },
+                error: function(data) {
+                     //console.log(data);
+                    $("#load-ico-link").show();
+                    $("#loading-ico-cnt").hide();
+                    var show = (typeof data.responseJSON !== 'undefined')?data.responseJSON.message:"request failed";
+                    alert(show);
+                    return false;
+                },
+             });
+
+          }
           /*
             $(document).ready(function() { 
                 $.ajaxSetup({
@@ -137,6 +270,7 @@
            
            $(function () {
                 $('#dt_sales_users, #dt_sales_public').datetimepicker();
+                loadIcoSettings();
             });
            
         </script>

@@ -18,7 +18,8 @@ $email = clean_data($_POST['email']);
 $captcha = $_POST['response'];
 $verificationCode = clean_data($_POST['verificationCode']);
 
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
+//$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";//original
+$secretKey = "6LeTxTcUAAAAAGwy89ptRBrmGPPNFrOXmSEGeC69";//halcyon.user
 $ip = $_SERVER['REMOTE_ADDR'];
 $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
 $response = json_decode($response, true);

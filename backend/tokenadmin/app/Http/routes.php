@@ -82,7 +82,7 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::post('settings/update', ['uses' => 'SettingsController@update', 'as' => 'settingsUpdate']);        
         Route::get('settings/{id}/view', ['uses' => 'SettingsController@view', 'as' => 'settingsView']); 
         Route::post('settings/delete', ['uses' => 'SettingsController@delete', 'as' => 'settingsDelete']);
-        
+        Route::any('settings/load-ico-settings', ['uses' => 'SettingsController@loadIcoSettings', 'as' => 'settingsloadIcoSettings']);
     });
     
 });

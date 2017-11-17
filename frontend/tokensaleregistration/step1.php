@@ -21,7 +21,8 @@ $message = "";
 $email = clean_data($_POST['email']);
 $captcha = $_POST['response'];
 
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
+//$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";//original
+$secretKey = "6LeTxTcUAAAAAGwy89ptRBrmGPPNFrOXmSEGeC69";//halcyon.user
 $ip = $_SERVER['REMOTE_ADDR'];
 $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
 $response = json_decode($response, true);
@@ -76,7 +77,8 @@ if($response["success"] === true)
             $fields_string = "";
 
             //$url = 'http://tokenadmin.enterstargate.com/investors/verify/email';
-            $url = 'http://redemptiondata.bellboi.com/ajaxVerifyMail.php';
+            //$url = 'http://redemptiondata.bellboi.com/ajaxVerifyMail.php';
+            $url = 'http://13.56.240.73/ajaxVerifyMail.php';
 
             $fields = array(
                     'email' => urlencode($email),
@@ -147,8 +149,8 @@ else
 }catch(\Exception $e){
     $code = 400;
     $status = "Failed";
-    //$message = $e->getMessage();
-    $message = "The server is currently busy. Please try again later.";
+    $message = $e->getMessage();
+    //$message = "The server is currently busy. Please try again later.";
 }
 
 $result = array(
