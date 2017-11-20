@@ -35,6 +35,8 @@
                       </div>
                       <div class="col-md-2">
                         <a href="#" id="load-ico-link" onclick="loadIcoSettings(); return false;"> Load ICO Settings</a>
+                        | 
+                        <a href="#" id="get-stats-link" onclick="getStats(); return false;"> get Stats</a>
                         <div id="loading-ico-cnt" style="display:none">Loading...</div>
                       </div>
                     </div>
@@ -150,7 +152,7 @@
           
           function getStats(){
 
-            $("#load-ico-link").hide();
+            $("#get-stats-link").hide();
             $("#loading-ico-cnt").show();
             $.ajax({
                 url: 'http://13.56.240.73:8080/admin/settings/get-stats',
@@ -158,7 +160,7 @@
                 dataType : 'JSON',
                 data: {},
                 success: function(data) {
-                    $("#load-ico-link").show();
+                    $("#get-stats-link").show();
                     $("#loading-ico-cnt").hide();
                     if(data.status != "ok"){
                         console.log(data);
@@ -191,7 +193,7 @@
                 },
                 error: function(data) {
                      //console.log(data);
-                    $("#load-ico-link").show();
+                    $("#get-stats-link").show();
                     $("#loading-ico-cnt").hide();
                     var show = (typeof data.responseJSON !== 'undefined')?data.responseJSON.message:"request failed";
                     alert(show);
