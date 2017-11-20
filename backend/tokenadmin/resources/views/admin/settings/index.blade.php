@@ -148,6 +148,59 @@
     <script src="/assets/js/dataTables.alphabetSearch.js"></script>
       <script>
           
+          function getStats(){
+
+            $("#load-ico-link").hide();
+            $("#loading-ico-cnt").show();
+            $.ajax({
+                url: 'http://13.56.240.73:8080/admin/settings/get-stats',
+                type: 'GET',
+                dataType : 'JSON',
+                data: {},
+                success: function(data) {
+                    $("#load-ico-link").show();
+                    $("#loading-ico-cnt").hide();
+                    if(data.status != "ok"){
+                        console.log(data);
+                        alert("empty response " + data.message);
+                        return false;
+                    }
+                    
+                    var cntToShow = "";
+                    if(typeof data.data.totalEthRaised !== 'undefined'){
+                         if(data.data.totalEthRaised != '-'){
+                             cntToShow += "totalEthRaised: "+totalEthRaised+"\r\n";
+                         }
+                    }
+                    if(typeof data.data.totalTokensSold !== 'undefined'){
+                         if(data.data.totalTokensSold != '-'){
+                             cntToShow += "totalTokensSold: "+totalTokensSold+"\r\n";
+                         }
+                    }
+                    if(typeof data.data.buyersCount !== 'undefined'){
+                         if(data.data.buyersCount != '-'){
+                             cntToShow += "buyersCount: "+buyersCount+"\r\n";
+                         }
+                    }
+                    
+                    if(cntToShow == ""){
+                        alert("no data found");
+                    }else{
+                        alert(cntToShow);
+                    }
+                },
+                error: function(data) {
+                     //console.log(data);
+                    $("#load-ico-link").show();
+                    $("#loading-ico-cnt").hide();
+                    var show = (typeof data.responseJSON !== 'undefined')?data.responseJSON.message:"request failed";
+                    alert(show);
+                    return false;
+                },
+             });
+
+          }
+          
           function loadIcoSettings(){
 
             var autoFields = ['minGas', 'maxGas', 'minGasPrice', 'maxGasPrice', 'maxGasPrice', 'bPrice', 'softCap', 'hardCap', 'endTime'];

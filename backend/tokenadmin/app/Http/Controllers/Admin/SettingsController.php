@@ -39,6 +39,35 @@ class SettingsController extends Controller
         return \View::make('admin.settings.index')->with('oSetting', $oSetting);
 
     }
+    
+    public function getStats(){
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/getStats");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output1 = curl_exec ($ch);
+        curl_close ($ch);
+        
+        $aResp = ['message' => '', 'success' => '1', 'serverTime' => '-'];
+        $aResp['totalEthRaised'] = '-';
+        $aResp['totalTokensSold'] = '-';
+        $aResp['buyersCount'] = '-';
+        
+        $aObj = json_decode($server_output1, true);
+        if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
+        if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
+            if(!empty($aObj['data'][0]))$aResp['totalEthRaised'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][6]))$aResp['totalTokensSold'] = $aObj['data'][1];
+            if(!empty($aObj['data'][7]))$aResp['buyersCount'] = $aObj['data'][2];
+        }
+
+        
+        $data = ['data' => $aResp, 'status' => 'ok', 'message' => ''];
+        echo json_encode($data);
+        exit;
+    }
 
     public function loadIcoSettings(){
         

@@ -464,9 +464,10 @@ class InvestorNewController extends Controller
         if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
-            //echo "http://13.56.240.73:1337/user/whitelistAccount".'?'.$post;exit;
+            $functionToCall = (!empty($request->prflag))?"whitelist":"approve";
+            
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/whitelistAccount");
+            curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/".$functionToCall."Account");
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
