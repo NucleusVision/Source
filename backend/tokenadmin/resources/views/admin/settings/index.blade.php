@@ -243,13 +243,13 @@
                     
                     if(typeof data.data.endTime !== 'undefined'){
                          if(data.data.endTime != '-'){
-                             document.getElementsByName("dt_end_time")[0].value = data.data.endTime;
+                             document.getElementsByName("endTime")[0].value = data.data.endTime;
                          }
                     }
                     
                     if(typeof data.data.lockTime !== 'undefined'){
                          if(data.data.lockTime != '-'){
-                             document.getElementsByName("dt_lock_time")[0].value = data.data.lockTime;
+                             document.getElementsByName("lockTime")[0].value = data.data.lockTime;
                          }
                     }
                     
