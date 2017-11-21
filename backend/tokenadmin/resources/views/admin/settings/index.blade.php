@@ -80,7 +80,7 @@
                       <label for="" class="control-label col-md-5"></label>
                       <div class="col-md-4">
                         <input class="btn btn-success btn-lg mrr20" type="submit" name="status" value="Submit"> 
-                        <a href="javascript:void(0);" class="btn btn-primary btn-lg cancel">Cancel</a>
+                        <a href="{{ route('admin::dashboard') }}" class="btn btn-primary btn-lg cancel">Cancel</a>
                       </div>
                     </div> 
                     </form>
