@@ -189,14 +189,14 @@ class SettingsController extends Controller
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $server_output = curl_exec ($ch);
                     curl_close ($ch);
-
+/*
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/setStartTimes");
                     curl_setopt($ch, CURLOPT_POST, 1);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     $server_output = curl_exec ($ch);
-                    curl_close ($ch);
+                    curl_close ($ch);*/
                 }
 
             \Session::flash('status', trans('notifications.success'));
