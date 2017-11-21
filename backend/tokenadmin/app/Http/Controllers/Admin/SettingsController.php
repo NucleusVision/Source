@@ -82,6 +82,7 @@ class SettingsController extends Controller
         $aResp['whiteTime'] = '-';
         $aResp['publicTime'] = '-';
         $aResp['endTime'] = '-';
+        $aResp['lockTime'] = '-';
         $aResp['ePrice'] = '-';
         $aResp['bPrice'] = '-';
         $aResp['minEth'] = '-';
@@ -122,6 +123,7 @@ class SettingsController extends Controller
         if(!empty($aObj['data'][1]))$aResp['whiteTime'] = date("m/d/Y h:i a", $aObj['data'][1]);
         if(!empty($aObj['data'][2]))$aResp['publicTime'] = date("m/d/Y h:i a", $aObj['data'][2]);
         if(!empty($aObj['data'][3]))$aResp['endTime'] = date("m/d/Y h:i a", $aObj['data'][3]);
+        if(!empty($aObj['data'][4]))$aResp['lockTime'] = date("m/d/Y h:i a", $aObj['data'][4]);
         
         $data = ['data' => $aResp, 'status' => 'ok', 'message' => ''];
         echo json_encode($data);
@@ -164,6 +166,7 @@ class SettingsController extends Controller
                 if(!empty($_REQUEST['dt_sales_users']))$post[] = "whiteTime=".strtotime($_REQUEST['dt_sales_users']);
                 if(!empty($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
                 if(!empty($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
+                if(!empty($_REQUEST['lockTime']))$post[] = "lockTime=".strtotime($_REQUEST['lockTime']);
                 if(!empty($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
                 if(!empty($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
                 if(!empty($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);

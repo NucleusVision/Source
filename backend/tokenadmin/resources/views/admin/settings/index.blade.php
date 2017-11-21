@@ -129,7 +129,14 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">sale End Time</label>
                       <div class="col-md-4">
-                        <input class="form-control" tabindex="3" name="endTime" id="dt_sales_public" type="text" value="">
+                        <input class="form-control" tabindex="3" name="endTime" id="dt_end_time" type="text" value="">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group mrb20">
+                      <label for="" class="control-label col-md-5">lock Time</label>
+                      <div class="col-md-4">
+                        <input class="form-control" tabindex="3" name="lockTime" id="dt_lock_time" type="text" value="">
                       </div>
                     </div>
                       
@@ -231,6 +238,18 @@
                     if(typeof data.data.publicTime !== 'undefined'){
                          if(data.data.publicTime != '-'){
                              document.getElementsByName("dt_sales_public")[0].value = data.data.publicTime;
+                         }
+                    }
+                    
+                    if(typeof data.data.publicTime !== 'undefined'){
+                         if(data.data.publicTime != '-'){
+                             document.getElementsByName("dt_end_time")[0].value = data.data.endTime;
+                         }
+                    }
+                    
+                    if(typeof data.data.publicTime !== 'undefined'){
+                         if(data.data.publicTime != '-'){
+                             document.getElementsByName("dt_lock_time")[0].value = data.data.lockTime;
                          }
                     }
                     
