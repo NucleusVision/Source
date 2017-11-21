@@ -468,7 +468,7 @@ class InvestorNewController extends Controller
             $functionToCall = (!empty($request->prflag))?"whitelist":"approve";
             
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/".$functionToCall."Account");
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall."Account");
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
