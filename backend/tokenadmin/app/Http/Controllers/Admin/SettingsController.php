@@ -58,11 +58,10 @@ class SettingsController extends Controller
         $aObj = json_decode($server_output1, true);
         if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
         if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
-            if(!empty($aObj['data'][0]))$aResp['totalEthRaised'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
-            if(!empty($aObj['data'][6]))$aResp['totalTokensSold'] = $aObj['data'][1];
-            if(!empty($aObj['data'][7]))$aResp['buyersCount'] = $aObj['data'][2];
+            if(isset($aObj['data'][0]))$aResp['totalEthRaised'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
+            if(isset($aObj['data'][1]))$aResp['totalTokensSold'] = $aObj['data'][1];
+            if(isset($aObj['data'][2]))$aResp['buyersCount'] = $aObj['data'][2];
         }
-
         
         $data = ['data' => $aResp, 'status' => 'ok', 'message' => ''];
         echo json_encode($data);
