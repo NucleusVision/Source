@@ -106,7 +106,7 @@ class SettingsController extends Controller
             if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
             if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
             if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
-            if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
+            if(!empty($aObj['data'][8]))$aResp['FirstBuyers'] = $aObj['data'][8];
             if(!empty($aObj['data'][9]))$aResp['softCap'] = bcdiv($aObj['data'][9], bcpow('10', '18'), 18);
             if(!empty($aObj['data'][10]))$aResp['hardCap'] = bcdiv($aObj['data'][10], bcpow('10', '18'), 18);
         }
