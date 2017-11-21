@@ -106,7 +106,7 @@ class SettingsController extends Controller
             if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
             if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
             if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
-            if(!empty($aObj['data'][8]))$aResp['FirstBuyers'] = $aObj['data'][8];
+            if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
             if(!empty($aObj['data'][9]))$aResp['softCap'] = bcdiv($aObj['data'][9], bcpow('10', '18'), 18);
             if(!empty($aObj['data'][10]))$aResp['hardCap'] = bcdiv($aObj['data'][10], bcpow('10', '18'), 18);
         }
@@ -177,7 +177,7 @@ class SettingsController extends Controller
                 if(!empty($_REQUEST['maxGasPrice']))$post[] = "maxGasPrice=".urlencode($_REQUEST['maxGasPrice']);
 
                 if(!empty($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
-                if(!empty($_REQUEST['bonus']))$post[] = "bonusBuyers=".urlencode($_REQUEST['bonus']);
+                if(!empty($_REQUEST['bonus']))$post[] = "FirstBuyers=".urlencode($_REQUEST['bonus']);
                 if(!empty($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
                 if(!empty($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
 
