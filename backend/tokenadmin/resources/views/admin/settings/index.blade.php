@@ -178,17 +178,17 @@
                     var cntToShow = "";
                     if(typeof data.data.totalEthRaised !== 'undefined'){
                          if(data.data.totalEthRaised != '-'){
-                             cntToShow += "totalEthRaised: "+totalEthRaised+"\r\n";
+                             cntToShow += "totalEthRaised: "+data.data.totalEthRaised+"\r\n";
                          }
                     }
                     if(typeof data.data.totalTokensSold !== 'undefined'){
                          if(data.data.totalTokensSold != '-'){
-                             cntToShow += "totalTokensSold: "+totalTokensSold+"\r\n";
+                             cntToShow += "totalTokensSold: "+data.data.totalTokensSold+"\r\n";
                          }
                     }
                     if(typeof data.data.buyersCount !== 'undefined'){
                          if(data.data.buyersCount != '-'){
-                             cntToShow += "buyersCount: "+buyersCount+"\r\n";
+                             cntToShow += "buyersCount: "+data.data.buyersCount+"\r\n";
                          }
                     }
                     
