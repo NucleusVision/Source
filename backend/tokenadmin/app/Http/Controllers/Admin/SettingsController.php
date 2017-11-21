@@ -8,7 +8,7 @@ use App\Models\Settings;
 
 class SettingsController extends Controller
 {
-    //
+    public $apiDomain = '54.215.211.34:1337';//13.56.240.73:1337
     /**
      * @return void
      */
@@ -43,7 +43,7 @@ class SettingsController extends Controller
     public function getStats(){
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/getStats");
+        curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/getStats");
         curl_setopt($ch, CURLOPT_POST, 1);
         //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -72,7 +72,7 @@ class SettingsController extends Controller
     public function loadIcoSettings(){
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/getSettings");
+        curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/getSettings");
         curl_setopt($ch, CURLOPT_POST, 1);
         //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -113,7 +113,7 @@ class SettingsController extends Controller
         $server_output2 = "";
         
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/GetStartTimes");
+        curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/GetStartTimes");
         curl_setopt($ch, CURLOPT_POST, 1);
         //curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -181,7 +181,7 @@ class SettingsController extends Controller
 
                 if(!empty($post)){
                     $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/setSettings");
+                    curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/setSettings");
                     curl_setopt($ch, CURLOPT_POST, 1);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -189,7 +189,7 @@ class SettingsController extends Controller
                     curl_close ($ch);
 
                     $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/setStartTimes");
+                    curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/setStartTimes");
                     curl_setopt($ch, CURLOPT_POST, 1);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $post));
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

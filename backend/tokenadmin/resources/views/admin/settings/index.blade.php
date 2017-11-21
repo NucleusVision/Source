@@ -155,7 +155,7 @@
             $("#get-stats-link").hide();
             $("#loading-ico-cnt").show();
             $.ajax({
-                url: 'http://13.56.240.73:8080/admin/settings/get-stats',
+                url: 'http://54.215.211.34:8080/admin/settings/get-stats',
                 type: 'GET',
                 dataType : 'JSON',
                 data: {},
@@ -209,7 +209,7 @@
             $("#load-ico-link").hide();
             $("#loading-ico-cnt").show();
             $.ajax({
-                url: 'http://13.56.240.73:8080/admin/settings/load-ico-settings',
+                url: 'http://54.215.211.34:8080/admin/settings/load-ico-settings',
                 type: 'GET',
                 dataType : 'JSON',
                 data: {},

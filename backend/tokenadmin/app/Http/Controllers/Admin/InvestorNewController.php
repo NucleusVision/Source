@@ -8,6 +8,7 @@ use App\Models\Investor;
 
 class InvestorNewController extends Controller
 {
+    public $apiDomain = '54.215.211.34:1337';//13.56.240.73:1337
     //
     /**
      * @return void
@@ -467,7 +468,7 @@ class InvestorNewController extends Controller
             $functionToCall = (!empty($request->prflag))?"whitelist":"approve";
             
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://13.56.240.73:1337/user/".$functionToCall."Account");
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain.":1337/user/".$functionToCall."Account");
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

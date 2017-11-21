@@ -39,7 +39,7 @@ console.log(web3.eth.accounts);
 //console.log('Unlocking merchant: ');
 //personal.unlockAccount(merchantAccount, '111', 8200).then(console.log);
 
-// curl -X POST --data "password=1q2w3e4r5t6y" http://13.56.240.73:1337/user/createOwnerWithContract
+// curl -X POST --data "password=1q2w3e4r5t6y" http://54.215.211.34:1337/user/createOwnerWithContract
 
 module.exports = {
     createOwnerWithContract : function (req, res) {
