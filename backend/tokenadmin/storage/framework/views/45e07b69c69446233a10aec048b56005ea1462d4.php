@@ -83,14 +83,14 @@
 					<div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Document1</b>:</div>
                       <div class="col-md-7 pdl0">
-                         <img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc1); ?>" >
+                         <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc1); ?>" >
                       </div>
                     </div> 
 					
 					<div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Document2</b>:</div>
                       <div class="col-md-7 pdl0">
-                         <img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc2); ?>" >
+                         <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc2); ?>" >
                       </div>
                     </div> 
                       

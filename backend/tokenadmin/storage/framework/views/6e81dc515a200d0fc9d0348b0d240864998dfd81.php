@@ -117,14 +117,14 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Document1</label>
                       <div class="col-md-4"> 
-                        <img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc1); ?>">
+                        <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc1); ?>">
                       </div>
                     </div>
                       
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Document2</label>
                       <div class="col-md-4">
-                        <img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc2); ?>">
+                        <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc2); ?>">
                       </div>
                     </div>   
                       
