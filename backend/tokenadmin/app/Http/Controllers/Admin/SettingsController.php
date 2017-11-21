@@ -166,7 +166,7 @@ class SettingsController extends Controller
                 if(!empty($_REQUEST['dt_sales_users']))$post[] = "whiteTime=".strtotime($_REQUEST['dt_sales_users']);
                 if(!empty($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
                 if(!empty($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
-                if(!empty($_REQUEST['lockTime']))$post[] = "lockTime=".($_REQUEST['audit_period_days']*24*3600);
+                if(!empty($_REQUEST['audit_period_days']))$post[] = "lockTime=".($_REQUEST['audit_period_days']*24*3600);
                 if(!empty($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
                 if(!empty($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
                 if(!empty($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);
