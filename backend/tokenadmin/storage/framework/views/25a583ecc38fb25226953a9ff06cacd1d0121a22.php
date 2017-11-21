@@ -1,21 +1,33 @@
-@extends('admin.layouts.master')
-
-@section('content') 
+<?php $__env->startSection('content'); ?> 
   <div class="content-wrapper">        
     <section class="content-header">
-      <h1>PR Investors</h1>
+      <h1>Investors</h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin::dashboard') }}"><i class="fa fa-home"></i> Home</a></li>
-        <li class="active">PR Investors</li>
+        <li><a href="<?php echo e(route('admin::dashboard')); ?>"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">Investors</li>
       </ol>
     </section>        
     <section class="content">      
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">List of PR Investors</h3>
+          <h3 class="box-title">List of Investors</h3>
         </div>
-        <div class="box-body">
-        
+          <div class="row" style="margin-left: 3px;">  
+        <form name="form1" id="form1" method="get">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="call_status">Type</label>
+                    <select class="form-control" id="type" name="type" style="width:200px;">
+                        <option value="" selected="selected">Select Type</option>
+                        <option value="whitelisted">White Listed</option>
+                        <option value="public">Public</option>
+                        <option value="btc">BTC Wallet Investors</option>
+                    </select>
+                </div>
+            </div>
+        </form>   
+        </div>
+        <div class="box-body">  
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
@@ -26,8 +38,6 @@
                 <th>Status</th>
                 <th>PR Flag</th>
                 <th>BTC Wallet</th>
-                <th style="width:70px;">Bonus %</th>
-                <th>Lock-in period</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -74,13 +84,17 @@
                         }
                 });
                 
-                $('#investors-list').DataTable({
+                var investors_table = $('#investors-list').DataTable({
                     "ordering": false,
                   "ajax": {
                         "processing": true,
                          "serverSide": true,
-                         "url": "{{ route('admin::prInvestorsList') }}", 
-                         "dataSrc": ""
+                         "url": "<?php echo e(route('admin::investorsNewList')); ?>", 
+                         "dataSrc": "",
+                        "type": 'GET',
+                        "data": function (d) {
+                            return $('#form1').serialize();
+                        }
                     },
                     "columns": [
                         { "data": "doc1",
@@ -117,20 +131,21 @@
                                 else
                                     return 'No';
                             }
-                        },
-                        { "data": "bonus_per" },
-                        { "data": "lock_in_period" },
+                        },    
                         { "data": "investor_id",
                             "render": function(data, type, row, meta) {     
                                 var out='<a id="' + row.investor_id + '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp';
-                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp';
-                                out+='<a href="/admin/pr-investors/' + row.investor_id + '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp';
+                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp'; 
                                 return out;
                             }
                         }
                     ]
                 });
                 
+                
+                $('#type').on('change', function() {
+                    investors_table.ajax.reload();
+                });
                 
                 $(document).on('click', '.content .investor-status', function (e) {
                     
@@ -186,4 +201,5 @@
 });
                 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -2,10 +2,10 @@
 error_reporting(0);
 date_default_timezone_set('Asia/Kolkata');
 $servername = "localhost";
-$username = "nucleusvision";
-$password = "nucleus@vision";
-//$username = "root";
-//$password = "";
+//$username = "nucleusvision";
+//$password = "nucleus@vision";
+$username = "root";
+$password = "";
 $dbname = "nucleusvision";
 
 // Create connection

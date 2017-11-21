@@ -101,12 +101,12 @@
                     "columns": [
                         { "data": "doc1",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
 					   { "data": "doc2",
                             "render": function(data, type, row, meta) {  
-                               return '<img src="http://tokensale.enterstargate.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
+                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
                            }
                        },
                         { "data": "name",

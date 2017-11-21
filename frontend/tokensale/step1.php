@@ -50,13 +50,13 @@ if($response["success"] === true)
 				
 				//file_put_contents("test.txt", "time1: ".$time1."time2: ".$time2."hour diff".$hourdiff);
 
-				if($hourdiff > 1){
+				//if($hourdiff > 1){
 					$token = bin2hex(openssl_random_pseudo_bytes(16));
 					$update_user_verify = "UPDATE user_verify SET token = '".$token."',created_at='".$time1."' WHERE email = '".$email."'";		
 					mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-				}else{
-					$token = $user_verify_row['token'];
-				}
+				//}else{
+					//$token = $user_verify_row['token'];
+				//}
 				
 			}else{
 				$code = 400;

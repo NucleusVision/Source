@@ -53,13 +53,13 @@ if($response["success"] === true)
 
                 //file_put_contents("test.txt", "time1: ".$time1."time2: ".$time2."hour diff".$hourdiff);
 
-                if($hourdiff > 1){
+                //if($hourdiff > 1){
                     $token = sha1(uniqid().mt_rand().time());
                     $update_user_verify = "UPDATE user_verify SET activation_code = '".$token."',created_at='".$time1."' WHERE email = '".$email."'";		
                     mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-                }else{
-                    $token = $user_verify_row['activation_code'];
-                }
+                //}else{
+                    //$token = $user_verify_row['activation_code'];
+                //}
             }
         } else {
             $token = sha1(uniqid().mt_rand().time());

@@ -1,11 +1,9 @@
-@extends('admin.layouts.master')
-
-@section('content') 
+<?php $__env->startSection('content'); ?> 
   <div class="content-wrapper">        
     <section class="content-header">
       <h1>PR Investors</h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin::dashboard') }}"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="<?php echo e(route('admin::dashboard')); ?>"><i class="fa fa-home"></i> Home</a></li>
         <li class="active">PR Investors</li>
       </ol>
     </section>        
@@ -79,7 +77,7 @@
                   "ajax": {
                         "processing": true,
                          "serverSide": true,
-                         "url": "{{ route('admin::prInvestorsList') }}", 
+                         "url": "<?php echo e(route('admin::prInvestorsList')); ?>", 
                          "dataSrc": ""
                     },
                     "columns": [
@@ -186,4 +184,5 @@
 });
                 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
