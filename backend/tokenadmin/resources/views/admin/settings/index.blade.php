@@ -132,13 +132,6 @@
                         <input class="form-control" tabindex="3" name="endTime" id="dt_end_time" type="text" value="">
                       </div>
                     </div>
-                    
-                    <div class="form-group mrb20">
-                      <label for="" class="control-label col-md-5">lock Time</label>
-                      <div class="col-md-4">
-                        <input class="form-control" tabindex="3" name="lockTime" id="dt_lock_time" type="text" value="">
-                      </div>
-                    </div>
                       
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5"></label>
@@ -249,7 +242,7 @@
                     
                     if(typeof data.data.lockTime !== 'undefined'){
                          if(data.data.lockTime != '-'){
-                             document.getElementsByName("lockTime")[0].value = data.data.lockTime;
+                             document.getElementsByName("audit_period_days")[0].value = data.data.lockTime;
                          }
                     }
                     
