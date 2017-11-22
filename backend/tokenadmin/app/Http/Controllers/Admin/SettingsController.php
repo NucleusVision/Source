@@ -153,12 +153,12 @@ class SettingsController extends Controller
         
         if(strpos($nbr, "E+")){
             $data = explode("E+", $nbr);
-            return bcmul($data[0], bcpow('10', $nbr), $precision);
+            return bcmul($data[0], bcpow('10', $data[1]), $precision);
         }
         
         if(strpos($nbr, "E-")){
             $data = explode("E-", $nbr);
-            return bcdev($data[0], bcpow('10', $nbr), $precision);
+            return bcdiv($data[0], bcpow('10', $data[1]), $precision);
         }
         
         return $nbr;
