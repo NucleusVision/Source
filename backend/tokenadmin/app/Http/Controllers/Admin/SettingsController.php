@@ -177,7 +177,7 @@ class SettingsController extends Controller
                 if(!empty($_REQUEST['maxGasPrice']))$post[] = "maxGasPrice=".urlencode($_REQUEST['maxGasPrice']);
 
                 if(!empty($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
-                if(!empty($_REQUEST['no_first_buyers']))$post[] = "bonusBuyers=".urlencode($_REQUEST['bonus']);
+                if(!empty($_REQUEST['no_first_buyers']))$post[] = "bonusBuyers=".urlencode($_REQUEST['no_first_buyers']);
                 if(!empty($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
                 if(!empty($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
 
