@@ -98,17 +98,17 @@ class SettingsController extends Controller
         $aObj = json_decode($server_output1, true);
         if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
         if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
-            if(!empty($aObj['data'][0]))$aResp['ePrice'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][0]), bcpow('10', '18'), 18));
-            if(!empty($aObj['data'][1]))$aResp['bPrice'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][1], 8), bcpow('10', '8'), 8));
-            if(!empty($aObj['data'][2]))$aResp['minEth'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][2]), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][0]))$aResp['ePrice'] = $this->TrimTrailingZeroes(bcdiv($this->EtoFull($aObj['data'][0]), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][1]))$aResp['bPrice'] = $this->TrimTrailingZeroes(bcdiv($this->EtoFull($aObj['data'][1], 8), bcpow('10', '8'), 8));
+            if(!empty($aObj['data'][2]))$aResp['minEth'] = $this->TrimTrailingZeroes(bcdiv($this->EtoFull($aObj['data'][2]), bcpow('10', '18'), 18));
             if(!empty($aObj['data'][3]))$aResp['minGas'] = $aObj['data'][3];
             if(!empty($aObj['data'][4]))$aResp['maxGas'] = $aObj['data'][4];
             if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
             if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
             if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
             if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
-            if(!empty($aObj['data'][9]))$aResp['softCap'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][9],18), bcpow('10', '18'), 18));
-            if(!empty($aObj['data'][10]))$aResp['hardCap'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][10],18), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][9]))$aResp['softCap'] = $this->TrimTrailingZeroes(bcdiv($this->EtoFull($aObj['data'][9],18), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][10]))$aResp['hardCap'] = $this->TrimTrailingZeroes(bcdiv($this->EtoFull($aObj['data'][10],18), bcpow('10', '18'), 18));
         }
         $server_output2 = "";
         
