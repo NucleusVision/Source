@@ -98,17 +98,17 @@ class SettingsController extends Controller
         $aObj = json_decode($server_output1, true);
         if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
         if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
-            if(!empty($aObj['data'][0]))$aResp['ePrice'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][0], bcpow('10', '18'), 18));
-            if(!empty($aObj['data'][1]))$aResp['bPrice'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][1], bcpow('10', '8'), 8));
-            if(!empty($aObj['data'][2]))$aResp['minEth'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][2], bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][0]))$aResp['ePrice'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][0]), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][1]))$aResp['bPrice'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][1], 8), bcpow('10', '8'), 8));
+            if(!empty($aObj['data'][2]))$aResp['minEth'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][2]), bcpow('10', '18'), 18));
             if(!empty($aObj['data'][3]))$aResp['minGas'] = $aObj['data'][3];
             if(!empty($aObj['data'][4]))$aResp['maxGas'] = $aObj['data'][4];
             if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
             if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
             if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
             if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
-            if(!empty($aObj['data'][9]))$aResp['softCap'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][9], bcpow('10', '18'), 18));
-            if(!empty($aObj['data'][10]))$aResp['hardCap'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][10], bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][9]))$aResp['softCap'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][9],18), bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][10]))$aResp['hardCap'] = $this->TrimTrailingZeroes(bcdiv(EtoFull($aObj['data'][10],18), bcpow('10', '18'), 18));
         }
         $server_output2 = "";
         
@@ -145,6 +145,23 @@ class SettingsController extends Controller
     
     public function TrimTrailingZeroes($nbr) {
         return strpos($nbr,'.')!==false ? rtrim(rtrim($nbr,'0'),'.') : $nbr;
+    }
+    
+    public function EtoFull($nbr, $precision = 18) {
+        
+        $nbr = strtoupper($nbr);
+        
+        if(strpos($nbr, "E+")){
+            $data = explode("E+", $nbr);
+            return bcmul($data[0], bcpow('10', $nbr), $precision);
+        }
+        
+        if(strpos($nbr, "E-")){
+            $data = explode("E-", $nbr);
+            return bcdev($data[0], bcpow('10', $nbr), $precision);
+        }
+        
+        return $nbr;
     }
 
     /**
@@ -185,6 +202,8 @@ class SettingsController extends Controller
                 if(isset($_REQUEST['softCap']))$post[] = "softCap=".$this->TrimTrailingZeroes(bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18));
                 if(isset($_REQUEST['hardCap']))$post[] = "hardCap=".$this->TrimTrailingZeroes(bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18));
 
+                //print_r($post);
+                //exit;
                 
                 if(!empty($post)){
                     $ch = curl_init();
