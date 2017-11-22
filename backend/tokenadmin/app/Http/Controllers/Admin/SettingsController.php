@@ -58,7 +58,7 @@ class SettingsController extends Controller
         $aObj = json_decode($server_output1, true);
         if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
         if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
-            if(isset($aObj['data'][0]))$aResp['totalEthRaised'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
+            if(isset($aObj['data'][0]))$aResp['totalEthRaised'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][0], bcpow('10', '18'), 18));
             if(isset($aObj['data'][1]))$aResp['totalTokensSold'] = $aObj['data'][1];
             if(isset($aObj['data'][2]))$aResp['buyersCount'] = $aObj['data'][2];
         }
@@ -98,17 +98,17 @@ class SettingsController extends Controller
         $aObj = json_decode($server_output1, true);
         if(!empty($aObj['currentTime']))$aResp['serverTime'] = date("m/d/Y h:i a", $aObj['currentTime']);
         if(!empty($aObj['status']) && $aObj['status'] == 'ok'){
-            if(!empty($aObj['data'][0]))$aResp['ePrice'] = bcdiv($aObj['data'][0], bcpow('10', '18'), 18);
-            if(!empty($aObj['data'][1]))$aResp['bPrice'] = bcdiv($aObj['data'][1], bcpow('10', '8'), 8);
-            if(!empty($aObj['data'][2]))$aResp['minEth'] = bcdiv($aObj['data'][2], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][0]))$aResp['ePrice'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][0], bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][1]))$aResp['bPrice'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][1], bcpow('10', '8'), 8));
+            if(!empty($aObj['data'][2]))$aResp['minEth'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][2], bcpow('10', '18'), 18));
             if(!empty($aObj['data'][3]))$aResp['minGas'] = $aObj['data'][3];
             if(!empty($aObj['data'][4]))$aResp['maxGas'] = $aObj['data'][4];
             if(!empty($aObj['data'][5]))$aResp['minGasPrice'] = $aObj['data'][5];
             if(!empty($aObj['data'][6]))$aResp['maxGasPrice'] = $aObj['data'][6];
             if(!empty($aObj['data'][7]))$aResp['bonus'] = $aObj['data'][7];
             if(!empty($aObj['data'][8]))$aResp['bonusBuyers'] = $aObj['data'][8];
-            if(!empty($aObj['data'][9]))$aResp['softCap'] = bcdiv($aObj['data'][9], bcpow('10', '18'), 18);
-            if(!empty($aObj['data'][10]))$aResp['hardCap'] = bcdiv($aObj['data'][10], bcpow('10', '18'), 18);
+            if(!empty($aObj['data'][9]))$aResp['softCap'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][9], bcpow('10', '18'), 18));
+            if(!empty($aObj['data'][10]))$aResp['hardCap'] = $this->TrimTrailingZeroes(bcdiv($aObj['data'][10], bcpow('10', '18'), 18));
         }
         $server_output2 = "";
         
@@ -142,6 +142,10 @@ class SettingsController extends Controller
     public function create() {
         return view('admin.settings.add');
     }
+    
+    public function TrimTrailingZeroes($nbr) {
+        return strpos($nbr,'.')!==false ? rtrim(rtrim($nbr,'0'),'.') : $nbr;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -167,9 +171,9 @@ class SettingsController extends Controller
                 if(isset($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
                 if(isset($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
                 if(isset($_REQUEST['audit_period_days']))$post[] = "lockTime=".($_REQUEST['audit_period_days']*24*3600);
-                if(isset($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
-                if(isset($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
-                if(isset($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['token_price']))$post[] = "ePrice=".$this->TrimTrailingZeroes(bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18));
+                if(isset($_REQUEST['bPrice']))$post[] = "bPrice=".$this->TrimTrailingZeroes(bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8));
+                if(isset($_REQUEST['min_amount']))$post[] = "minEth=".$this->TrimTrailingZeroes(bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18));
 
                 if(isset($_REQUEST['minGas']))$post[] = "minGas=".urlencode($_REQUEST['minGas']);
                 if(isset($_REQUEST['maxGas']))$post[] = "maxGas=".urlencode($_REQUEST['maxGas']);
@@ -178,9 +182,10 @@ class SettingsController extends Controller
 
                 if(isset($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
                 if(isset($_REQUEST['no_first_buyers']))$post[] = "bonusBuyers=".urlencode($_REQUEST['no_first_buyers']);
-                if(isset($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
-                if(isset($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['softCap']))$post[] = "softCap=".$this->TrimTrailingZeroes(bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18));
+                if(isset($_REQUEST['hardCap']))$post[] = "hardCap=".$this->TrimTrailingZeroes(bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18));
 
+                
                 if(!empty($post)){
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/setSettings");
