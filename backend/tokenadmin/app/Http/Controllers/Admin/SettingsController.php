@@ -163,23 +163,23 @@ class SettingsController extends Controller
             }
             
                 $post = [];
-                if(!empty($_REQUEST['dt_sales_users']))$post[] = "whiteTime=".strtotime($_REQUEST['dt_sales_users']);
-                if(!empty($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
-                if(!empty($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
-                if(!empty($_REQUEST['audit_period_days']))$post[] = "lockTime=".($_REQUEST['audit_period_days']*24*3600);
-                if(!empty($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
-                if(!empty($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
-                if(!empty($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['dt_sales_users']))$post[] = "whiteTime=".strtotime($_REQUEST['dt_sales_users']);
+                if(isset($_REQUEST['dt_sales_public']))$post[] = "publicTime=".strtotime($_REQUEST['dt_sales_public']);
+                if(isset($_REQUEST['endTime']))$post[] = "endTime=".strtotime($_REQUEST['endTime']);
+                if(isset($_REQUEST['audit_period_days']))$post[] = "lockTime=".($_REQUEST['audit_period_days']*24*3600);
+                if(isset($_REQUEST['token_price']))$post[] = "ePrice=".bcmul($_REQUEST['token_price'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['bPrice']))$post[] = "bPrice=".bcmul($_REQUEST['bPrice'], bcpow('10', '8'), 8);
+                if(isset($_REQUEST['min_amount']))$post[] = "minEth=".bcmul($_REQUEST['min_amount'], bcpow('10', '18'), 18);
 
-                if(!empty($_REQUEST['minGas']))$post[] = "minGas=".urlencode($_REQUEST['minGas']);
-                if(!empty($_REQUEST['maxGas']))$post[] = "maxGas=".urlencode($_REQUEST['maxGas']);
-                if(!empty($_REQUEST['minGasPrice']))$post[] = "minGasPrice=".urlencode($_REQUEST['minGasPrice']);
-                if(!empty($_REQUEST['maxGasPrice']))$post[] = "maxGasPrice=".urlencode($_REQUEST['maxGasPrice']);
+                if(isset($_REQUEST['minGas']))$post[] = "minGas=".urlencode($_REQUEST['minGas']);
+                if(isset($_REQUEST['maxGas']))$post[] = "maxGas=".urlencode($_REQUEST['maxGas']);
+                if(isset($_REQUEST['minGasPrice']))$post[] = "minGasPrice=".urlencode($_REQUEST['minGasPrice']);
+                if(isset($_REQUEST['maxGasPrice']))$post[] = "maxGasPrice=".urlencode($_REQUEST['maxGasPrice']);
 
-                if(!empty($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
-                if(!empty($_REQUEST['no_first_buyers']))$post[] = "bonusBuyers=".urlencode($_REQUEST['no_first_buyers']);
-                if(!empty($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
-                if(!empty($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['bonus_percentage']))$post[] = "bonus=".urlencode($_REQUEST['bonus_percentage']);
+                if(isset($_REQUEST['no_first_buyers']))$post[] = "bonusBuyers=".urlencode($_REQUEST['no_first_buyers']);
+                if(isset($_REQUEST['softCap']))$post[] = "softCap=".bcmul($_REQUEST['softCap'], bcpow('10', '18'), 18);
+                if(isset($_REQUEST['hardCap']))$post[] = "hardCap=".bcmul($_REQUEST['hardCap'], bcpow('10', '18'), 18);
 
                 if(!empty($post)){
                     $ch = curl_init();
