@@ -21,6 +21,7 @@ class Investor extends Model
         'last_name' => 'required',
         'email' => 'required'
     ];
+
     
     public static $pr_rules = [
         'bonus_per' => 'required|numeric',

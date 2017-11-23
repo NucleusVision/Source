@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
+use Yajra\Datatables\Facades\Datatables;
 
 class InvestorNewController extends Controller
 {
@@ -37,7 +38,8 @@ class InvestorNewController extends Controller
 
     
     public function getInvestorsList(Request $request) {
-        $oSelect = Investor::where(function ($query) {
+		
+		$oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
                         $query->where('prflag', '<>', 1)
                               ->orWhereNull('prflag');
                     });
@@ -48,8 +50,37 @@ class InvestorNewController extends Controller
                 $oSelect->whereNotNull('bitcoin_id');
             }
         }
-        
-        return $oSelect->get()->toArray();
+		
+		$investors = $oSelect->orderBy('id', 'DESC');
+		
+		return Datatables::of($investors)
+			->editColumn('doc1', function ($row) {
+				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('doc2', function ($row) {
+				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('prflag', function ($row) {
+				if($row->prflag == 1)
+					return 'Yes';
+				else if($row->prflag == 0)
+					return 'No';
+				else
+					return 'No';
+            })
+			->editColumn('bitcoin_id', function ($row) {
+				if($row->bitcoin_id)
+					return 'Yes';
+				else
+					return 'No';
+            })
+			->addColumn('name', function ($row) {
+                return $row->first_name.' '.$row->last_name;
+            })
+            ->addColumn('action', function ($row) {
+				return '<a id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/investors-new/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+            })
+            ->make(true);
     }
 
     public function create() {
@@ -77,8 +108,10 @@ class InvestorNewController extends Controller
      * Edit Team 
      */
     public function edit($iInvestorId) {
-        return view('admin.investors.edit')
+		//dd(Investor::find($iInvestorId));
+        return view('admin.investorsnew.edit')
                 ->with('oInvestor', Investor::find($iInvestorId));
+				
     }
 
     /**
@@ -473,7 +506,38 @@ class InvestorNewController extends Controller
     }
     
     public function getprInvestorsList() {
-        return Investor::where('prflag', '1')->orderBy('investor_id','DESC')->get()->toArray();
+		
+		$investors = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name', 'bonus_per', 'lock_in_period'])->where('prflag', '1')->orderBy('id', 'DESC');
+		
+		return Datatables::of($investors)
+			->editColumn('doc1', function ($row) {
+				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('doc2', function ($row) {
+				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('prflag', function ($row) {
+				if($row->prflag == 1)
+					return 'Yes';
+				else if($row->prflag == 0)
+					return 'No';
+				else
+					return 'No';
+            })
+			->editColumn('bitcoin_id', function ($row) {
+				if($row->bitcoin_id)
+					return 'Yes';
+				else
+					return 'No';
+            })
+			->addColumn('name', function ($row) {
+                return $row->first_name.' '.$row->last_name;
+            })
+            ->addColumn('action', function ($row) {
+				return '<a id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+            })
+            ->make(true);
+		
     }
     
     public function prInvestorEdit($iInvestorId) {
@@ -492,6 +556,21 @@ class InvestorNewController extends Controller
         $oInvestor->update([
             'bonus_per'  =>  $request->bonus_per,
             'lock_in_period'  =>  $request->lock_in_period
+        ]);
+        
+        \Session::flash('status', 'Updated Successfully.');
+
+        return redirect()->back();
+    }
+	
+	public function InvestorFlagUpdate(Request $request) {
+
+        $this->validate($request, ['prflag' => 'required']);
+        
+        $oInvestor = Investor::find($request->input("investor_id"));
+               
+        $oInvestor->update([
+            'prflag'  =>  $request->prflag
         ]);
         
         \Session::flash('status', 'Updated Successfully.');

@@ -38,14 +38,14 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">ID</label>
                       <div class="col-md-4">
-                          <label style="margin-top: 5px;"><img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc1); ?>"></label>
+                          <label style="margin-top: 5px;"><img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc1); ?>"></label>
                       </div>
                     </div>
                       
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Selfie with ID</label>
                       <div class="col-md-4">
-                          <label style="margin-top: 5px;font-weight: normal;"><img src="http://tokensale.enterstargate.com/uploads/<?php echo e($oInvestor->doc2); ?>"></label>
+                          <label style="margin-top: 5px;font-weight: normal;"><img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc2); ?>"></label>
                       </div>
                     </div> 
                       

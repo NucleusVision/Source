@@ -74,64 +74,32 @@
                         }
                 });
                 
-                $('#investors-list').DataTable({
-                    "ordering": false,
-                  "ajax": {
-                        "processing": true,
-                         "serverSide": true,
-                         "url": "{{ route('admin::prInvestorsList') }}", 
-                         "dataSrc": ""
-                    },
-                    "columns": [
-                        { "data": "doc1",
-                            "render": function(data, type, row, meta) {  
-                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
-                           }
-                       },
-					   { "data": "doc2",
-                            "render": function(data, type, row, meta) {  
-                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
-                           }
-                       },
-                        { "data": "name",
-                            "render": function(data, type, row, meta) {     
-                                return row.first_name+" "+row.last_name;
-                            } 
-                        },
-                        { "data": "nationality" },
-                        { "data": "status" },
-                        { "data": "prflag",
-                            "render": function(data, type, row, meta) {
-                                if(row.prflag == 1)
-                                    return 'Yes';
-                                else if(row.prflag == 0)
-                                    return 'No';
-                                else
-                                    return 'No';
-                            }
-                        },
-                        { "data": "bitcoin_id",
-                            "render": function(data, type, row, meta) {
-                                if(row.bitcoin_id)
-                                    return 'Yes';
-                                else
-                                    return 'No';
-                            }
-                        },
-                        { "data": "bonus_per" },
-                        { "data": "lock_in_period" },
-                        { "data": "investor_id",
-                            "render": function(data, type, row, meta) {     
-                                var out='<a id="' + row.investor_id + '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp';
-                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp';
-                                out+='<a href="/admin/pr-investors/' + row.investor_id + '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp';
-                                return out;
-                            }
-                        }
-                    ]
-                });
-                
-                
+				
+				var investors_table = $('#investors-list').DataTable({
+					processing: true,
+					serverSide: true,
+					ajax: {
+						url: "{{ route('admin::prInvestorsList') }}",
+						data: function (d) {
+							d.type = $('#type').val();
+						}
+					},
+					"columns": [
+							{data: 'doc1', name: 'doc1'},
+							{data: 'doc2', name: 'doc2'},
+							{data: 'name', name: 'name'},
+							{data: 'nationality', name: 'nationality'},
+							{data: 'status', name: 'status'},
+							{data: 'prflag', name: 'prflag'},
+							{data: 'bitcoin_id', name: 'bitcoin_id'},
+							{data: 'bonus_per', name: 'bonus_per'},
+							{data: 'lock_in_period', name: 'lock_in_period'},
+							{data: 'action', name: 'action', orderable: false, searchable: false}
+						]
+				});
+
+				
+				
                 $(document).on('click', '.content .investor-status', function (e) {
                     
                     e.preventDefault();
@@ -164,13 +132,13 @@
                                     data: {investor_id: id, status:investor_status},
                                     success: function(data){
                                         swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
-                                        $('#investors-list').dataTable()._fnAjaxUpdate();
+                                        investors_table.draw();
                                     }
                                 }
                         )
                       .done(function(data) {
                         swal(investor_status_message, "Investor was successfully "+investor_status_message+"!", "success");
-                        $('#investors-list').dataTable()._fnAjaxUpdate();
+                        investors_table.draw();
                       })
                       .error(function(data) {
                         swal("Oops", "We couldn't connect to the server!", "error");
