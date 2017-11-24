@@ -63,16 +63,13 @@
                       </div>
                     </div>
                       
-                    <div class="form-group mrb20">
+                   <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">PR Flag</label>
                       <div class="col-md-4">
-                          <?php if($oInvestor->prflag == 1): ?>
-                          <label style="margin-top: 5px;font-weight: normal;">Yes</label>
-                          <?php elseif($oInvestor->prflag == 0): ?>
-                          <label style="margin-top: 5px;font-weight: normal;">No</label>
-                          <?php else: ?>
-                          <label style="margin-top: 5px;font-weight: normal;"></label>
-                          <?php endif; ?>
+                          <select name="prflag" class="form-control">
+							<option value="0">No</option>
+							<option value="1" <?php if($oInvestor->prflag == '1'): ?> selected <?php endif; ?>>Yes</option>
+						  </select>
                       </div>
                     </div>     
 

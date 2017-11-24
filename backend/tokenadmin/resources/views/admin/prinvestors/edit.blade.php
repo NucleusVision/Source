@@ -64,16 +64,13 @@
                       </div>
                     </div>
                       
-                    <div class="form-group mrb20">
+                   <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">PR Flag</label>
                       <div class="col-md-4">
-                          @if($oInvestor->prflag == 1)
-                          <label style="margin-top: 5px;font-weight: normal;">Yes</label>
-                          @elseif($oInvestor->prflag == 0)
-                          <label style="margin-top: 5px;font-weight: normal;">No</label>
-                          @else
-                          <label style="margin-top: 5px;font-weight: normal;"></label>
-                          @endif
+                          <select name="prflag" class="form-control">
+							<option value="0">No</option>
+							<option value="1" @if($oInvestor->prflag == '1') selected @endif>Yes</option>
+						  </select>
                       </div>
                     </div>     
 

@@ -555,7 +555,8 @@ class InvestorNewController extends Controller
                
         $oInvestor->update([
             'bonus_per'  =>  $request->bonus_per,
-            'lock_in_period'  =>  $request->lock_in_period
+            'lock_in_period'  =>  $request->lock_in_period,
+			'prflag'  =>  $request->prflag
         ]);
         
         \Session::flash('status', 'Updated Successfully.');
