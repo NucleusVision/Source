@@ -138,7 +138,18 @@ module.exports = {
                 } });
         });
     },
-
+    distributeTokens : function (req, res) {
+        console.log(req.body);
+        var _this = this;
+        lib.distributeTokens(function(err, transactionHash) {
+                console.log("distributeTokens: " + transactionHash);
+                return res.json({
+                        status : 'ok',
+                        error: err,
+                        data : { tx: transactionHash }
+                    });
+            });
+    },
     whitelistAccount : function (req, res) {
         console.log(req.body);
         var _this = this;
@@ -174,8 +185,8 @@ module.exports = {
         var _flag = (req.param('flag') == "1");
         var _lockTimeout = req.param('lockTimeout');
         var _bonus = req.param('bonus');
-        lib.approveAccount(_addr, _flag, _lockTimeout, _bonus, function(err, transactionHash) {
-                console.log("approveAccount: " + transactionHash);
+        lib.addPreSaleAccount(_addr, _flag, _lockTimeout, _bonus, function(err, transactionHash) {
+                console.log("addPreSaleAccount: " + transactionHash);
                 return res.json({
                         status : 'ok',
                         error: err,
@@ -247,7 +258,7 @@ module.exports = {
                 return res.json({
                         status : 'ok',
                         error: err,
-                        data : settings,
+                        data : stats,
                         currentTime: Math.floor(Date.now() / 1000)
                     });
             });
@@ -269,8 +280,9 @@ module.exports = {
         var _whiteTime = req.param('whiteTime') || 0;
         var _publicTime = req.param('publicTime') || 0;
         var _endTime = req.param('endTime') || 0;
+        var _lockTime = req.param('lockTime') || 0;
 
-        lib.setSaleStartTimes(_whiteTime, _publicTime, _endTime, function(err, tx) {
+        lib.setSaleStartTimes(_whiteTime, _publicTime, _endTime, _lockTime, function(err, tx) {
                 console.log("setStartTimes: " + tx);
                 return res.json({
                         status : 'ok',
@@ -296,7 +308,7 @@ module.exports = {
         var _whiteTime = req.param('whiteTime') || 0;
         var _publicTime = req.param('publicTime') || 0;
         var _endTime = req.param('endTime') || 0;
-
+        var _lockTime = req.param('lockTime') || 0;
         var ePrice = req.param('ePrice') || 0;
         var bPrice = req.param('bPrice') || 0;
         var minEth = req.param('minEth') || 0;
@@ -309,7 +321,7 @@ module.exports = {
         var softCap = req.param('softCap') || 0;
         var hardCap = req.param('hardCap') || 0;
 
-        lib.setSaleSettings(_whiteTime, _publicTime, _endTime, ePrice, bPrice, minEth, minGas, maxGas, 
+        lib.setSaleSettings(_whiteTime, _publicTime, _endTime, _lockTime, ePrice, bPrice, minEth, minGas, maxGas, 
             minGasPrice, maxGasPrice, bonus, bonusBuyers, softCap, hardCap, function(err, tx) {
                 console.log("setSaleSettings: " + tx);
                 return res.json({
@@ -318,6 +330,46 @@ module.exports = {
                         data : tx
                     });
             });
+    },
+    isPreSale : function (req, res) {
+        console.log(req.body);
+        var _addr = req.param('addr');
+        lib.isPreSale(_addr, function(err, settings) {
+                console.log("isPreSale: " + settings);
+                return res.json({
+                        status : 'ok',
+                        error: err,
+                        data : settings,
+                        currentTime: Math.floor(Date.now() / 1000)
+                    });
+            });
+    },
+    isWhitelisted : function (req, res) {
+        console.log(req.body);
+        var _addr = req.param('addr');
+        lib.isWhitelisted(_addr, function(err, settings) {
+                console.log("isWhitelisted: " + settings);
+                return res.json({
+                        status : 'ok',
+                        error: err,
+                        data : settings,
+                        currentTime: Math.floor(Date.now() / 1000)
+                    });
+            });
+    },
+    isApproved : function (req, res) {
+        console.log(req.body);
+        var _addr = req.param('addr');
+        lib.isApproved(_addr, function(err, settings) {
+                console.log("isApproved: " + settings);
+                return res.json({
+                        status : 'ok',
+                        error: err,
+                        data : settings,
+                        currentTime: Math.floor(Date.now() / 1000)
+                    });
+            });
     }
+
 };
 

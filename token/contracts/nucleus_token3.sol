@@ -169,6 +169,11 @@ contract TokenERC20 {
         Burn(_from, _value);
         return true;
     }
+
+    function getBalance(address _to) view public returns(uint res) {
+        return balanceOf[_to];
+    }
+
 }
 
 contract NCashToken is owned, TokenERC20 {
@@ -176,6 +181,7 @@ contract NCashToken is owned, TokenERC20 {
     uint defaultUnlockTime;
 
     mapping (address => uint) public unlockAt;
+    mapping (address => bool) public unlockAtDefault;
 
     function NCashToken(
         uint256 initialSupply,
@@ -189,12 +195,9 @@ contract NCashToken is owned, TokenERC20 {
 
     // need to check if lockTokenTimeout passed
     function transfer(address _to, uint256 _value) public {
-        require((unlockAt[msg.sender] > 0 && unlockAt[msg.sender] <= now) || defaultUnlockTime <= now);
+        require(msg.sender == owner || (unlockAt[msg.sender] > 0 && unlockAt[msg.sender] <= now) 
+            || !unlockAtDefault[_to] || defaultUnlockTime <= now);
         _transfer(msg.sender, _to, _value);
-    }
-
-    function getBalance(address _to) view public returns(uint res) {
-        return balanceOf[_to];
     }
 
     function getUnlockTime(address _to) view public returns(uint res) {
@@ -211,7 +214,11 @@ contract NCashToken is owned, TokenERC20 {
     }
 
     function transferAndLock(address _to, uint256 _value, uint _unlockAt) onlyOwner public {
-        unlockAt[_to] = _unlockAt;
+        if(_unlockAt == 0) {
+            unlockAtDefault[_to] = true;
+        } else {
+            unlockAt[_to] = _unlockAt;
+        }
         _transfer(msg.sender, _to, _value);
     }
 
@@ -255,6 +262,7 @@ contract NCoreToken is owned, TokenERC20 {
 }
 
 contract NucleusTokenSale is owned {
+    uint256 public initialSupply;
     uint internal buyersCount;
     uint256 internal totalEthRaised;
     uint256 internal totalTokensSold;
@@ -297,16 +305,17 @@ contract NucleusTokenSale is owned {
     mapping (address => PreICO) public preSaleAccount;
     mapping (address => bool) public whitelistedAccount;
     mapping (address => bool) public approvedAccount;
+    mapping (address => uint256) public etherPaid;
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     function NucleusTokenSale(
-/*        uint256 _initialSupply,
+        uint256 _initialSupply,
         string _ncashName,
         uint8 _ncashDecimals,
         string _ncashSymbol,
         string _ncoreName,
         string _ncoreSymbol,
-        address _reserveWallet,
+        /*address _reserveWallet,
         address _teamWallet,
         address _partnersWallet,
         uint _reservePercent,
@@ -337,17 +346,15 @@ contract NucleusTokenSale is owned {
         totalEthRaised = 0;
         totalTokensSold = 0;
 
-        tokensIssued = false;
+        initialSupply = _initialSupply;
 
+        ncashToken = new NCashToken(initialSupply, _ncashName, _ncashDecimals, _ncashSymbol, saleEndTime + lockTokenTimeout);
+        ncoreToken = new NCoreToken(_ncoreName, _ncoreSymbol);
+
+        tokensIssued = false;
     }
 
-    function issueTokens(
-        uint256 _initialSupply,
-        string _ncashName,
-        uint8 _ncashDecimals,
-        string _ncashSymbol,
-        string _ncoreName,
-        string _ncoreSymbol,
+    function distributeTokens(
         address _reserveWallet,
         address _teamWallet,
         address _partnersWallet,
@@ -355,26 +362,8 @@ contract NucleusTokenSale is owned {
         uint _teamPercent,
         uint _partnersPercent
     ) onlyOwner public {
-        require(!tokensIssued);
-        
-        tokensIssued = true;
-        ncashToken = new NCashToken(_initialSupply, _ncashName, _ncashDecimals, _ncashSymbol, saleEndTime + lockTokenTimeout);
-        ncoreToken = new NCoreToken(_ncoreName, _ncoreSymbol);
-
-        distributeTokens(_initialSupply, _reserveWallet, _teamWallet, _partnersWallet, 
-            _reservePercent, _teamPercent, _partnersPercent);
-
-    }
-
-    function distributeTokens(
-        uint256 _initialSupply,
-        address _reserveWallet,
-        address _teamWallet,
-        address _partnersWallet,
-        uint _reservePercent,
-        uint _teamPercent,
-        uint _partnersPercent
-    ) internal {
+        require(_reservePercent >= 0 && _teamPercent >= 0 && _partnersPercent >= 0);
+        require(_reservePercent + _teamPercent + _partnersPercent <= 100);
         reserveWallet = _reserveWallet;
         teamWallet = _teamWallet;
         partnersWallet = _partnersWallet;
@@ -385,13 +374,13 @@ contract NucleusTokenSale is owned {
         if(reservePercent >= 0 && teamPercent >= 0 && partnersPercent >= 0 && 
             reservePercent + teamPercent + partnersPercent <= 100) {
             if(reserveWallet != 0x0 && reservePercent > 0 && reservePercent <= 100) {
-                ncashToken.transfer(reserveWallet, _initialSupply * reservePercent / 100);
+                ncashToken.transfer(reserveWallet, initialSupply * reservePercent / 100);
             } 
             if(teamWallet != 0x0 && teamPercent > 0 && teamPercent <= 100) {
-                ncashToken.transfer(teamWallet, _initialSupply * teamPercent / 100);
+                ncashToken.transfer(teamWallet, initialSupply * teamPercent / 100);
             } 
             if(partnersWallet != 0x0 && partnersPercent > 0 && partnersPercent <= 100) {
-                ncashToken.transfer(partnersWallet, _initialSupply * partnersPercent / 100);
+                ncashToken.transfer(partnersWallet, initialSupply * partnersPercent / 100);
             }
         }
     }
@@ -502,6 +491,20 @@ contract NucleusTokenSale is owned {
         return (totalEthRaised, totalTokensSold, buyersCount);
     }
 
+    function getEtherPaid(address target) onlyAdmin view public returns(uint256 res) {
+        return etherPaid[target];
+    }
+
+
+
+/*    function refundUser(address target) onlyAdmin public {
+        require(etherPaid[target] > 0);
+        // refund
+        target.transfer(etherPaid[target]); 
+        etherPaid[target] = 0;
+        ncoreToken.burnFrom(target, ncoreToken.getBalance(target));
+    }
+*/
 /*    function checkCanBuy(address _from, uint256 _amount) view onlyAdmin public 
             returns (bool res, string _msg, uint256 d1, uint256 d2, uint d3, uint d4) {
         if(_amount < minEthAmount) return (false, "Amount sent is too small", minEthAmount,  _amount, 0, 0);
@@ -551,13 +554,15 @@ contract NucleusTokenSale is owned {
             // calculate unlock date/time
             ncashToken.transferAndLock(msg.sender, amount, getTime() + preSaleAccount[msg.sender].lockingTime);
         } else {
-            ncashToken.transfer(msg.sender, amount);
+            ncashToken.transferAndLock(msg.sender, amount, 0);
         }
         ncoreToken.addToken(msg.sender);
 
         buyersCount += 1;
         totalEthRaised += msg.value;
         totalTokensSold += amount;
+
+        etherPaid[msg.sender] += msg.value;
 
         if(totalEthRaised >= softCap && ethWallet != 0x0) {
             // transfer everything from this wallet to external
