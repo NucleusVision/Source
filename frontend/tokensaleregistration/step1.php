@@ -78,7 +78,7 @@ if($response["success"] === true)
 
             //$url = 'http://tokenadmin.enterstargate.com/investors/verify/email';
             //$url = 'http://redemptiondata.bellboi.com/ajaxVerifyMail.php';
-            $url = 'http://13.56.240.73/ajaxVerifyMail.php';
+            $url = 'http://54.215.211.34/ajaxVerifyMail.php';
 
             $fields = array(
                     'email' => urlencode($email),

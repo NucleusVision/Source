@@ -111,14 +111,14 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Document1</label>
                       <div class="col-md-4"> 
-                        <img src="http://13.56.240.73:8000/uploads/{{ $oInvestor->doc1 }}">
+                        <img src="http://54.215.211.34:8000/uploads/{{ $oInvestor->doc1 }}">
                       </div>
                     </div>
                       
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">Document2</label>
                       <div class="col-md-4">
-                        <img src="http://13.56.240.73:8000/uploads/{{ $oInvestor->doc2 }}">
+                        <img src="http://54.215.211.34:8000/uploads/{{ $oInvestor->doc2 }}">
                       </div>
                     </div>   
                       

@@ -35,6 +35,8 @@
                       </div>
                       <div class="col-md-2">
                         <a href="#" id="load-ico-link" onclick="loadIcoSettings(); return false;"> Load ICO Settings</a>
+                        | 
+                        <a href="#" id="get-stats-link" onclick="getStats(); return false;"> get Stats</a>
                         <div id="loading-ico-cnt" style="display:none">Loading...</div>
                       </div>
                     </div>
@@ -127,7 +129,7 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">sale End Time</label>
                       <div class="col-md-4">
-                        <input class="form-control" tabindex="3" name="endTime" id="dt_sales_public" type="text" value="">
+                        <input class="form-control" tabindex="3" name="endTime" id="dt_end_time" type="text" value="">
                       </div>
                     </div>
                       
@@ -148,13 +150,66 @@
     <script src="/assets/js/dataTables.alphabetSearch.js"></script>
       <script>
           
+          function getStats(){
+
+            $("#get-stats-link").hide();
+            $("#loading-ico-cnt").show();
+            $.ajax({
+                url: 'http://54.215.211.34:8080/admin/settings/get-stats',
+                type: 'GET',
+                dataType : 'JSON',
+                data: {},
+                success: function(data) {
+                    $("#get-stats-link").show();
+                    $("#loading-ico-cnt").hide();
+                    if(data.status != "ok"){
+                        console.log(data);
+                        alert("empty response " + data.message);
+                        return false;
+                    }
+                    
+                    var cntToShow = "";
+                    if(typeof data.data.totalEthRaised !== 'undefined'){
+                         if(data.data.totalEthRaised != '-'){
+                             cntToShow += "totalEthRaised: "+data.data.totalEthRaised+"\r\n";
+                         }
+                    }
+                    if(typeof data.data.totalTokensSold !== 'undefined'){
+                         if(data.data.totalTokensSold != '-'){
+                             cntToShow += "totalTokensSold: "+data.data.totalTokensSold+"\r\n";
+                         }
+                    }
+                    if(typeof data.data.buyersCount !== 'undefined'){
+                         if(data.data.buyersCount != '-'){
+                             cntToShow += "buyersCount: "+data.data.buyersCount+"\r\n";
+                         }
+                    }
+                    
+                    if(cntToShow == ""){
+                        alert("no data found");
+                    }else{
+                        alert(cntToShow);
+                    }
+                },
+                error: function(data) {
+                     //console.log(data);
+                    $("#get-stats-link").show();
+                    $("#loading-ico-cnt").hide();
+                    var show = (typeof data.responseJSON !== 'undefined')?data.responseJSON.message:"request failed";
+                    alert(show);
+                    return false;
+                },
+             });
+
+          }
+          
           function loadIcoSettings(){
 
             var autoFields = ['minGas', 'maxGas', 'minGasPrice', 'maxGasPrice', 'maxGasPrice', 'bPrice', 'softCap', 'hardCap', 'endTime'];
             $("#load-ico-link").hide();
             $("#loading-ico-cnt").show();
             $.ajax({
-                url: 'http://13.56.240.73:8080/admin/settings/load-ico-settings',
+                url: 'http://54.215.211.34:8080/admin/settings/load-ico-settings',
                 type: 'GET',
                 dataType : 'JSON',
                 data: {},
@@ -176,6 +231,18 @@
                     if(typeof data.data.publicTime !== 'undefined'){
                          if(data.data.publicTime != '-'){
                              document.getElementsByName("dt_sales_public")[0].value = data.data.publicTime;
+                         }
+                    }
+                    
+                    if(typeof data.data.endTime !== 'undefined'){
+                         if(data.data.endTime != '-'){
+                             document.getElementsByName("endTime")[0].value = data.data.endTime;
+                         }
+                    }
+                    
+                    if(typeof data.data.lockTime !== 'undefined'){
+                         if(data.data.lockTime != '-'){
+                             document.getElementsByName("audit_period_days")[0].value = data.data.lockTime;
                          }
                     }
                     
