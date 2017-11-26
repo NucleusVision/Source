@@ -21,8 +21,7 @@ $message = "";
 $email = clean_data($_POST['email']);
 $captcha = $_POST['response'];
 
-//$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";//original
-$secretKey = "6LeTxTcUAAAAAGwy89ptRBrmGPPNFrOXmSEGeC69";//halcyon.user
+$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
 $ip = $_SERVER['REMOTE_ADDR'];
 $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
 $response = json_decode($response, true);
@@ -51,13 +50,13 @@ if($response["success"] === true)
 				
 				//file_put_contents("test.txt", "time1: ".$time1."time2: ".$time2."hour diff".$hourdiff);
 
-				if($hourdiff > 1 || empty($user_verify_row['token'])){
+				//if($hourdiff > 1){
 					$token = bin2hex(openssl_random_pseudo_bytes(16));
 					$update_user_verify = "UPDATE user_verify SET token = '".$token."',created_at='".$time1."' WHERE email = '".$email."'";		
 					mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-				}else{
-					$token = $user_verify_row['token'];
-				}
+				//}else{
+					//$token = $user_verify_row['token'];
+				//}
 				
 			}else{
 				$code = 400;

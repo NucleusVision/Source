@@ -1,3 +1,4 @@
+RewriteEngine On
 RewriteCond %{THE_REQUEST} ^(GET|HEAD)\s/(.+)\.php[^\s]* [NC]
 RewriteRule ^ /%2 [R=301,NE,L]
 RewriteCond %{REQUEST_FILENAME} !-d

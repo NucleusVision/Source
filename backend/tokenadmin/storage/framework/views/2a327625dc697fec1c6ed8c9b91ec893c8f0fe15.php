@@ -1,35 +1,19 @@
-@extends('admin.layouts.master')
-
-@section('content') 
+<?php $__env->startSection('content'); ?> 
   <div class="content-wrapper">        
     <section class="content-header">
-      <h1>Investors</h1>
+      <h1>PR Investors</h1>
       <ol class="breadcrumb">
-        <li><a href="{{ route('admin::dashboard') }}"><i class="fa fa-home"></i> Home</a></li>
-        <li class="active">Investors</li>
+        <li><a href="<?php echo e(route('admin::dashboard')); ?>"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">PR Investors</li>
       </ol>
     </section>        
     <section class="content">      
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">List of Investors</h3>
+          <h3 class="box-title">List of PR Investors</h3>
         </div>
-          <div class="row" style="margin-left: 3px;">  
-        <form name="form1" id="form1" method="get">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="call_status">Type</label>
-                    <select class="form-control" id="type" name="type" style="width:200px;">
-                        <option value="" selected="selected">Select Type</option>
-                        <option value="whitelisted">White Listed</option>
-                        <option value="public">Public</option>
-                        <option value="btc">BTC Wallet Investors</option>
-                    </select>
-                </div>
-            </div>
-        </form>   
-        </div>
-        <div class="box-body">  
+        <div class="box-body">
+        
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
@@ -40,6 +24,8 @@
                 <th>Status</th>
                 <th>PR Flag</th>
                 <th>BTC Wallet</th>
+                <th style="width:70px;">Bonus %</th>
+                <th>Lock-in period</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -86,32 +72,63 @@
                         }
                 });
                 
-				
-				var investors_table = $('#investors-list').DataTable({
-					processing: true,
-					serverSide: true,
-					ajax: {
-						url: "{{ route('admin::investorsNewList') }}",
-						data: function (d) {
-							d.type = $('#type').val();
-						}
-					},
-					"columns": [
-							{data: 'doc1', name: 'doc1'},
-							{data: 'doc2', name: 'doc2'},
-							{data: 'name', name: 'name'},
-							{data: 'nationality', name: 'nationality'},
-							{data: 'status', name: 'status'},
-							{data: 'prflag', name: 'prflag'},
-							{data: 'bitcoin_id', name: 'bitcoin_id'},
-							{data: 'action', name: 'action', orderable: false, searchable: false}
-						]
-				});
-				
-
-                $('#type').on('change', function() {
-                    investors_table.draw();
+                $('#investors-list').DataTable({
+                    "ordering": false,
+                  "ajax": {
+                        "processing": true,
+                         "serverSide": true,
+                         "url": "<?php echo e(route('admin::prInvestorsList')); ?>", 
+                         "dataSrc": ""
+                    },
+                    "columns": [
+                        { "data": "doc1",
+                            "render": function(data, type, row, meta) {  
+                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc1 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
+                           }
+                       },
+					   { "data": "doc2",
+                            "render": function(data, type, row, meta) {  
+                               return '<img src="http://dev.tokensale.com/uploads/' + row.doc2 + '" alt="' + row.first_name + '" class="imageId" style="cursor:pointer;"/>';  
+                           }
+                       },
+                        { "data": "name",
+                            "render": function(data, type, row, meta) {     
+                                return row.first_name+" "+row.last_name;
+                            } 
+                        },
+                        { "data": "nationality" },
+                        { "data": "status" },
+                        { "data": "prflag",
+                            "render": function(data, type, row, meta) {
+                                if(row.prflag == 1)
+                                    return 'Yes';
+                                else if(row.prflag == 0)
+                                    return 'No';
+                                else
+                                    return 'No';
+                            }
+                        },
+                        { "data": "bitcoin_id",
+                            "render": function(data, type, row, meta) {
+                                if(row.bitcoin_id)
+                                    return 'Yes';
+                                else
+                                    return 'No';
+                            }
+                        },
+                        { "data": "bonus_per" },
+                        { "data": "lock_in_period" },
+                        { "data": "investor_id",
+                            "render": function(data, type, row, meta) {     
+                                var out='<a id="' + row.investor_id + '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp';
+                                out+='<a id="' + row.investor_id + '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp';
+                                out+='<a href="/admin/pr-investors/' + row.investor_id + '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp';
+                                return out;
+                            }
+                        }
+                    ]
                 });
+                
                 
                 $(document).on('click', '.content .investor-status', function (e) {
                     
@@ -135,8 +152,8 @@
                         showCancelButton: true,
                         confirmButtonText: "Yes, "+investor_status+" it!",
                         confirmButtonColor: "#ec6c62",
-						showLoaderOnConfirm: true,
-						preConfirm: function() {
+                    showLoaderOnConfirm: true,
+                    preConfirm: function() {
                       return new Promise(function(resolve) {
                            $.ajax(
                                 {
@@ -145,13 +162,13 @@
                                     data: {investor_id: id, status:investor_status},
                                     success: function(data){
                                         swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
-                                        investors_table.draw();
+                                        $('#investors-list').dataTable()._fnAjaxUpdate();
                                     }
                                 }
                         )
                       .done(function(data) {
                         swal(investor_status_message, "Investor was successfully "+investor_status_message+"!", "success");
-						investors_table.draw();
+                        $('#investors-list').dataTable()._fnAjaxUpdate();
                       })
                       .error(function(data) {
                         swal("Oops", "We couldn't connect to the server!", "error");
@@ -167,4 +184,5 @@
 });
                 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
