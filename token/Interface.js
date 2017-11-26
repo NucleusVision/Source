@@ -11,26 +11,29 @@ var wsProvider = _server;
 var Personal = require('web3-eth-personal');
 var personal = new Personal(wsProvider);
 
-var _ownerAcc = "0x156c3fc2b7688583ef089e416d1c1ebc584934ee"; //"0x20154D90491630A3d8EA09deD4e8D14269Ac22dF"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
+var _ownerAcc = "0x36112c7cd9cd6fc00ae1bd747411cd856be48bae"; //"0x156c3fc2b7688583ef089e416d1c1ebc584934ee"; //"0x20154D90491630A3d8EA09deD4e8D14269Ac22dF"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
 var _ownerAccPwd = "1q2w3e4r5t6y";
 
-var _baseAcc = "0x8fdc87eb775221facbf2c37387b974dca48b82f6"; //"0x8EA3a92C3075991F72e0B5B19De476d0e13c7F48"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
+var _baseAcc = "0x238a3addf093abbdc6ac5ff2daef7ac312d857eb"; //"0x8fdc87eb775221facbf2c37387b974dca48b82f6"; //"0x8EA3a92C3075991F72e0B5B19De476d0e13c7F48"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
 var _baseAccPwd = "123";
 
 var _ownerWallet = _ownerAcc; //"0x20154D90491630A3d8EA09deD4e8D14269Ac22dF"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
 
 const _contractFileName = "contracts/nucleus_token3.sol";
-var _contractAddress = "0x7d8BEee4E2AFa2504df055EC6eCd1014388cF87a"; //"0xcD7819aD0ef9E33d5441eC6b13aBD22D4cB4e995"; //"0xA3A5e6D92EBd55ee62cc6D07088FeD5673E7ED30"; //"0x113aE280661d1d74c142864F2F16002AD581e8e3"; //"0xEB9b5C80ab6D7dD8d9da1223A4467e8D744645CC"; //"0xaa1e29854f9f4d41cf386e2858972f23da5bffe1"; //"0x89693da18c7741e51221Ef28A9Aa0B99daF8A97E"; //"0xa56e415bde7283d4e6717b471935ed0850691027"; //"0x97F26A2e110a3f020Af68b100E620615efD1D221";
+var _contractAddress = "0x46692F445ECB1A1A65bE9F718F46c3AaBa7C683b"; //"0x070F441594d72F572Da49110F5FCC18EAdA7d580"; //"0x7d8BEee4E2AFa2504df055EC6eCd1014388cF87a"; //"0xcD7819aD0ef9E33d5441eC6b13aBD22D4cB4e995"; //"0xA3A5e6D92EBd55ee62cc6D07088FeD5673E7ED30"; //"0x113aE280661d1d74c142864F2F16002AD581e8e3"; //"0xEB9b5C80ab6D7dD8d9da1223A4467e8D744645CC"; //"0xaa1e29854f9f4d41cf386e2858972f23da5bffe1"; //"0x89693da18c7741e51221Ef28A9Aa0B99daF8A97E"; //"0xa56e415bde7283d4e6717b471935ed0850691027"; //"0x97F26A2e110a3f020Af68b100E620615efD1D221";
 const _contractName = "NucleusTokenSale"; //"NCashToken";
 
-const _reserveWallet = "0xd425114da1911d533806f382ae4a098135bea93e";
-const _teamWallet = "0xe5c4d6e3f2d3e44e320216a4aa84a48c7436edb4";
-const _partnersWallet = "0xc9a354fd5c9cabd30d8c26816b5c8c048124f86c";
+const _reserveWallet = "0x3559c44dcec5874c8747f6ff6f80415b57443017"; //"0xd425114da1911d533806f382ae4a098135bea93e";
+const _teamWallet = "0x7a5cb81470d75c4f7541fedf7d1a3f74b26ac0e4"; //"0xe5c4d6e3f2d3e44e320216a4aa84a48c7436edb4";
+const _partnersWallet = "0x0f34865976def109f9e95a3564a0a2d4e9aaae8c"; //"0xc9a354fd5c9cabd30d8c26816b5c8c048124f86c";
 const _reservePercent = 25;
 const _teamPercent = 20;
 const _partnersPercent = 5;
 
 const _btcWallet = "0xYYYYYYYYYYYYYYYYYYYYY";
+
+const _gasLimit = 6700000;
+const _gasPrice = 40000000000;
 
 //const input = fs.readFileSync(_contractFileName);
 // console.log("start compiling...");
@@ -139,7 +142,7 @@ class Interface {
                 if (a == true) {
                     console.log("sendTransaction...");
 
-                    var tx = _contract.transfer(to, amount, {from: _ownerAcc,gas: 2000000});
+                    var tx = _contract.transfer(to, amount, {from: _ownerAcc,gas: _gasLimit, gasPrice: _gasPrice});
                     if(cb) cb(null, tx);
                 } else {
                     console.log("Unlock error");
@@ -156,7 +159,7 @@ class Interface {
                 if (a == true) {
                     console.log("sendTransaction...");
 
-                    var tx = _contract.mintToken(to, amount, {from: _ownerAcc, gas: 2000000});
+                    var tx = _contract.mintToken(to, amount, {from: _ownerAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     if(cb) cb(null, tx);
                 } else {
                     console.log("Unlock error");
@@ -173,7 +176,7 @@ class Interface {
                 if (a == true) {
                     console.log("sendTransaction...");
 
-                    var tx = _contract.transferOwnership(newOwner, {from: _ownerAcc, gas: 2000000});
+                    var tx = _contract.transferOwnership(newOwner, {from: _ownerAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     if(cb) cb(null, tx);
                 } else {
                     console.log("Unlock error");
@@ -204,15 +207,15 @@ class Interface {
 
                     console.log("start deployment...");
                     _contract = NCash.new(
-                    // _contract = NCash.new(initialAmount, "NC03Test", 0, "NCN03", "NCC03Test", "NCC03", 
-                    //     _reserveWallet, _teamWallet, _partnersWallet,
-                    //     _reservePercent, _teamPercent, _partnersPercent,
-                        _baseAccPwd, //_ownerWallet, _btcWallet, 
+                        initialAmount, "NC09Test", 0, "NCN09", "NCC09Test", "NCC09", 
+                        // _reserveWallet, _teamWallet, _partnersWallet,
+                        // _reservePercent, _teamPercent, _partnersPercent,
+                        _baseAcc, //_ownerWallet, _btcWallet, 
                         {
                             data: '0x' + bytecode,
                             from: _ownerAcc,
-                            gas: 2000000, //web3.eth.estimateGas({data: '0x'+bytecode}),
-                            gasPrice: 4000000
+                            gas: _gasLimit, //web3.eth.estimateGas({data: '0x'+bytecode}),
+                            gasPrice: _gasPrice
                         }, (err, res1) => {
                             if (err) {
                                 console.log("contract deploy error:" + err);
@@ -239,6 +242,26 @@ class Interface {
             });
     }
 
+    distributeTokens(cb) {
+        console.log("distributeTokens()");
+        var _this = this;
+        if(!_contract) this.init();
+        this.unlockOwnerAccount().then(
+            function (a) {
+                if (a == true) {
+                    var tx = _contract.distributeTokens(
+                        _reserveWallet, _teamWallet, _partnersWallet,
+                        _reservePercent, _teamPercent, _partnersPercent,
+                        {from: _ownerAcc, gas: _gasLimit, gasPrice: _gasPrice});
+                    console.log("_contract.distributeTokens: "+ tx);
+                    if(cb) cb(null, tx);
+                } else {
+                    console.log("Unlock error");
+                    if(cb) cb("Unlock error");
+                }
+            });
+    }
+
     deployNCashToken(cb) {
         console.log("deployNCashToken");
         var _this = this;
@@ -258,8 +281,7 @@ class Interface {
                         {
                             data: '0x' + bytecode,
                             from: _ownerAcc,
-                            gas: 2000000, //web3.eth.estimateGas({data: '0x'+bytecode}),
-                            gasPrice: 4000000
+                            gas: _gasLimit, gasPrice: _gasPrice
                         }, (err, res1) => {
                             if (err) {
                                 console.log("contract deploy error:" + err);
@@ -294,7 +316,7 @@ class Interface {
             function (a) {
                 if (a == true) {
                     //web3.eth.defaultAccount = _baseAcc;
-                    var tx = _contract.whitelistAccount(addr, flag, {from: _baseAcc, gas: 2000000});
+                    var tx = _contract.whitelistAccount(addr, flag, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.whitelistAccount: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -312,7 +334,7 @@ class Interface {
             function (a) {
                 if (a == true) {
                     //web3.eth.defaultAccount = _baseAcc;
-                    var tx = _contract.approveAccount(addr, flag, {from: _baseAcc, gas: 2000000});
+                    var tx = _contract.approveAccount(addr, flag, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.approveAccount: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -330,7 +352,7 @@ class Interface {
             function (a) {
                 if (a == true) {
                     //web3.eth.defaultAccount = _baseAcc;
-                    var tx = _contract.addPreSaleAccount(addr, flag, lockTimeout, bonus, {from: _baseAcc, gas: 2000000});
+                    var tx = _contract.addPreSaleAccount(addr, flag, lockTimeout, bonus, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.addPreSaleAccount: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -350,7 +372,7 @@ class Interface {
                     //web3.eth.defaultAccount = _baseAcc;
                     var oldAdmin = _contract.admin;
                     console.log("oldAdmin: "+ oldAdmin);
-                    var tx = _contract.transferAdmin(addr, {from: _ownerAcc, gas: 2000000});
+                    var tx = _contract.transferAdmin(addr, {from: _ownerAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.transferAdmin: "+ tx);
                     var newAdmin = _contract.admin;
                     console.log("newAdmin: "+ oldAdmin);
@@ -370,7 +392,7 @@ class Interface {
             function (a) {
                 if (a == true) {
                     //web3.eth.defaultAccount = _baseAcc;
-                    var tx = _contract.setWallets(addr, "", {from: _ownerAcc, gas: 2000000});
+                    var tx = _contract.setWallets(addr, "", {from: _ownerAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.setWallets: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -388,6 +410,65 @@ class Interface {
         return _contract.getAccountBalance(acc);
     }
 
+    isPreSale(addr, cb) {
+        console.log("isPreSale("+addr+")");
+        var _this = this;
+        if(!_contract) this.init();
+        this.unlockBaseAccount().then(
+            function (a) {
+                if (a == true) {
+                    web3.eth.defaultAccount = _baseAcc;
+                    //var wt = _contract.getWhitelistedSaleStartTime({gas: 2000000});
+                    //var pt = _contract.getPublicSaleStartTime({gas: 2000000});
+                    var tt = _contract.isPreSale(addr);
+                    console.log("_contract.isPreSale: "+ tt);
+                    if(cb) cb(null, tt);
+                } else {
+                    console.log("Unlock error");
+                    if(cb) cb("Unlock error");
+                }
+            });
+    }
+
+    isWhitelisted(addr, cb) {
+        console.log("isWhitelisted("+addr+")");
+        var _this = this;
+        if(!_contract) this.init();
+        this.unlockBaseAccount().then(
+            function (a) {
+                if (a == true) {
+                    web3.eth.defaultAccount = _baseAcc;
+                    //var wt = _contract.getWhitelistedSaleStartTime({gas: 2000000});
+                    //var pt = _contract.getPublicSaleStartTime({gas: 2000000});
+                    var tt = _contract.isWhitelisted(addr);
+                    console.log("_contract.isWhitelisted: "+ tt);
+                    if(cb) cb(null, tt);
+                } else {
+                    console.log("Unlock error");
+                    if(cb) cb("Unlock error");
+                }
+            });
+    }
+
+    isApproved(addr, cb) {
+        console.log("isApproved("+addr+")");
+        var _this = this;
+        if(!_contract) this.init();
+        this.unlockBaseAccount().then(
+            function (a) {
+                if (a == true) {
+                    web3.eth.defaultAccount = _baseAcc;
+                    //var wt = _contract.getWhitelistedSaleStartTime({gas: 2000000});
+                    //var pt = _contract.getPublicSaleStartTime({gas: 2000000});
+                    var tt = _contract.isApproved(addr);
+                    console.log("_contract.isApproved: "+ tt);
+                    if(cb) cb(null, tt);
+                } else {
+                    console.log("Unlock error");
+                    if(cb) cb("Unlock error");
+                }
+            });
+    }
 
     getSaleStartTimes(cb) {
         console.log("getSaleStartTimes()");
@@ -409,8 +490,8 @@ class Interface {
             });
     }
 
-    setSaleStartTimes(whitelistedStartTime, publicStartTime, endTime, cb) {
-        console.log("setSaleStartTimes(" + whitelistedStartTime + ", " + publicStartTime + ", " + endTime + ")");
+    setSaleStartTimes(whitelistedStartTime, publicStartTime, endTime, lockTokenTimeout, cb) {
+        console.log("setSaleStartTimes(" + whitelistedStartTime + ", " + publicStartTime + ", " + endTime + ", " + lockTokenTimeout + ")");
         var _this = this;
         if(!_contract) this.init();
         this.unlockBaseAccount().then(
@@ -419,7 +500,7 @@ class Interface {
                     //web3.eth.defaultAccount = _baseAcc;
                     // var wtx = _contract.setWhitelistedSaleStartTime(whitelistedStartTime, {gas: 2000000});
                     // var ptx = _contract.setPublicSaleStartTime(publicStartTime, {gas: 2000000});
-                    var tx = _contract.setSaleTimes(whitelistedStartTime, publicStartTime, endTime, {from: _baseAcc, gas: 2000000});
+                    var tx = _contract.setSaleTimes(whitelistedStartTime, publicStartTime, endTime, lockTokenTimeout, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.setSaleTimes: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -447,7 +528,7 @@ class Interface {
             });
     }
 
-    setSaleSettings(wStartTime, pStartTime, eTime, ePrice, bPrice, minEth, minGas, maxGas, 
+    setSaleSettings(wStartTime, pStartTime, eTime, lockTimeout, ePrice, bPrice, minEth, minGas, maxGas, 
             minGasPrice, maxGasPrice, bonus, bonusBuyers, softCap, hardCap, cb) {
         //console.log("setSaleSettings(" + whitelistedStartTime + ", " + publicStartTime + ")");
         var _this = this;
@@ -455,9 +536,9 @@ class Interface {
         this.unlockBaseAccount().then(
             function (a) {
                 if (a == true) {
-                    var tx = _contract.setSaleSettings(wStartTime, pStartTime, eTime, ePrice, bPrice, 
+                    var tx = _contract.setSaleSettings(wStartTime, pStartTime, eTime, lockTimeout, ePrice, bPrice, 
                         minEth, minGas, maxGas, minGasPrice, maxGasPrice, bonus, bonusBuyers, 
-                        softCap, hardCap, {from: _baseAcc, gas: 2000000});
+                        softCap, hardCap, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.setSaleSettings: "+ tx);
                     if(cb) cb(null, tx);
                 } else {
@@ -494,7 +575,7 @@ class Interface {
                 if (a == true) {
                     //web3.eth.defaultAccount = _baseAcc;
                     // var tt = _contract.checkCanBuy(addr, web3.toDecimal(ethAmount), {from: _baseAcc, gas: 2000000});
-                    var tt = _contract.checkCanBuy(addr, ethAmount, {from: _baseAcc, gas: 2000000});
+                    var tt = _contract.checkCanBuy(addr, ethAmount, {from: _baseAcc, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.checkCanBuy: "+ tt);
                     if(cb) cb(null, tt);
                 } else {
@@ -513,7 +594,7 @@ class Interface {
             function (a) {
                 if (a == true) {
                     //web3.eth.defaultAccount = addr;
-                    var tt = _contract.buy({ from: addr, value: ethAmount, gas: 4000000});
+                    var tt = _contract.buy({ from: addr, value: ethAmount, gas: _gasLimit, gasPrice: _gasPrice});
                     console.log("_contract.buy: "+ tt);
                     if(cb) cb(null, tt);
                 } else {
