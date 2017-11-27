@@ -278,11 +278,11 @@ class InvestorNewController extends Controller
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
             $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
-            if($functionToCall == "addPreSaleAccount")$post .= "&bonus_per=".$oInvestor->bonus_per."&lock_in_period=".($oInvestor->lock_in_period*24*3600);
+            if($functionToCall == "addPreSaleAccount")$post .= "&bonus=".$oInvestor->bonus_per."&lockTime=".($oInvestor->lock_in_period*24*3600);
             
-            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
-            print_r($post);
-            exit;
+//            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
+//            print_r($post);
+//            exit;
 
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
@@ -525,11 +525,11 @@ class InvestorNewController extends Controller
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
             $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
-            if($functionToCall == "addPreSaleAccount")$post .= "&bonus_per=".$oInvestor->bonus_per."&lock_in_period=".($oInvestor->lock_in_period*24*3600);
+            if($functionToCall == "addPreSaleAccount")$post .= "&bonus=".$oInvestor->bonus_per."&lockTime=".($oInvestor->lock_in_period*24*3600);
             
-            echo "http://".$this->apiDomain."/user/".$functionToCall;
-            print_r($post);
-            exit;
+//            echo "http://".$this->apiDomain."/user/".$functionToCall;
+//            print_r($post);
+//            exit;
             
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
