@@ -123,7 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <b>Document ID</b><br>
                 Provide your passport ID , driver's license number or national registration identity card number used when you registered.<br><br>
                 <input type="text" name="doc_id" class="form-control" placeholder="Document ID"></p>
-                <p><div class="g-recaptcha" data-sitekey="6LegUjYUAAAAAOIptlp4CQGTVIFH6APqe8AhCIVs"></div></p>            
+                <!-- <p><div class="g-recaptcha" data-sitekey="6LegUjYUAAAAAOIptlp4CQGTVIFH6APqe8AhCIVs"></div></p>    original       -->
+                <p><div class="g-recaptcha" data-sitekey="6LeTxTcUAAAAAA0pHcw86RYdF5N4_-sQcaYUD8Pc"></div></p>  <!--   halcyon        -->  
                 <button type="submit" class="btn btn-lg btn-block btn-bb" id="form-submit">Submit</button>
               </form>
                 <div>
