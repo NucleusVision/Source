@@ -524,7 +524,7 @@ class InvestorNewController extends Controller
         if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
-            $functionToCall = (!empty($request->prflag))?"addPreSaleAccount":"whitelistAccount";
+            $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
             if($functionToCall == "addPreSaleAccount")$post .= "&bonus_per=".$oInvestor->bonus_per."&lock_in_period=".($oInvestor->$lock_in_period*24*3600);
             
             echo "http://".$this->apiDomain."/user/".$functionToCall;
