@@ -277,14 +277,15 @@ class InvestorNewController extends Controller
         if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
-            $functionToCall = (!empty($oInvestor->prflag))?"whitelist":"approve";
+            $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
+            if($functionToCall == "addPreSaleAccount")$post .= "&bonus_per=".$oInvestor->bonus_per."&lock_in_period=".($oInvestor->$lock_in_period*24*3600);
             
-//            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
-//            print_r($post);
-//            exit;
-//            
+            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
+            print_r($post);
+            exit;
+
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall."Account");
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -523,14 +524,15 @@ class InvestorNewController extends Controller
         if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
-            $functionToCall = (!empty($request->prflag))?"whitelist":"approve";
+            $functionToCall = (!empty($request->prflag))?"addPreSaleAccount":"whitelistAccount";
+            if($functionToCall == "addPreSaleAccount")$post .= "&bonus_per=".$oInvestor->bonus_per."&lock_in_period=".($oInvestor->$lock_in_period*24*3600);
             
-            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
+            echo "http://".$this->apiDomain."/user/".$functionToCall;
             print_r($post);
             exit;
             
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall."Account");
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
