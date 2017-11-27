@@ -234,10 +234,10 @@ class InvestorController extends Controller
             $post = "addr=".$oInvestor->id."&flag=".$flag;
 
             $urlToCall = "http://".$this->apiDomain."/user/approveAccount";
-            echo $urlToCall;print_r($post);exit;
+            //echo $urlToCall;print_r($post);exit;
             
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
+            curl_setopt($ch, CURLOPT_URL, $urlToCall);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
