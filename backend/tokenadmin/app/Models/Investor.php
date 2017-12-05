@@ -24,11 +24,14 @@ class Investor extends Model
 
     
     public static $pr_rules = [
-        'bonus_per' => 'required|numeric',
-        'lock_in_period' => 'required|numeric'
+        'prflag' => 'required',
+        'bonus_per' => 'required_if:prflag,1|numeric|min:0.1',
+        'lock_in_period' => 'required_if:prflag,1|numeric|min:0.1'
     ];
     
     public static $messages = [
+        'bonus_per.required_if' => 'The Bonus % field is required.',
+        'lock_in_period.required_if' => 'The Lock-in period field is required.',
     ];
     
     public static $customAttributeNames = [

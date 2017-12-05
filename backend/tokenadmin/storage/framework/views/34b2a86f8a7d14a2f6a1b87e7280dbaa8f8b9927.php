@@ -30,6 +30,13 @@
 
                 </div>
                 <?php endif; ?>
+                <?php if(session('error')): ?>
+                <div class="alert alert-error fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <?php echo e(session('error')); ?>
+
+                </div>
+                <?php endif; ?>
                 <?php echo Form::model($oInvestor, array('route' => 'admin::InvestorFlagUpdate', 'class' => 'form-horizontal')); ?>  
                 <?php echo Form::hidden('investor_id'); ?> 
                 <div class="row mrb20">
@@ -66,21 +73,34 @@
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">PR Flag</label>
                       <div class="col-md-4">
-                          <select name="prflag" class="form-control">
-							<option value="0">No</option>
-							<option value="1" <?php if($oInvestor->prflag == '1'): ?> selected <?php endif; ?>>Yes</option>
-						  </select>
+                          <select name="prflag" id="prflag" class="form-control">
+			    <option value="0">No</option>
+                            <option value="1" <?php if($oInvestor->prflag == 1): ?> selected <?php endif; ?>>Yes</option>
+                          </select>
                       </div>
                     </div>     
-                    <br/>
+                    <div class="form-group mrb20 bonus_area">
+                      <label for="" class="control-label col-md-5">Bonus %</label>
+                      <div class="col-md-4">
+                        <?php echo Form::text('bonus_per', null, ['class'=>'form-control', 'id'=>'bonus_per', 'tabindex'=>'5']); ?>
+
+                      </div>
+                    </div>
+                    <div class="form-group mrb20 lockin_area">
+                      <label for="" class="control-label col-md-5">Lock-in period</label>
+                      <div class="col-md-4">
+                        <?php echo Form::text('lock_in_period', null, ['class'=>'form-control', 'id'=>'lock_in_period', 'tabindex'=>'5']); ?>
+
+                      </div>
+                    </div>
+                    <br/><br/>
                     <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5"></label>
                       <div class="col-md-4">
                         <input class="btn btn-success btn-lg mrr20" type="submit" name="status" value="Submit"> 
                         <a href="javascript:void(0);" class="btn btn-primary btn-lg cancel">Cancel</a>
                       </div>
-                    </div>  
-                      
+                    </div>   
                   </div>
                 </div>
                <?php echo Form::close(); ?>
@@ -91,9 +111,31 @@
         <script>
             $(function () {
                 $(".cancel").click(function(){ 
-                   location.href="<?php echo e(route('admin::prInvestors')); ?>"; 
+                   location.href="<?php echo e(route('admin::investorsNew')); ?>"; 
                 });
+                
+                $("#prflag").change(function(){
+                    if($(this).val() == 0){
+                        //$("#bonus_per, #lock_in_period").val("");
+                        $(".bonus_area, .lockin_area").hide();
+                    }else{
+                        //$("#bonus_per, #lock_in_period").val("");
+                        $(".bonus_area, .lockin_area").show(); 
+                    }
+                });
+                
+                if($("#prflag").val() == 1){
+                   $(".bonus_area, .lockin_area").show(); 
+                }else{
+                   $(".bonus_area, .lockin_area").hide(); 
+                }
+                
+                <?php if(old('prflag') && old('prflag') == 1): ?>
+                    $(".bonus_area, .lockin_area").show();
+                    $("#prflag option[value='1']").prop('selected', true);
+                <?php endif; ?>
             }); 
+           
         </script>
 </div>
 <?php $__env->stopSection(); ?>

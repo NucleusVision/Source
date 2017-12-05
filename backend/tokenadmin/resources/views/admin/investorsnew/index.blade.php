@@ -23,7 +23,6 @@
                         <option value="" selected="selected">Select Type</option>
                         <option value="whitelisted">White Listed</option>
                         <option value="public">Public</option>
-                        <option value="btc">BTC Wallet Investors</option>
                     </select>
                 </div>
             </div>
@@ -39,7 +38,6 @@
                 <th>Country</th>
                 <th>Status</th>
                 <th>PR Flag</th>
-                <th>BTC Wallet</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -103,7 +101,6 @@
 							{data: 'nationality', name: 'nationality'},
 							{data: 'status', name: 'status'},
 							{data: 'prflag', name: 'prflag'},
-							{data: 'bitcoin_id', name: 'bitcoin_id'},
 							{data: 'action', name: 'action', orderable: false, searchable: false}
 						]
 				});

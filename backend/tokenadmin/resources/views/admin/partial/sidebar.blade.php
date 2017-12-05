@@ -7,33 +7,42 @@
                 </a>
             </li>
             
-            <li class="{{ Request::is('admin/investors', 'admin/investors/*') ? 'active' : '' }}">
-                <a href="{{ route("admin::investors") }}">
-                    <i class="icon-users"></i> <span>Investors</span>
-                </a>
-            </li>
-            
             <li class="{{ Request::is('admin/entries', 'admin/entries/*') ? 'active' : '' }}">
                 <a href="{{ route("admin::entries") }}">
                     <i class="icon-users"></i> <span>Entries</span>
                 </a>
             </li>
             
-            <li class="{{ Request::is('admin/investors-new', 'admin/investors-new/*') ? 'active' : '' }}">
+            
+            <li class="{{ Request::is('admin/investors-all', 'admin/investors-all/*') ? 'active' : '' }}">
                 <a href="{{ route("admin::investorsNew") }}">
-                    <i class="icon-users"></i> <span>Investors New</span>
+                    <i class="icon-users"></i> <span>All Investors</span>
                 </a>
             </li>
             
+            <!--
+            <li class="{{ Request::is('admin/investors', 'admin/investors/*') ? 'active' : '' }}">
+                <a href="{{ route("admin::investors") }}">
+                    <i class="icon-users"></i> <span>Investors</span>
+                </a>
+            </li>
+            -->
+    
             <li class="{{ Request::is('admin/pr-investors', 'admin/pr-investors/*') ? 'active' : '' }}">
                 <a href="{{ route("admin::prInvestors") }}">
                     <i class="icon-users"></i> <span>PR Investors</span>
                 </a>
             </li>
             
+            <li class="{{ Request::is('admin/wp-investors', 'admin/wp-investors/*') ? 'active' : '' }}">
+                <a href="{{ route("admin::investorsWp") }}">
+                    <i class="icon-users"></i> <span>Whitelisted/Public Investors</span>
+                </a>
+            </li>
+            
             <li class="{{ Request::is('admin/settings', 'admin/settings/*') ? 'active' : '' }}">
                 <a href="{{ route("admin::settings") }}">
-                    <i class="icon-users"></i> <span>Settings</span>
+                    <i class="icon-settings"></i> <span>Settings</span>
                 </a>
             </li>
         </ul>

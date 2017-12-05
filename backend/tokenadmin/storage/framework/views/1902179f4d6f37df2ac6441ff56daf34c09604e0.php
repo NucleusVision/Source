@@ -2,10 +2,10 @@
 
 <div class="content-wrapper">        
     <section class="content-header">
-        <h1>Edit PR Investor</h1>
+        <h1>Edit Investor</h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo e(route('admin::prInvestors')); ?>"><i class="fa fa-home"></i> Home</a></li>
-            <li class="active">Edit PR Investor</li>
+            <li class="active">Edit Investor</li>
         </ol>
     </section>        
     <section class="content"> 
@@ -37,7 +37,7 @@
 
                 </div>
                 <?php endif; ?>
-                <?php echo Form::model($oInvestor, array('route' => 'admin::prInvestorUpdate', 'class' => 'form-horizontal')); ?>  
+                <?php echo Form::model($oInvestor, array('route' => 'admin::InvestorFlagUpdate', 'class' => 'form-horizontal')); ?>  
                 <?php echo Form::hidden('investor_id'); ?> 
                 <div class="row mrb20">
                   <div class="col-md-12">
@@ -70,16 +70,15 @@
                       </div>
                     </div>
                       
-                   <div class="form-group mrb20">
+                    <div class="form-group mrb20">
                       <label for="" class="control-label col-md-5">PR Flag</label>
                       <div class="col-md-4">
                           <select name="prflag" id="prflag" class="form-control">
-							<option value="0">No</option>
-							<option value="1" <?php if($oInvestor->prflag == '1'): ?> selected <?php endif; ?>>Yes</option>
-						  </select>
+			    <option value="0">No</option>
+                            <option value="1" <?php if($oInvestor->prflag == 1): ?> selected <?php endif; ?>>Yes</option>
+                          </select>
                       </div>
                     </div>     
-
                     <div class="form-group mrb20 bonus_area">
                       <label for="" class="control-label col-md-5">Bonus %</label>
                       <div class="col-md-4">
@@ -101,8 +100,7 @@
                         <input class="btn btn-success btn-lg mrr20" type="submit" name="status" value="Submit"> 
                         <a href="javascript:void(0);" class="btn btn-primary btn-lg cancel">Cancel</a>
                       </div>
-                    </div>  
-                      
+                    </div>   
                   </div>
                 </div>
                <?php echo Form::close(); ?>
@@ -113,7 +111,7 @@
         <script>
             $(function () {
                 $(".cancel").click(function(){ 
-                   location.href="<?php echo e(route('admin::prInvestors')); ?>"; 
+                   location.href="<?php echo e(route('admin::investorsWp')); ?>"; 
                 });
                 
                 $("#prflag").change(function(){
@@ -137,6 +135,7 @@
                     $("#prflag option[value='1']").prop('selected', true);
                 <?php endif; ?>
             }); 
+           
         </script>
 </div>
 <?php $__env->stopSection(); ?>

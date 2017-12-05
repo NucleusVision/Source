@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="/assets/css/global.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
     <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
     <!-- <script src="/assets/js/sweetalert.js"></script> -->
     <script src="/assets/js/sweetalert2.min.js"></script>
@@ -38,7 +39,6 @@
                 });
             </script> 
             @endif
-            
         </div>
 
         <div class="loader">

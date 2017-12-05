@@ -23,7 +23,6 @@
                 <th>Country</th>
                 <th>Status</th>
                 <th>PR Flag</th>
-                <th>BTC Wallet</th>
                 <th style="width:70px;">Bonus %</th>
                 <th>Lock-in period</th>
                 <th>Actions</th>
@@ -89,7 +88,6 @@
 							{data: 'nationality', name: 'nationality'},
 							{data: 'status', name: 'status'},
 							{data: 'prflag', name: 'prflag'},
-							{data: 'bitcoin_id', name: 'bitcoin_id'},
 							{data: 'bonus_per', name: 'bonus_per'},
 							{data: 'lock_in_period', name: 'lock_in_period'},
 							{data: 'action', name: 'action', orderable: false, searchable: false}
@@ -126,7 +124,7 @@
                            $.ajax(
                                 {
                                     type: "post",
-                                    url: "/admin/investors-new/status/change",
+                                    url: "/admin/investors-all/status/change",
                                     data: {investor_id: id, status:investor_status},
                                     success: function(data){
                                         swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");

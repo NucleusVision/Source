@@ -141,6 +141,16 @@
                       https://myetherwallet.com/.
                     </h3>
                     -->
+                    
+                    <p>
+                      Do not use addresses from exchanges you may
+                      not receive any Nucleus Token from. CakeCodes
+                      Global SEZC, Inc. disclaims all
+                      responsibility and liability to you if you
+                      use exchange wallet, or other intermediary
+                      and do not receive Nucleus Tokens.
+                    </p>
+                    
                     <div class="form-group">
                         <div class="eth-box-cnt">  
                             <div class="eth-box-cnt-b1">
@@ -155,18 +165,8 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--
-                    <p>
-                      Do not use addresses from exchanges you may
-                      not receive any Nucleus Token from. CakeCodes
-                      Global SEZC, Inc. disclaims all
-                      responsibility and liability to you if you
-                      use exchange wallet, or other intermediary
-                      and do not receive Nucleus Tokens.
-                    </p>
-                    -->
-                    
                     <p>
                      The Bitcoin Wallet Address Should be the one you will be contributing BTC from.Please enter a valid Ethereum wallet address above to receive the Nucleus tokens.
                     </p>
@@ -185,7 +185,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                    -->
                     <button class="btn next-btn" type=
                     "button" onclick="nextStep1()">Next</button>
                     <p id="eth-address-msg"></p>

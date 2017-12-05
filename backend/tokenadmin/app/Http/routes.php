@@ -51,24 +51,28 @@ Route::group(['middlewareGroups' => 'web'], function () {
         
         
         //Investors New
-        Route::get('investors-new', ['uses' => 'InvestorNewController@index', 'as' => 'investorsNew']); 
-        Route::get('investors-new.list', ['uses' => 'InvestorNewController@getInvestorsList', 'as' => 'investorsNewList']);        
-        Route::get('investors-new/create', ['uses' => 'InvestorNewController@create', 'as' => 'investorsNewCreate']);
-        Route::post('investors-new/store', ['uses' => 'InvestorNewController@store', 'as' => 'investorsNewStore']);
-        Route::get('investors-new/{id}/edit', ['uses' => 'InvestorNewController@edit', 'as' => 'investorsNewEdit']);
-        Route::post('investors-new/update', ['uses' => 'InvestorNewController@update', 'as' => 'investorsNewUpdate']);        
-        Route::get('investors-new/{id}/view', ['uses' => 'InvestorNewController@view', 'as' => 'investorsNewView']); 
-        Route::get('investors-new/delete/{id}', ['uses' => 'InvestorNewController@delete', 'as' => 'investorsNewDelete']);
-        Route::post('investors-new/status/change', ['uses' => 'InvestorNewController@changeStatus', 'as' => 'investorschangeStatus']);
-		Route::post('investors-new/flag/update', ['uses' => 'InvestorNewController@InvestorFlagUpdate', 'as' => 'InvestorFlagUpdate']); 
+        Route::get('investors-all', ['uses' => 'InvestorNewController@index', 'as' => 'investorsNew']); 
+        Route::get('investors-all.list', ['uses' => 'InvestorNewController@getInvestorsList', 'as' => 'investorsNewList']);        
+        Route::get('investors-all/create', ['uses' => 'InvestorNewController@create', 'as' => 'investorsNewCreate']);
+        Route::post('investors-all/store', ['uses' => 'InvestorNewController@store', 'as' => 'investorsNewStore']);
+        Route::get('investors-all/{id}/edit', ['uses' => 'InvestorNewController@edit', 'as' => 'investorsNewEdit', 'middleware' => 'checkinvestorstatus']);
+        Route::post('investors-all/update', ['uses' => 'InvestorNewController@update', 'as' => 'investorsNewUpdate']);        
+        Route::get('investors-all/{id}/view', ['uses' => 'InvestorNewController@view', 'as' => 'investorsNewView']); 
+        Route::get('investors-all/delete/{id}', ['uses' => 'InvestorNewController@delete', 'as' => 'investorsNewDelete']);
+        Route::post('investors-all/status/change', ['uses' => 'InvestorNewController@changeStatus', 'as' => 'investorschangeStatus']);
+        Route::post('investors-all/flag/update', ['uses' => 'InvestorNewController@InvestorFlagUpdate', 'as' => 'InvestorFlagUpdate']); 
         
         
          //PR Investors New
         Route::get('pr-investors', ['uses' => 'InvestorNewController@prInvestors', 'as' => 'prInvestors']); 
         Route::get('pr-investors.list', ['uses' => 'InvestorNewController@getprInvestorsList', 'as' => 'prInvestorsList']);        
-        Route::get('pr-investors/{id}/edit', ['uses' => 'InvestorNewController@prInvestorEdit', 'as' => 'prInvestorEdit']);
-        Route::post('pr-investors/update', ['uses' => 'InvestorNewController@prInvestorUpdate', 'as' => 'prInvestorUpdate']);        
-        
+        Route::get('pr-investors/{id}/edit', ['uses' => 'InvestorNewController@prInvestorEdit', 'as' => 'prInvestorEdit', 'middleware' => 'checkinvestorstatus']);
+        Route::post('pr-investors/update', ['uses' => 'InvestorNewController@prInvestorUpdate', 'as' => 'prInvestorUpdate']);
+
+        Route::get('wp-investors', ['uses' => 'InvestorNewController@indexWp', 'as' => 'investorsWp']); 
+        Route::get('wp-investors.list', ['uses' => 'InvestorNewController@getInvestorsWpList', 'as' => 'investorsWpList']);     
+        Route::get('wp-investors/{id}/edit', ['uses' => 'InvestorNewController@editWpInvestor', 'as' => 'investorsWpEdit', 'middleware' => 'checkinvestorstatus']);
+        Route::post('wp-investors/update', ['uses' => 'InvestorNewController@investorWpUpdate', 'as' => 'investorsWpUpdate']);
 
         //Investors New
         Route::get('entries', ['uses' => 'EntriesController@index', 'as' => 'entries']); 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
 use Yajra\Datatables\Facades\Datatables;
+use Carbon\Carbon;
+use Validator;
 
 class InvestorNewController extends Controller
 {
@@ -35,30 +37,34 @@ class InvestorNewController extends Controller
     public function index() {
         return \View::make('admin.investorsnew.index');
     }
+    
+    public function indexWp() {
+        return \View::make('admin.investorswp.index');
+    }
 
     
     public function getInvestorsList(Request $request) {
 		
-		$oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
-                        $query->where('prflag', '<>', 1)
-                              ->orWhereNull('prflag');
-                    });
+        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
+                $query->where('prflag', '<>', 1)
+                      ->orWhereNull('prflag');
+        });
         if($request->type){
             if($request->type == "whitelisted"){
-                $oSelect->where('status', 'Approved');
-            }elseif($request->type == "btc"){
-                $oSelect->whereNotNull('bitcoin_id');
+                $oSelect->where('created_at', '>=', Carbon::now()->subDay());
+            }elseif($request->type == "public"){
+               $oSelect->where('created_at', '<=', Carbon::now()->subDay());
             }
         }
-		
+        	
 		$investors = $oSelect->orderBy('id', 'DESC');
 		
 		return Datatables::of($investors)
 			->editColumn('doc1', function ($row) {
-				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
             })
 			->editColumn('doc2', function ($row) {
-				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
             })
 			->editColumn('prflag', function ($row) {
 				if($row->prflag == 1)
@@ -78,7 +84,54 @@ class InvestorNewController extends Controller
                 return $row->first_name.' '.$row->last_name;
             })
             ->addColumn('action', function ($row) {
-				return '<a id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/investors-new/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+				return '<a href="/admin/investors-all/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+            })
+            ->make(true);
+    }
+    
+    
+    public function getInvestorsWpList(Request $request) {
+		
+        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
+                        $query->where('prflag', '<>', 1)
+                              ->orWhereNull('prflag');
+                    });
+        if($request->type){
+            if($request->type == "whitelisted"){
+                $oSelect->where('created_at', '>=', Carbon::now()->subDay());
+            }elseif($request->type == "public"){
+               $oSelect->where('created_at', '<=', Carbon::now()->subDay());
+            }
+        }
+		
+		$investors = $oSelect->orderBy('id', 'DESC');
+		
+		return Datatables::of($investors)
+			->editColumn('doc1', function ($row) {
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('doc2', function ($row) {
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            })
+			->editColumn('prflag', function ($row) {
+				if($row->prflag == 1)
+					return 'Yes';
+				else if($row->prflag == 0)
+					return 'No';
+				else
+					return 'No';
+            })->addColumn('name', function ($row) {
+                return $row->first_name.' '.$row->last_name;
+            })
+            ->addColumn('action', function ($row) {
+                $isdisabled = "";
+                $statusClass = "investor-status";
+                if($row->status != Investor::STATUS_PENDING){
+                    $isdisabled="disabled";
+                    $statusClass = "";
+                }
+                    
+				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/wp-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
             })
             ->make(true);
     }
@@ -87,33 +140,15 @@ class InvestorNewController extends Controller
         return view('admin.investors.add');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request) {
-        $this->validate($request, Warehouse::$rules, Warehouse::$messages,  Warehouse::$customAttributeNames);
-        $aData = $this->formatData($request);
-
-        Warehouse::create($aData);
-        
-        \Session::flash('status', trans('notifications.success'));
-        \Session::flash('message', trans('notifications.investors.insert_message'));
-
-        return redirect()->route('admin::investors');
-    }
     
-    /*
-     * Edit Team 
-     */
+
     public function edit($iInvestorId) {
 		//dd(Investor::find($iInvestorId));
         return view('admin.investorsnew.edit')
                 ->with('oInvestor', Investor::find($iInvestorId));
 				
     }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -511,10 +546,10 @@ class InvestorNewController extends Controller
 		
 		return Datatables::of($investors)
 			->editColumn('doc1', function ($row) {
-				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
             })
 			->editColumn('doc2', function ($row) {
-				return '<img src="http://dev.tokensale.com/uploads/' . $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
             })
 			->editColumn('prflag', function ($row) {
 				if($row->prflag == 1)
@@ -523,18 +558,19 @@ class InvestorNewController extends Controller
 					return 'No';
 				else
 					return 'No';
-            })
-			->editColumn('bitcoin_id', function ($row) {
-				if($row->bitcoin_id)
-					return 'Yes';
-				else
-					return 'No';
-            })
-			->addColumn('name', function ($row) {
+            })->addColumn('name', function ($row) {
                 return $row->first_name.' '.$row->last_name;
             })
             ->addColumn('action', function ($row) {
-				return '<a id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm investor-status" style="margin-bottom:10px;width:70px;">Approve</a>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+                $isdisabled = "";
+                $statusClass = "investor-status";
+                if($row->status != Investor::STATUS_PENDING){
+                    $isdisabled="disabled";
+                    $statusClass = "";
+                }
+                    
+				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm investor-status" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+                
             })
             ->make(true);
 		
@@ -547,37 +583,136 @@ class InvestorNewController extends Controller
     
     
     public function prInvestorUpdate(Request $request) {
-        $aRules = Investor::$pr_rules;
-
-        $this->validate($request, $aRules);
+        try{
         
+        $validator = Validator::make($request->all(), Investor::$pr_rules, Investor::$messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }    
+
         $oInvestor = Investor::find($request->input("investor_id"));
-               
-        $oInvestor->update([
-            'bonus_per'  =>  $request->bonus_per,
-            'lock_in_period'  =>  $request->lock_in_period,
-			'prflag'  =>  $request->prflag
-        ]);
+         
+        if($oInvestor->status != Investor::STATUS_APPROVED)
+        {
+            if($request->prflag == 1){
+                $oInvestor->update([
+                    'bonus_per'  =>  $request->bonus_per,
+                    'lock_in_period'  =>  $request->lock_in_period,
+                    'prflag'  =>  1
+                ]);
+            }else{
+                $oInvestor->update([
+                    'bonus_per'  =>  NULL,
+                    'lock_in_period'  =>  NULL,
+                    'prflag'  =>  $request->prflag
+                ]);
+            }
+        }else{
+            \Session::flash('error', 'Investor status can be updated only in pending state.');
+        }
         
         \Session::flash('status', 'Updated Successfully.');
-
+        //\Session::flash('error', 'Error while updating. Please try again.');
+        
+        }catch(\Exception $e){
+            \Session::flash('error', 'Error while updating. Please try again.');
+        }
         return redirect()->back();
     }
 	
-	public function InvestorFlagUpdate(Request $request) {
-
-        $this->validate($request, ['prflag' => 'required']);
+    public function InvestorFlagUpdate(Request $request) {
         
+        try{
+        
+        $validator = Validator::make($request->all(), Investor::$pr_rules, Investor::$messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }    
+
         $oInvestor = Investor::find($request->input("investor_id"));
-               
-        $oInvestor->update([
-            'prflag'  =>  $request->prflag
-        ]);
+         
+        if($oInvestor->status != Investor::STATUS_APPROVED)
+        {
+            if($request->prflag == 1){
+                $oInvestor->update([
+                    'bonus_per'  =>  $request->bonus_per,
+                    'lock_in_period'  =>  $request->lock_in_period,
+                    'prflag'  =>  1
+                ]);
+            }else{
+                $oInvestor->update([
+                    'bonus_per'  =>  NULL,
+                    'lock_in_period'  =>  NULL,
+                    'prflag'  =>  $request->prflag
+                ]);
+            }
+        }else{
+            \Session::flash('error', 'Investor status can be updated only in pending state.');
+        }
         
         \Session::flash('status', 'Updated Successfully.');
-
+        //\Session::flash('error', 'Error while updating. Please try again.');
+        
+        }catch(\Exception $e){
+            \Session::flash('error', 'Error while updating. Please try again.');
+        }
         return redirect()->back();
     }
     
-	
+    public function editWpInvestor($iInvestorId) {
+		//dd(Investor::find($iInvestorId));
+        return view('admin.investorswp.edit')
+                ->with('oInvestor', Investor::find($iInvestorId));
+				
+    }
+    
+    public function investorWpUpdate(Request $request) {
+        
+        try{
+        
+        $validator = Validator::make($request->all(), Investor::$pr_rules, Investor::$messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }    
+
+        $oInvestor = Investor::find($request->input("investor_id"));
+         
+        if($oInvestor->status != Investor::STATUS_APPROVED)
+        {
+            if($request->prflag == 1){
+                $oInvestor->update([
+                    'bonus_per'  =>  $request->bonus_per,
+                    'lock_in_period'  =>  $request->lock_in_period,
+                    'prflag'  =>  1
+                ]);
+            }else{
+                $oInvestor->update([
+                    'bonus_per'  =>  NULL,
+                    'lock_in_period'  =>  NULL,
+                    'prflag'  =>  $request->prflag
+                ]);
+            }
+        }else{
+            \Session::flash('error', 'Investor status can be updated only in pending state.');
+        }
+        
+        \Session::flash('status', 'Updated Successfully.');
+        //\Session::flash('error', 'Error while updating. Please try again.');
+        
+        }catch(\Exception $e){
+            \Session::flash('error', 'Error while updating. Please try again.');
+        }
+        return redirect()->back();
+    }
+    
+    	
 }

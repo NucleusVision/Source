@@ -1,16 +1,18 @@
-<?php $__env->startSection('content'); ?> 
+@extends('admin.layouts.master')
+
+@section('content') 
   <div class="content-wrapper">        
     <section class="content-header">
-      <h1>Investors</h1>
+      <h1>Whitelisted/Public Investors</h1>
       <ol class="breadcrumb">
-        <li><a href="<?php echo e(route('admin::dashboard')); ?>"><i class="fa fa-home"></i> Home</a></li>
-        <li class="active">Investors</li>
+        <li><a href="{{ route('admin::dashboard') }}"><i class="fa fa-home"></i> Home</a></li>
+        <li class="active">Whitelisted/Public Investors</li>
       </ol>
     </section>        
     <section class="content">      
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">List of Investors</h3>
+          <h3 class="box-title">List of Whitelisted/Public Investors</h3>
         </div>
           <div class="row" style="margin-left: 3px;">  
         <form name="form1" id="form1" method="get">
@@ -87,7 +89,7 @@
 					processing: true,
 					serverSide: true,
 					ajax: {
-						url: "<?php echo e(route('admin::investorsNewList')); ?>",
+						url: "{{ route('admin::investorsWpList') }}",
 						data: function (d) {
 							d.type = $('#type').val();
 						}
@@ -136,7 +138,7 @@
                            $.ajax(
                                 {
                                     type: "post",
-                                    url: "/admin/investors-new/status/change",
+                                    url: "/admin/investors-all/status/change",
                                     data: {investor_id: id, status:investor_status},
                                     success: function(data){
                                         swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
@@ -162,5 +164,4 @@
 });
                 
 </script>
-<?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+@endsection
