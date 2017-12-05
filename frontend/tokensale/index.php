@@ -186,6 +186,9 @@
                         </div>
                     </div>
                     -->
+                    
+                    <input type="hidden" class="bc-acct-input" id="bcaddressInput" placeholder="" value="" />
+                    
                     <button class="btn next-btn" type=
                     "button" onclick="nextStep1()">Next</button>
                     <p id="eth-address-msg"></p>

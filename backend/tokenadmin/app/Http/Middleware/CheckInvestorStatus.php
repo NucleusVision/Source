@@ -22,7 +22,8 @@
                 return $next($request);
             }
             
-            return new RedirectResponse(url('/'));
+            //return new RedirectResponse(url('/'));
+			return redirect()->back()->with('authmessage', 'Investor can not be edited once approved.');
         }
 
     }

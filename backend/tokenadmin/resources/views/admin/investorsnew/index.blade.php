@@ -29,6 +29,12 @@
         </form>   
         </div>
         <div class="box-body">  
+			@if (session('authmessage'))
+				<div class="alert alert-info fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					{{ session('authmessage') }}
+				</div>
+			@endif
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>

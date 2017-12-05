@@ -45,10 +45,8 @@ class InvestorNewController extends Controller
     
     public function getInvestorsList(Request $request) {
 		
-        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
-                $query->where('prflag', '<>', 1)
-                      ->orWhereNull('prflag');
-        });
+        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name']);
+		
         if($request->type){
             if($request->type == "whitelisted"){
                 $oSelect->where('created_at', '>=', Carbon::now()->subDay());
