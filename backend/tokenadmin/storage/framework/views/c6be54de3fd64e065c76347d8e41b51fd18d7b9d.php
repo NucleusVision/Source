@@ -13,7 +13,13 @@
           <h3 class="box-title">List of PR Investors</h3>
         </div>
         <div class="box-body">
-        
+			<?php if(session('authmessage')): ?>
+				<div class="alert alert-info fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<?php echo e(session('authmessage')); ?>
+
+				</div>
+			<?php endif; ?>
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
@@ -107,45 +113,101 @@
                     
                     if(investor_status == 'Approve'){
                         investor_status_message = 'Approved';
-                    }else{
-                        investor_status_message = 'Rejected';
-                    }
-
-                    swal({
-                    title: "Are you sure?", 
+                        
+                        swal({
+                        title: "Are you sure?", 
                         text: "Are you sure that you want to "+investor_status+" this investor?", 
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Yes, "+investor_status+" it!",
                         confirmButtonColor: "#ec6c62",
-                    showLoaderOnConfirm: true,
-                    preConfirm: function() {
-                      return new Promise(function(resolve) {
-                           $.ajax(
-                                {
-                                    type: "post",
-                                    url: "/admin/investors-all/status/change",
-                                    data: {investor_id: id, status:investor_status},
-                                    success: function(data){
-                                        swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
-                                        investors_table.draw();
+                        showLoaderOnConfirm: true,
+                        preConfirm: function() {
+                          return new Promise(function(resolve) {
+                               $.ajax(
+                                    {
+                                        type: "post",
+                                        url: "/admin/investors-all/status/change",
+                                        data: {investor_id: id, status:investor_status},
+                                        success: function(data){
+                                            swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
+                                            investors_table.draw();
+                                        }
                                     }
-                                }
-                        )
-                      .done(function(data) {
-                        swal(investor_status_message, "Investor was successfully "+investor_status_message+"!", "success");
-                        investors_table.draw();
-                      })
-                      .error(function(data) {
-                        swal("Oops", "We couldn't connect to the server!", "error");
-                      });
-                      });
+                            )
+                          .done(function(data) {
+                            swal(investor_status_message, "Investor was successfully "+investor_status_message+"!", "success");
+                            investors_table.draw();
+                          })
+                          .error(function(data) {
+                            swal("Oops", "We couldn't connect to the server!", "error");
+                          });
+                          });
+                        }
+                      }).then(function(result) {
+                            //swal('Ajax request finished!');
+                      }, function(dismiss) {
+                            // dismiss can be "cancel" | "close" | "outside"
+                    }); 
+                        
+                        
+                    }else{
+                         investor_status_message = 'Rejected';
+                        
+                         swal({
+                            title: "Your message for rejection",
+                            input: 'textarea',
+                            showCancelButton: true,
+                            confirmButtonText: "Submit",
+                            confirmButtonColor: "#ec6c62",
+                            showLoaderOnConfirm: true,
+                            allowOutsideClick: false,
+                            preConfirm: function(message) {
+                              return new Promise(function(resolve) {
+                                  
+                                  if (message === '') {
+                                    swal.showValidationError(
+                                      'This field is required.'
+                                    )
+                                    resolve()
+                                  }else{
+                                  //return false;
+                                   $.ajax(
+                                        {
+                                            type: "post",
+                                            url: "/admin/investors-all/status/change",
+                                            data: {investor_id: id, status:investor_status, rej_message: message},
+                                            success: function(data){
+                                                swal("Canceled!", "Investor was successfully "+investor_status_message+"!", "success");
+                                                investors_table.draw();
+                                            }
+                                        }
+                                )
+                              .done(function(data) {
+                                  if(data == "success"){
+                                        swal(investor_status_message, "Investor was successfully "+investor_status_message+"!", "success");
+                                        investors_table.draw();
+                                    }else{
+                                        swal("Oops", "We couldn't connect to the server!", "error");
+                                    }
+                              })
+                              .error(function(data) {
+                                swal("Oops", "We couldn't connect to the server!", "error");
+                              });
+                              
+                            }
+                              
+                              });
+                            }
+                          }).then(function(result) {
+                                //swal('Ajax request finished!');
+                          }, function(dismiss) {
+                                // dismiss can be "cancel" | "close" | "outside"
+                        }); 
+                        
                     }
-                  }).then(function(result) {
-                        //swal('Ajax request finished!');
-                  }, function(dismiss) {
-                        // dismiss can be "cancel" | "close" | "outside"
-                    });                                       
+
+                                                          
         });         
 });
                 

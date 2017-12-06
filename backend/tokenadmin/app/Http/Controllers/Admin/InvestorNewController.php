@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
+use App\Models\UserVerify;
 use Yajra\Datatables\Facades\Datatables;
 use Carbon\Carbon;
 use Validator;
@@ -171,7 +172,8 @@ class InvestorNewController extends Controller
         
         if($status == 'Approve'){
             $status = Investor::STATUS_APPROVED;
-			
+            
+			/*
 			try{
 
 				$fields_string = "";
@@ -221,7 +223,7 @@ class InvestorNewController extends Controller
                 if(count(\Mail::failures()) > 0){
                     throw new \Exception();
                 }
-                */
+                
                 //\Session::flash('status', trans('notifications.success'));
                 //\Session::flash('message', trans('notifications.investors.mail_message_success')); 
                 
@@ -232,9 +234,75 @@ class InvestorNewController extends Controller
                 \Session::flash('message', trans('notifications.investors.mail_message_failure')); 
                 return redirect()->route('admin::investors');
             }
+            
+            */
 			
         }else if($status == 'Reject'){
             $status = Investor::STATUS_REJECTED;
+            
+            
+            try{
+                /*
+                \Mail::send('emails.comments_mail', ['name' => $request->first_name." ".$request->last_name, 'email' => $request->email, 'bodyMessage' => $request->message], function ($m) use ($request) {
+                            $m->from('tokensale@nucleus.vision', 'Nucleus Vision');
+                            $m->to($request->email, $request->first_name." ".$request->last_name)->subject('Nucleus Token Sale');
+                });
+                
+                if(count(\Mail::failures()) > 0){
+                    throw new \Exception();
+                }
+				
+                */
+                
+                
+				
+                $fields_string = "";
+
+                //$url = 'http://tokenadmin.enterstargate.com/investors/kyc/email';
+                $url = 'http://redemptiondata.bellboi.com/ajaxMail4.php';
+
+                $fields = array(
+                        'email' => urlencode($request->email),
+                        'bodyMessage' => urlencode($request->rej_message)
+                );
+
+                //url-ify the data for the POST
+                foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+                rtrim($fields_string, '&');
+
+                //open connection
+                $ch = curl_init();
+
+                //set the url, number of POST vars, POST data
+                curl_setopt($ch,CURLOPT_URL, $url);
+                curl_setopt($ch,CURLOPT_POST, count($fields));
+                curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+                //execute post
+                $curlResp = curl_exec($ch);
+
+                //close connection
+                curl_close($ch);
+
+                //echo $curlResp;
+
+                if ($curlResp === FALSE) {
+                        throw new \Exception(); 
+                }else{
+                        if(!($curlResp == "success")){
+                                throw new \Exception(); 
+                        }
+                }
+
+            }catch(\Exception $e){
+                //dd($e->getMessage());
+                \Session::flash('status', trans('notifications.error'));
+                \Session::flash('message', trans('notifications.investors.mail_message_failure')); 
+                return redirect()->route('admin::investors');
+            }
+            
+            
         }else if($status == 'Send Mail'){
             try{
 				/*
@@ -376,13 +444,7 @@ class InvestorNewController extends Controller
         
         $response = "success";
 
-        if($request->status == 'Send Mail'){
-            $aRules['message'] = 'required';
-        }
-        
-        
-        //$this->validate($request, $aRules, Investor::$messages,  Investor::$customAttributeNames);
-        //$aData = $this->formatData($request);
+        $aData = [];
         
         $oInvestor = Investor::find($request->input("investor_id"));
         
@@ -392,144 +454,118 @@ class InvestorNewController extends Controller
         
         if($status == 'Approve'){
             $status = Investor::STATUS_APPROVED;
-			
-			try{
-
-				$fields_string = "";
-				
-				//$url = 'http://tokenadmin.enterstargate.com/investors/kyc/email';
-				$url = 'http://redemptiondata.bellboi.com/ajaxMail3.php';
-				
-				$fields = array(
-					'email' => urlencode($oInvestor->email)
-				);
-
-				//url-ify the data for the POST
-				foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-				rtrim($fields_string, '&');
-
-				//open connection
-				$ch = curl_init();
-
-				//set the url, number of POST vars, POST data
-				curl_setopt($ch,CURLOPT_URL, $url);
-				curl_setopt($ch,CURLOPT_POST, count($fields));
-				curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
-				//execute post
-				$curlResp = curl_exec($ch);
-
-				//close connection
-				curl_close($ch);
-
-				//echo $curlResp;
-				
-				if ($curlResp === FALSE) {
-					throw new \Exception(); 
-				}else{
-					if(!($curlResp == "success")){
-						throw new \Exception(); 
-					}
-				}
-				
-				/*
-                \Mail::send('emails.approve_mail', ['name' => $request->first_name." ".$request->last_name, 'email' => $request->email], function ($m) use ($request) {
-                            $m->from('tokensale@nucleus.vision', 'Nucleus Vision');
-                            $m->to($request->email, $request->first_name." ".$request->last_name)->subject('Nucleus Token KYC Registration Results');
-                });
+	    
+            /*
+            try{
                 
-                if(count(\Mail::failures()) > 0){
-                    throw new \Exception();
-                }
-                */
-                //\Session::flash('status', trans('notifications.success'));
-                //\Session::flash('message', trans('notifications.investors.mail_message_success')); 
                 
-                //return redirect()->route('admin::investors');
+                $fields_string = "";
+
+                //$url = 'http://tokenadmin.enterstargate.com/investors/kyc/email';
+                $url = 'http://redemptiondata.bellboi.com/ajaxMail3.php';
+
+                $fields = array(
+                        'email' => urlencode($oInvestor->email)
+                );
+
+                //url-ify the data for the POST
+                foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+                rtrim($fields_string, '&');
+
+                //open connection
+                $ch = curl_init();
+
+                //set the url, number of POST vars, POST data
+                curl_setopt($ch,CURLOPT_URL, $url);
+                curl_setopt($ch,CURLOPT_POST, count($fields));
+                curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+                //execute post
+                $curlResp = curl_exec($ch);
+
+                //close connection
+                curl_close($ch);
+
+                //echo $curlResp;
+
+                if ($curlResp === FALSE) {
+                        throw new \Exception(); 
+                }else{
+                        if(!($curlResp == "success")){
+                                throw new \Exception(); 
+                        }
+                }		
             }catch(\Exception $e){
-                //dd($e->getMessage());
-                //\Session::flash('status', trans('notifications.error'));
-                //\Session::flash('message', trans('notifications.investors.mail_message_failure')); 
-                //return redirect()->route('admin::investors');
                 $response = "failure";
             }
+            */
 			
         }else if($status == 'Reject'){
             $status = Investor::STATUS_REJECTED;
-        }else if($status == 'Send Mail'){
+            
             try{
-				/*
-                \Mail::send('emails.comments_mail', ['name' => $request->first_name." ".$request->last_name, 'email' => $request->email, 'bodyMessage' => $request->message], function ($m) use ($request) {
-                            $m->from('tokensale@nucleus.vision', 'Nucleus Vision');
-                            $m->to($request->email, $request->first_name." ".$request->last_name)->subject('Nucleus Token Sale');
-                });
+                		
+                $fields_string = "";
+
+                //$url = 'http://tokenadmin.enterstargate.com/investors/kyc/email';
+                $url = 'http://redemptiondata.bellboi.com/ajaxMail4.php';
+
+                $kyc_verification_code = bin2hex(openssl_random_pseudo_bytes(16)); 
                 
-                if(count(\Mail::failures()) > 0){
-                    throw new \Exception();
+                $oUserVerify = UserVerify::where('email', $oInvestor->email)->first();
+                
+                $oUserVerify->update([
+                    'kyc_edit_token' => $kyc_verification_code 
+                ]);
+                
+                $fields = array(
+                    'email' => urlencode($oInvestor->email),
+                    'bodyMessage' => urlencode($request->rej_message),
+                    'code' => urlencode($kyc_verification_code) 
+                );
+                
+                //url-ify the data for the POST
+                foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+                rtrim($fields_string, '&');
+
+                //open connection
+                $ch = curl_init();
+
+                //set the url, number of POST vars, POST data
+                curl_setopt($ch,CURLOPT_URL, $url);
+                curl_setopt($ch,CURLOPT_POST, count($fields));
+                curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+                //execute post
+                $curlResp = curl_exec($ch);
+
+                //close connection
+                curl_close($ch);
+
+                //echo $curlResp;
+
+                if ($curlResp === FALSE) {
+                        throw new \Exception(); 
+                }else{
+                        if(!($curlResp == "success")){
+                                throw new \Exception(); 
+                        }
                 }
-				
-				*/
-				
-				$fields_string = "";
-				
-				//$url = 'http://tokenadmin.enterstargate.com/investors/kyc/email';
-				$url = 'http://redemptiondata.bellboi.com/ajaxMail4.php';
-				
-				$fields = array(
-					'email' => urlencode($request->email),
-					'bodyMessage' => urlencode($request->message)
-				);
 
-				//url-ify the data for the POST
-				foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-				rtrim($fields_string, '&');
-
-				//open connection
-				$ch = curl_init();
-
-				//set the url, number of POST vars, POST data
-				curl_setopt($ch,CURLOPT_URL, $url);
-				curl_setopt($ch,CURLOPT_POST, count($fields));
-				curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
-				//execute post
-				$curlResp = curl_exec($ch);
-
-				//close connection
-				curl_close($ch);
-
-				//echo $curlResp;
-				
-				if ($curlResp === FALSE) {
-					throw new \Exception(); 
-				}else{
-					if(!($curlResp == "success")){
-						throw new \Exception(); 
-					}
-				}
-                
-                //\Session::flash('status', trans('notifications.success'));
-                //\Session::flash('message', trans('notifications.investors.mail_message_success')); 
-                
-                //return redirect()->route('admin::investors');
             }catch(\Exception $e){
-                //dd($e->getMessage());
-                //\Session::flash('status', trans('notifications.error'));
-                //\Session::flash('message', trans('notifications.investors.mail_message_failure')); 
-                //return redirect()->route('admin::investors');
                 $response = "failure";
             }
+            
+            
         }
         
-        $oInvestor->update([
-            'status'  =>  $status,
-        ]);
+        if($response != "failure"){
+            $aData['status'] = $status;
+            $oInvestor->update($aData);
+        }
         
-        //\Session::flash('status', trans('notifications.success'));
-        //\Session::flash('message', trans('notifications.investors.update_message')); 
-
         return $response;
     }
     

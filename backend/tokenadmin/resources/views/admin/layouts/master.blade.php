@@ -10,7 +10,7 @@
     <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
     <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
     <!-- <script src="/assets/js/sweetalert.js"></script> -->
-    <script src="/assets/js/sweetalert2.min.js"></script>
+    <script src="/assets/js/sweetalert2.all.min.js"></script>
     <script src="/assets/js/core.js"></script>
     <script src="{{ asset("assets/js/notify.min.js") }}" type="text/javascript"></script>
     <script src="{{ asset("assets/js/notify-metro.js") }}" type="text/javascript"></script>	

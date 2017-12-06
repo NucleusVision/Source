@@ -27,6 +27,13 @@
         </form>   
         </div>
         <div class="box-body">  
+			<?php if(session('authmessage')): ?>
+				<div class="alert alert-info fade in">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<?php echo e(session('authmessage')); ?>
+
+				</div>
+			<?php endif; ?>
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
