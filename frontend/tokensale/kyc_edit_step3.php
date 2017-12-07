@@ -98,22 +98,23 @@ $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?sec
 $response = json_decode($response, true);
 if($response["success"] === true)
 {    
-    $investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $investor_result = mysqli_query($conn, $investor_sql);
+    $is_investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
+    $is_investor_result = mysqli_query($conn, $is_investor_sql);
 
-    if (mysqli_num_rows($investor_result) > 0) {
+    if (mysqli_num_rows($is_investor_result) > 0) {
+    
+    if($investor_kyc_row['status'] == 'Approved'){
         $code = 400;
         $status = "Failed";
-        $message = "Email already registered.";
-    } else {
+        $message = "Your application is already approved.";
+    }  else {
         $token = "";        
-        $user_verify_sql = "SELECT email,token,created_at FROM user_verify WHERE email='".$email."'";
+        $user_verify_sql = "SELECT email,kyc_edit_token,created_at FROM user_verify WHERE email='".$email."' AND kyc_edit_token='".$verificationCode."'";
         $user_verify_result = mysqli_query($conn, $user_verify_sql);
 
         if (mysqli_num_rows($user_verify_result) > 0) {
             
             $eth = clean_data($_POST['eth']);
-            $bc = clean_data($_POST['bc']);
             $fName = clean_data($_POST['fName']);
             $lName = clean_data($_POST['lName']);
             $dob = date("Y-m-d", strtotime(clean_data($_POST['dob'])));
@@ -122,31 +123,49 @@ if($response["success"] === true)
             $residence = clean_data($_POST['residence']);
             $id_type = clean_data($_POST['id_type']);
             $id_num = clean_data($_POST['id_num']);
-            $document = saveImage($_POST['encodedDocData']['document']);
-            $selfie = saveImage($_POST['encodedDocData']['selfie']);
-            $thumb1 = makeThumbnails($document);
-            $thumb2 = makeThumbnails($selfie);
-            if($document && $selfie && $thumb1 && $thumb2){
+            $is_doc_change = clean_data($_POST['is_doc_change']);
+            $is_selfie_change = clean_data($_POST['is_selfie_change']);
             
-            $cur_time=date('Y-m-d H:i:s');
-		
-            $insert_investors =  "";         
-                        
-            if(!empty($bc)){            
-            $insert_investors = "insert into investors (`id`, `bitcoin_id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$bc."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
+            $document = $thumb1 = $selfie = $thumb2 = true;
+            
+            if($is_doc_change == "yes"){
+                $document = saveImage($_POST['encodedDocData']['document']);
+                $thumb1 = makeThumbnails($document);
+            }
+            
+            if($is_selfie_change == "yes"){
+                $selfie = saveImage($_POST['encodedDocData']['selfie']);
+                $thumb2 = makeThumbnails($selfie);
+            }
+            
+            if($document && $selfie && $thumb1 && $thumb2){
+               
+            $update_investors = "";    
+ 
+            if($is_doc_change == "no" && $is_selfie_change == "no"){
+                $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`status`='Pending' WHERE email = '".$email."'";
             }else{
-                $insert_investors = "insert into investors (`id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
+                if($is_doc_change == "yes" && $is_selfie_change == "no"){
+                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc1`='".$document."',`thumb1`='".$thumb1."',`status`='Pending' WHERE email = '".$email."'";
+                    
+                }elseif($is_doc_change == "no" && $is_selfie_change == "yes"){
+                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc2`='".$selfie."',`thumb2`='".$thumb2."',`status`='Pending' WHERE email = '".$email."'";
+                }elseif($is_doc_change == "yes" && $is_selfie_change == "yes"){
+                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc1`='".$document."',`doc2`='".$selfie."',`thumb1`='".$thumb1."',`thumb2`='".$thumb2."',`status`='Pending' WHERE email = '".$email."'";
+                }
+                
             }
 
-				if(mysqli_query($conn, $insert_investors)){
+				if(mysqli_query($conn, $update_investors)){
 					
-				$update_user_verify = "UPDATE user_verify SET kyc_completed = 1 WHERE email = '".$email."'";		
-				mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));	
+				//$update_user_verify = "UPDATE user_verify SET kyc_completed = 1 WHERE email = '".$email."'";		
+				//mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));	
             
 				$code = 200;
 				$status = "Success";
 				$message = "Request submitted successfully.";
 				
+                                /*
 				try{
 
 				$fields_string = "";
@@ -187,6 +206,8 @@ if($response["success"] === true)
 				}catch(\Exception $e){
 					
 				}
+                                 */ 
+
 			 }else{
 				$code = 400;
 				$status = "Failed";
@@ -205,7 +226,13 @@ if($response["success"] === true)
             $message = "Invalid Verification Code";
         }
           
-    }    
+    } 
+    
+    }else {
+        $code = 400;
+        $status = "Failed";
+        $message = "Email Not Found";
+    } 
 }
 else
 {

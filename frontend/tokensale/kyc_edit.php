@@ -191,6 +191,8 @@
                   </div>
                   <div id="personal-details">
                     <div class="form-group">
+						<input type="hidden" name="doc_change" id="doc_change" value="no" />
+						<input type="hidden" name="selfie_change" id="selfie_change" value="no" />
                       <label>First Name</label> <input class=
                       "form-control acct-input" id="firstName"
                       placeholder="First name" required="" />
@@ -200,11 +202,25 @@
                       <label>Date of birth</label> <input class=
                       "form-control acct-input" id="datepicker"
                       placeholder="mm/dd/yyyy" />
-                      <div id="select-boxes">
+                      <!--<div id="select-boxes">
                         <div id="nationality-box" class="col-xs-6">
+						-->
+						<label>Gender</label> <select id=
+						"gender-select-box" class="acct-input form-control">
+						  <option value="">
+							-- select one --
+						  </option>
+						  <option value="Male" title="Male">
+							Male
+						  </option>
+						  <option value="Female" title=
+						  "Female">
+							Female
+						  </option>
+						</select>
                           <label>Nationality</label> <select id=
                           "nationality" name="nationality" class=
-                          "acct-input">
+                          "acct-input form-control">
                             <option value="">
                               -- select one --
                             </option>
@@ -1000,25 +1016,18 @@
                               UNKNOWN
                             </option>
                           </select>
+						<!--  
                         </div>
                         <div class="col-xs-6">
                           <div id="gender-box">
-                            <label>Gender</label> <select id=
-                            "gender-select-box" class="acct-input">
-                              <option value="">
-                                -- select one --
-                              </option>
-                              <option value="Male" title="Male">
-                                Male
-                              </option>
-                              <option value="Female" title=
-                              "Female">
-                                Female
-                              </option>
-                            </select>
+						-->  
+                            
+							<!--
                           </div>
                         </div>
-                      </div><label>Country of Residence</label>
+                      </div>
+					  -->
+					  <label>Country of Residence</label>
                       <select id="residence" class=
                       "acct-input form-control">
                         <option value="">
@@ -1912,17 +1921,25 @@
                         "id" placeholder="ID Number" maxlength=
                         "100" minlength="2" required="" />
                       </div>
+                      <div id="preview-uploads1">
+                        <div class="col-xs-6 preview-box1">
+                          <img id="doc-preview1" />
+                        </div>
+                        <div class="col-xs-6 preview-box1">
+                          <img id="selfie-preview1" />
+                        </div>
+                      </div>                    
                       <div id="file-upload">
                         <h5 class="bold">
                           Images must be less than 10MB
                         </h5>
                         <div id="file-upload-box">
-                          <label id="doc-label">Copy of
+                          <label id="doc-label">Change Copy of
                           ID</label> <input id="doc-file"
                           class="file acct-input form-control"
                           accept=".jpg,.jpeg,.png" name="file1"
                           type="file" data-max-size="10000" />
-                          <label><span id="selfie-label">Selfie
+                          <label><span id="selfie-label">Change Selfie
                           with ID.</span> Name and picture
                           must be clear.<a id="example-hyperlink"
                           data-toggle="modal" href="#exampleModal"
@@ -2010,7 +2027,7 @@
                   Success
                 </h2>
                 <h5>
-                  You’ve completed the registration process. You
+                  You’ve completed the editing process. You
                   will be able to check your status at <a target=
                   "_blank" href="/status" rel="noopener" class=
                   "yellow-link">https://nucleus.vision/status</a>

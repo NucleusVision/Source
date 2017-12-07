@@ -4,10 +4,20 @@ function validateEmail(a) {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(a);
 }
 
-function getBase64(a, b) {
-    var c = new FileReader;
-    c.onload = b;
-    c.readAsDataURL(a);
+function getBase64Doc(a, b) {
+    if($("#doc_change").val() == "yes"){
+        var c = new FileReader;
+        c.onload = b;
+        c.readAsDataURL(a);
+    }
+}
+
+function getBase64Selfie(a, b) {
+    if($("#selfie_change").val() == "yes"){
+        var c = new FileReader;
+        c.onload = b;
+        c.readAsDataURL(a);
+    }
 }
 
 function readDocURL(a) {
@@ -15,6 +25,8 @@ function readDocURL(a) {
         var b = new FileReader;
         b.onload = function(a) {
             $("#doc-preview").attr("src", a.target.result);
+            $("#doc-preview1").attr("src", a.target.result);
+            $("#doc_change").val("yes");
         };
         b.readAsDataURL(a.files[0]);
     }
@@ -25,6 +37,8 @@ function readSelfieURL(a) {
         var b = new FileReader;
         b.onload = function(a) {
             $("#selfie-preview").attr("src", a.target.result);
+            $("#selfie-preview1").attr("src", a.target.result);
+            $("#selfie_change").val("yes");
         };
         b.readAsDataURL(a.files[0]);
     }
@@ -99,11 +113,21 @@ function nextStep1() {
 function nextStep2() {
     var a = !1;
     $(".acct-input").each(function() {
+		//console.log($(this).attr('id'));
+		if($(this).attr('id') == "doc-file" && $("#doc_change").val() == "no"){
+			//console.log("in doc file");
+			return true;
+		}
+		if($(this).attr('id') == "selfie-file" && $("#selfie_change").val() == "no"){
+			//console.log("in selfie");
+			return true;
+			
+		}
         1 > $(this).val().length && (a = !0);
     });
     
     
-    0 == $("#submit-page-review").children().length && $("#submit-page-review").append("<p><span>First name: </span> " + $("#firstName").val() + "</p>", "<p><span>Last name: </span>" + $("#lastName").val() + "</p>", "<p><span>" + $("#id-label").text() + " : </span>" + $("#id").val() + "</p>", "<p><span>D.O.B: </span>" + $("#datepicker").val() + "</p>", "<p><span>Nationality: </span>" + $("#nationality").val() + "</p>", "<p><span>Gender: </span>" + $("#gender-select-box").val() + "</p>", "<p><span>Residence: </span>" + $("#residence").val() + "</p>");
+    0 == $("#submit-page-review").children().length && $("#submit-page-review").append("<p><span>ETH Wallet: </span> " + $("#addressInput").val() + "</p>", "<p><span>First name: </span> " + $("#firstName").val() + "</p>", "<p><span>Last name: </span>" + $("#lastName").val() + "</p>", "<p><span>" + $("#id-label").text() + " : </span>" + $("#id").val() + "</p>", "<p><span>D.O.B: </span>" + $("#datepicker").val() + "</p>", "<p><span>Nationality: </span>" + $("#nationality").val() + "</p>", "<p><span>Gender: </span>" + $("#gender-select-box").val() + "</p>", "<p><span>Residence: </span>" + $("#residence").val() + "</p>");
     
     //alert($("#submit-page-review").html());
     //alert($("#firstName").val());
@@ -118,8 +142,9 @@ function nextStep2() {
                 "border-bottom": "1px solid #58b7df",
                 color: "#58b7df"
             });
-            
         });
+        window.scrollTo(0, 0);
+        
     }) : ($("#errModal").modal("show"), $(".modal-body").text("Please fill in ALL fields before proceeding").css("color", "#C40404"));
 }
 
@@ -184,11 +209,43 @@ $(document).ready(function() {
         //"DRIVING LICENSE" == $(this).val() ? () : "NRIC" == $(this).val() ? () : ();
     });
     $("#doc-file").change(function() {
-        10 < $(this)[0].files[0].size / 1024 / 1024 && ($("#errModal").modal("show"), $(".modal-body").text(""), $(".modal-body").text("Image file is too large. File must be less than 10MB.").css("color", "#C40404"));
-        readDocURL(this)
+                if(10 < $(this)[0].files[0].size / 1024 / 1024){
+                    $("#errModal").modal("show");
+                    $(".modal-body").text("");
+                    $(".modal-body").text("Image file is too large. File must be less than 10MB.").css("color", "#C40404");
+                    $(this).val("");
+                    return false;
+                }
+		var ext1 = $(this).val().split('.').pop().toLowerCase();
+                //console.log(ext1);
+                if($.inArray(ext1, ['png','jpg','jpeg']) == -1) {
+                        $("#errModal").modal("show");
+			$(".modal-body").text("");
+                        $(".modal-body").text("Uploaded file is not a valid image. Only JPG, PNG files are allowed.").css("color", "#C40404");
+                        $(this).val("");
+			return false;
+                }
+	
+                readDocURL(this);
     });
     $("#selfie-file").change(function() {
-        10 < $(this)[0].files[0].size / 1024 / 1024 && ($("#errModal").modal("show"), $(".modal-body").text(""), $(".modal-body").text("Image file is too large. File must be less than 10MB.").css("color", "#C40404"));
+        if(10 < $(this)[0].files[0].size / 1024 / 1024){
+            $("#errModal").modal("show");
+            $(".modal-body").text("");
+            $(".modal-body").text("Image file is too large. File must be less than 10MB.").css("color", "#C40404");
+            $(this).val("");
+            return false;
+        }
+        
+        var ext2 = $(this).val().split('.').pop().toLowerCase();
+        if($.inArray(ext2, ['png','jpg','jpeg']) == -1) {
+                $("#errModal").modal("show");
+                $(".modal-body").text("");
+                $(".modal-body").text("Uploaded file is not a valid image. Only JPG, PNG files are allowed.").css("color", "#C40404");
+                $(this).val("");
+                return false;
+        }
+        
         readSelfieURL(this);
     });
     document.cookie = "applicationSent=false";
@@ -261,9 +318,6 @@ $(document).ready(function() {
             },
             success: function(a) {
                 
-                
-                
-                
                 $.ajax({
                     type: "POST",
                     url: "kyc_edit_info_get.php",
@@ -272,21 +326,48 @@ $(document).ready(function() {
                         email: $("#email-input").val()
                     },
                     success: function(a) {
-                        console.log(a);
+                        //console.log(a);
                         
-                        $("#email-input").val(a['kyc_data'].email)
-                        $("#addressInput").val(a['kyc_data'].id)
-                        $("#firstName").val()
-                        $("#lastName").val()
-                        $("#datepicker").val()
-                        $("#nationality").val()
-                        $("#gender-select-box").val()
-                        $("#residence").val()
-                        $("#idType").val()
-                        $("#id").val()
-                        
-                        
-                        console.log(a['kyc_data'].first_name);
+                        $("#addressInput").val(a['kyc_data'].id);
+                        $("#firstName").val(a['kyc_data'].first_name);
+                        $("#lastName").val(a['kyc_data'].last_name);
+                        $("#datepicker").val(a['kyc_data'].dob);
+                        $("#nationality").val(a['kyc_data'].nationality);
+                        $("#gender-select-box").val(a['kyc_data'].gender);
+                        $("#residence").val(a['kyc_data'].residence);
+                        $("#idType").val(a['kyc_data'].id_type);
+                        $("#id").val(a['kyc_data'].id_num);
+						$('#doc-preview').attr("src", "http://dev.tokensale.com/uploads/"+a['kyc_data'].doc1);
+						$('#selfie-preview').attr("src", "http://dev.tokensale.com/uploads/"+a['kyc_data'].doc2);
+                                                $('#doc-preview1').attr("src", "http://dev.tokensale.com/uploads/"+a['kyc_data'].doc1);
+						$('#selfie-preview1').attr("src", "http://dev.tokensale.com/uploads/"+a['kyc_data'].doc2);
+                        //$("#doc-file").val();
+						//$("#selfie-file").val();
+
+						d.stop(c);
+						$(".overlay").hide();
+						var b = new Timer;
+						b.start({
+							countdown: !0,
+							startValues: {
+								minutes: 30
+							}
+						});
+						$("#countdownExample .values").html(b.getTimeValues().toString());
+						b.addEventListener("secondsUpdated", function(a) {
+							$("#countdownExample .values").html(b.getTimeValues().toString());
+						});
+						b.addEventListener("targetAchieved", function(a) {
+							$("#countdownExample .values").html("Session expired. Please start over.");
+							$("#account, #account-header, #tabs").fadeOut("slow", function() {
+								$("#expired-page").fadeIn("slow", function() {});
+							});
+						});
+						//document.cookie = "token=" + a.data;
+						$("#code, #registration-header").fadeOut("slow", function() {
+							$("#account, #account-header, #tabs").fadeIn("slow", function() {});
+						});
+						
                     },
                     error: function(a) {
                         //console.log(a);
@@ -299,36 +380,7 @@ $(document).ready(function() {
                         grecaptcha.reset(1);
                     }
                 });
-                
-                
-                //console.log(a);
-                d.stop(c);
-                $(".overlay").hide();
-                var b = new Timer;
-                b.start({
-                    countdown: !0,
-                    startValues: {
-                        minutes: 30
-                    }
-                });
-                $("#countdownExample .values").html(b.getTimeValues().toString());
-                b.addEventListener("secondsUpdated", function(a) {
-                    $("#countdownExample .values").html(b.getTimeValues().toString());
-                });
-                b.addEventListener("targetAchieved", function(a) {
-                    $("#countdownExample .values").html("Session expired. Please start over.");
-                    $("#account, #account-header, #tabs").fadeOut("slow", function() {
-                        $("#expired-page").fadeIn("slow", function() {});
-                    });
-                });
-                //document.cookie = "token=" + a.data;
-                $("#code, #registration-header").fadeOut("slow", function() {
-                    $("#account, #account-header, #tabs").fadeIn("slow", function() {});
-                });
-                
-                
-                
-                
+  
             },
             error: function(a) {
                 //console.log(a);
@@ -351,22 +403,29 @@ $(document).ready(function() {
         var e = document.getElementById("loader"),
             f = (new Spinner(a)).spin(e);
         $(".acct-input").each(function() {
+            
+            if($(this).attr('id') == "doc-file" && $("#doc_change").val() == "no"){
+                    //console.log("in doc file");
+                    return true;
+            }
+            if($(this).attr('id') == "selfie-file" && $("#selfie_change").val() == "no"){
+                    //console.log("in selfie");
+                    return true;
+
+            }
+            
             1 > $(this).val().length && (d = !0);
         });
         
         if (0 == d)
             if ($("#info-checkbox").is(":checked") && $("#terms-checkbox").is(":checked"))
-                if (10 > $("#doc-file")[0].files[0].size / 1024 / 1024 && 10 > $("#selfie-file")[0].files[0].size / 1024 / 1024)
                     if (recaptcha3) {
                         if (isValidEthAddress($("#addressInput").val()) || (b.address = "Invalid ETH Wallet Address", $("#addressInput").css("border", "1px solid #C40404")), isAlphaWithDashAndSpace($("#firstName").val()) || (b.firstName = "Invalid first name value", $("#firstName").css("border", "1px solid #C40404")), isAlphaWithDashAndSpace($("#firstName").val()) || (b.lastName = "Invalid last name value", $("#lastName").css("border", "1px solid #C40404")), "false" == getCookie("applicationSent")) {
                             var g = 0;
-                            $(".modal-body").empty();
-                                                        
+                            $(".modal-body").empty();                          
                             for (var h in b) b.hasOwnProperty(h) && g++, $(".modal-body").append("<p>" + b[h] + "</p>");
-                            0 < g ? ($(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").css("color", "#C40404")) : ($(".modal-body").empty(), b = {}, getBase64($("#doc-file")[0].files[0], function(a) {
-                                var b = a.target.result;
-                                getBase64($("#selfie-file")[0].files[0], function(a) {
-                                    a = a.target.result;
+                            //0 < g ? ($(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").css("color", "#C40404")) : ($(".modal-body").empty(), b = {}, function() {
+
                                     a = {
                                         email: $("#email-input").val(),
                                         verificationCode: $("#code-input").val(),
@@ -376,19 +435,21 @@ $(document).ready(function() {
                                         fName: $("#firstName").val(),
                                         lName: $("#lastName").val(),
                                         encodedDocData: {
-                                            document: b,
-                                            selfie: a
+                                            document: $("#doc-preview").attr("src"),
+                                            selfie: $("#selfie-preview").attr("src")
                                         },
                                         dob: $("#datepicker").val(),
                                         nationality: $("#nationality").val(),
                                         gender: $("#gender-select-box").val(),
                                         residence: $("#residence").val(),
                                         id_type: $("#idType").val(),
-                                        id_num: $("#id").val()
+                                        id_num: $("#id").val(),
+                                        is_doc_change: $("#doc_change").val(),
+                                        is_selfie_change: $("#selfie_change").val()
                                     };
                                     $.ajax({
                                         type: "POST",
-                                        url: "step3.php",
+                                        url: "kyc_edit_step3.php",
                                         data: a,
                                         success: function(a) {
                                             f.stop(e);
@@ -408,11 +469,9 @@ $(document).ready(function() {
                                             grecaptcha.reset(2);
                                         }
                                     });
-                                });
-                            }));
+                            //});
                         }
                     } else $(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").text("Invalid recaptcha").css("color", "#C40404"), $("#errMsg").text("Invalid recaptcha"), $("#errMsg").css("color", "#C40404");
-        else $(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").text(""), $(".modal-body").text("Image files are too large. Files must be less than 10MB.").css("color", "#C40404");
         else $(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").text("Must check both boxes before submitting.").css("color", "#C40404"), $("#errMsg").text("Must check both boxes before submitting.").css("color", "#C40404");
         else $(".overlay").hide(), f.stop(e), $("#errModal").modal("show"), $(".modal-body").text("Please fill in ALL fields.").css("color", "#C40404"), $("#errMsg").text("Please fill in ALL fields.").css("color", "#C40404");
     });

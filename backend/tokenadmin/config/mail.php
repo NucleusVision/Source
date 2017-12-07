@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => env('MAIL_FROM', 'support@bangpapers.com'), 'name' => env('MAIL_NAME', 'BANGPAPERS')],
+    'from' => ['address' => env('MAIL_FROM', 'tokensale@nucleus.vision'), 'name' => env('MAIL_NAME', 'Nucleus')],
 
     /*
     |--------------------------------------------------------------------------

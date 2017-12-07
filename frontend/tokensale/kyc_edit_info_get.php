@@ -17,7 +17,7 @@ try{
     $email = clean_data($_POST['email']);
     $verificationCode = clean_data($_POST['verificationCode']);
 
-    $is_investor_sql = "SELECT `id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2` FROM investors WHERE email='".$email."'";
+    $is_investor_sql = "SELECT `id`, `email`, `first_name`, `last_name`, DATE_FORMAT(dob,'%m/%d/%Y') AS `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2` FROM investors WHERE email='".$email."'";
     
     $is_investor_result = mysqli_query($conn, $is_investor_sql);
     

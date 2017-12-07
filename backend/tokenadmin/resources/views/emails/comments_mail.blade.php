@@ -1,13 +1,1 @@
-<div style="background:#051721; padding:80px 0px 30px 0px;">
-	<p style="margin-bottom: 50px;" align="center"><img src="https://nucleus.vision/img/nucleus-icon.png"></p>
-	<div style="width: 500px; margin:0px auto 0px auto; padding: 20px 35px; background: #FFF; border-radius: 15px;">
-		<p style="font-family: 'Titillium Web', sans-serif; font-size: 21px; text-align: left; color: #ffaa00;">
-                    Dear {{ $email }},
-                </p>
-		<p style="font-family: 'Titillium Web', sans-serif; font-size: 21px; text-align: left; margin-top: 30px;">
-                    {{ $bodyMessage }}
-                </p>
-		<p style="border-bottom: solid 1px #e5e5e5; margin-bottom: 20px;"></p>
-		<p style="font-family: 'Titillium Web', sans-serif; font-size: 21px; text-align: left; margin-top: 20px;"><b>Warmly,</b><br>Nucleus.Vision</p>
-	</div>
-</div>
+<html><body><div style="background:#051721; padding:10px 0px 10px 0px;"><p style="margin-bottom: 10px;" align="center"><img src="https://nucleus.vision/img/nucleus-icon.png"></p><div style="width: 500px; margin:0px auto 0px auto; padding: 20px 35px; background: #FFF; border-radius: 15px;"><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left; color: #ffaa00;">Dear {{ $email }},</p><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left; margin-top: 30px;">Your Nucleus Token Sale KYC application has been rejected.</p><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left;">{{ $bodyMessage }}</p><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left;">You can edit your KYC info using below verification code.</p><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left;">Verification Code: <b>{{ $kyc_code }}</b><br/><br/><a href="http://dev.tokensale.com/kyc_edit.php" style="background-color:#99c739;border:1px solid #7ea613;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:38px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;mso-hide:all;">Click here to Edit KYC</a></p><p style="border-bottom: solid 1px #e5e5e5; margin-bottom: 20px;"></p><p style="font-family: "Titillium Web", sans-serif; font-size: 21px; text-align: left; margin-top: 20px;"><b>Warmly,</b><br>Nucleus.Vision</p></div></div></body></html>

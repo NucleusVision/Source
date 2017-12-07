@@ -23,7 +23,7 @@
             }
             
             //return new RedirectResponse(url('/'));
-			return redirect()->back()->with('authmessage', 'Investor can not be edited once approved.');
+			return redirect()->back()->with('authmessage', 'Investor can not be edited once '.$oInvestor->status);
         }
 
     }

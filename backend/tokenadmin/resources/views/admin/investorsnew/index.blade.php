@@ -23,6 +23,7 @@
                         <option value="" selected="selected">Select Type</option>
                         <option value="whitelisted">White Listed</option>
                         <option value="public">Public</option>
+                        <option value="private">Private</option>
                     </select>
                 </div>
             </div>
