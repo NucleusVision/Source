@@ -1,10 +1,12 @@
-<?php $__env->startSection('content'); ?> 
+@extends('admin.layouts.master')
+
+@section('content') 
 
 <div class="content-wrapper">        
         <section class="content-header">
           <h1>View Investor</h1>
           <ol class="breadcrumb">
-            <li><a href="<?php echo e(route('admin::investors')); ?>"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="{{ route('admin::investors') }}"><i class="fa fa-home"></i> Home</a></li>
             <li class="active">View Investor</li>
           </ol>
         </section>        
@@ -18,79 +20,70 @@
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Id</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->id); ?>
-
+                        {{ $oInvestor->id }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Name</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->first_name." ". $oInvestor->last_name); ?>
-
+                        {{ $oInvestor->first_name." ". $oInvestor->last_name  }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Email</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->email); ?>
-
+                        {{ $oInvestor->email }}
                       </div>
                     </div>
                     
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>DOB</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->dob); ?>
-
+                        {{ $oInvestor->dob }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Gender</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->gender); ?>
-
+                        {{ $oInvestor->gender }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Nationality</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->nationality); ?>
-
+                        {{ $oInvestor->nationality }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Country Of Residence</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->residence); ?>
-
+                        {{ $oInvestor->residence }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Identification Type</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->id_type); ?>
-
+                        {{ $oInvestor->id_type }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Identification Number</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->id_num); ?>
-
+                        {{ $oInvestor->id_num }}
                       </div>
                     </div> 
 					
 					<div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Document1</b>:</div>
                       <div class="col-md-7 pdl0">
-                         <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc1); ?>" >
+                         <img src="/uploads/ps/id2.jpg" >
                       </div>
                     </div> 
 					
 					<div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Document2</b>:</div>
                       <div class="col-md-7 pdl0">
-                         <img src="<?php echo e(config('constants.NUCLEUS_UPLOAD_URL')); ?><?php echo e($oInvestor->doc2); ?>" >
+                         <img src="/uploads/ps/id1.jpg" >
                       </div>
                     </div> 
                       
@@ -98,21 +91,19 @@
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Status</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->status); ?>
-
+                        {{ $oInvestor->status }}
                       </div>
                     </div>
                     <div class="row mrb20">
                       <div class="col-md-5 text-right"><b>Created At</b>:</div>
                       <div class="col-md-7 pdl0">
-                        <?php echo e($oInvestor->created_at); ?>
-
+                        {{ $oInvestor->created_at }}
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <p align="center"><a href="<?php echo e(route('admin::investorsEdit', $oInvestor->investor_id)); ?>" class="btn btn-primary btn-lg mrr20">Edit</a> <a href="#" class="btn btn-primary btn-lg cancel">Back</a></p>
+                <p align="center"><a href="{{ route('admin::investorsEdit', $oInvestor->investor_id) }}" class="btn btn-primary btn-lg mrr20">Edit</a> <a href="#" class="btn btn-primary btn-lg cancel">Back</a></p>
             </div>
           </div>
         </section>
@@ -120,9 +111,8 @@
       <script>
             $(function () {
                 $(".cancel").click(function(){ 
-                   location.href="<?php echo e(route('admin::investors')); ?>"; 
+                   location.href="{{ route('admin::investors') }}"; 
                 });
             }); 
       </script>
-<?php $__env->stopSection(); ?>
-<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+@endsection

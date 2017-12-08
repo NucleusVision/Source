@@ -12,7 +12,7 @@
         <div class="box-header with-border">
           <h3 class="box-title">List of Investors</h3>
         </div>
-          <div class="row" style="margin-left: 3px;">  
+        <div class="row" style="margin-left: 3px;">  
         <form name="form1" id="form1" method="get">
             <div class="col-md-3">
                 <div class="form-group">
@@ -28,13 +28,13 @@
         </form>   
         </div>
         <div class="box-body">  
-			<?php if(session('authmessage')): ?>
-				<div class="alert alert-info fade in">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					<?php echo e(session('authmessage')); ?>
+            <?php if(session('authmessage')): ?>
+                    <div class="alert alert-info fade in">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <?php echo e(session('authmessage')); ?>
 
-				</div>
-			<?php endif; ?>
+                    </div>
+            <?php endif; ?>
           <table id="investors-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>

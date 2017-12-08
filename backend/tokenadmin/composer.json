@@ -9,7 +9,8 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "^5.2.0",
 		"yajra/laravel-datatables-oracle": "^6.6.0",
-		"barryvdh/laravel-snappy": "^0.3.0"
+		"barryvdh/laravel-snappy": "^0.3.0",
+        "dzarezenko/etherscan-api": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

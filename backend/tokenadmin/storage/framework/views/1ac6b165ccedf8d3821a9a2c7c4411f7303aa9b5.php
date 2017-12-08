@@ -45,6 +45,13 @@
                     <i class="icon-settings"></i> <span>Settings</span>
                 </a>
             </li>
+            
+            <li class="<?php echo e(Request::is('admin/show-transactions', 'admin/show-transactions/*') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route("admin::showTransactions")); ?>">
+                    <i class="icon-wallet"></i> <span>Show Transactions</span>
+                </a>
+            </li>
+            
         </ul>
     </section>
 </aside>

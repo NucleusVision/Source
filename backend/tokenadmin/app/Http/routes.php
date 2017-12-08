@@ -88,6 +88,14 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::get('settings/{id}/view', ['uses' => 'SettingsController@view', 'as' => 'settingsView']); 
         Route::post('settings/delete', ['uses' => 'SettingsController@delete', 'as' => 'settingsDelete']);
         
+        
+        //Show Transactions
+        Route::get('show-transactions', ['uses' => 'TransactionController@index', 'as' => 'showTransactions']); 
+        Route::post('ajax-get-investors', ['as'=>'ajaxGetInvestors', 'uses'=>'TransactionController@ajaxGetInvestors']);
+        Route::post('tr-search-form1', ['as'=>'trSearchForm1', 'uses'=>'TransactionController@trSearchForm1']);
+        Route::post('tr-search-form2', ['as'=>'trSearchForm2', 'uses'=>'TransactionController@trSearchForm2']);
+        
+        
     });
     
 });

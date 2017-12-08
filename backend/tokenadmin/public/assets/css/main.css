@@ -4154,6 +4154,56 @@ table.text-center th {
 .chart canvas {
   width: 100%!important;
 }
+
+/* transaction form styles start */
+.tr-form-container{
+    //min-height: 300px;
+    width:100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    //padding-bottom: 5px;
+    //border-bottom: 1px solid #f4f4f4;
+}
+
+.tr-form-wrapper{
+    margin-left: 1px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.tr-form-wrapper select{
+    width: 200px;
+}
+
+.tr-form-wrapper input[name=eth_addr]{
+    width: 360px;
+}
+
+.tr-form-wrapper .sel-type{
+    float:left;
+    margin-right: 10px;
+}
+
+.tr-form-wrapper .sel-investor{
+    float:left;
+    margin-right: 10px;
+}
+
+.tr-form-wrapper .input-btn{
+    float:left;
+    padding-top: 25px;
+}
+
+.tr-form-wrapper .txt{
+    float:left;
+    padding-top: 25px;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.tr-form-body-msg{
+    //min-height: 600px;
+}
 /*
  * Misc: print
  * -----------

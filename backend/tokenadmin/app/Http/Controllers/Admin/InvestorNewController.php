@@ -669,14 +669,19 @@ class InvestorNewController extends Controller
                     $statusClass = "";
                 }
 				
-				$isRejdisabled = "";
-				$statusRejClass = "investor-status";
-				if($row->status == Investor::STATUS_REJECTED){
+                $isRejdisabled = "";
+                $statusRejClass = "investor-status";
+                if($row->status == Investor::STATUS_REJECTED){
                     $isRejdisabled = "disabled";
                     $statusRejClass = "";
                 }
+                
+                $editDisabled = "";
+                if($row->status == Investor::STATUS_REJECTED){
+                    $editDisabled = "disabled";
+                }
                     
-				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusRejClass." ".$isRejdisabled.'" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusRejClass." ".$isRejdisabled.'" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$editDisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
                 
             })
             ->make(true);
@@ -684,6 +689,33 @@ class InvestorNewController extends Controller
     }
     
     public function prInvestorEdit($iInvestorId) {
+        
+        $oInvestor = Investor::find($iInvestorId);
+        
+        if($oInvestor->prflag == 1 && $oInvestor->status == Investor::STATUS_APPROVED){
+            
+            $flag = '0';
+            $post = "addr=".$oInvestor->id."&flag=".$flag;
+
+            $post .= "&bonus=".$oInvestor->bonus_per."&lockTimeout=".($oInvestor->lock_in_period*24*3600);
+ 
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/addPreSaleAccount");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec ($ch);
+            curl_close ($ch);
+
+            $aObj = json_decode($server_output, true);
+            $aResp = ['message' => $aObj['data'], 'success' => '1'];
+
+            $oInvestor->update(['status' => Investor::STATUS_PENDING]);
+        }
+        
+        
+        
+        
         return view('admin.prinvestors.edit')
                 ->with('oInvestor', Investor::find($iInvestorId));
     }

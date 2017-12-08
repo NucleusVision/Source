@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8ab025ec9d8e2e77fe302663dda2286",
+    "content-hash": "78551a4329fac250c28b9659a987bc6d",
     "packages": [
         {
             "name": "barryvdh/laravel-snappy",
@@ -211,6 +211,49 @@
                 "string"
             ],
             "time": "2015-11-06T14:35:42+00:00"
+        },
+        {
+            "name": "dzarezenko/etherscan-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dzarezenko/etherscan-api.git",
+                "reference": "c7318049a8d9ec95f191f7082b408a8b241616ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dzarezenko/etherscan-api/zipball/c7318049a8d9ec95f191f7082b408a8b241616ae",
+                "reference": "c7318049a8d9ec95f191f7082b408a8b241616ae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "etherscan\\api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmytro Zarezenko",
+                    "email": "dmytro.zarezenko@gmail.com",
+                    "homepage": "https://github.com/dzarezenko",
+                    "role": "Development"
+                }
+            ],
+            "description": "PHP wrapper for the Etherscan API.",
+            "homepage": "https://github.com/dzarezenko/etherscan-api",
+            "keywords": [
+                "api",
+                "etherscan"
+            ],
+            "time": "2017-09-28 14:16:25"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3669,7 +3712,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dzarezenko/etherscan-api": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

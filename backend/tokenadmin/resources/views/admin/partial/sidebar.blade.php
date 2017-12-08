@@ -45,6 +45,13 @@
                     <i class="icon-settings"></i> <span>Settings</span>
                 </a>
             </li>
+            
+            <li class="{{ Request::is('admin/show-transactions', 'admin/show-transactions/*') ? 'active' : '' }}">
+                <a href="{{ route("admin::showTransactions") }}">
+                    <i class="icon-wallet"></i> <span>Show Transactions</span>
+                </a>
+            </li>
+            
         </ul>
     </section>
 </aside>

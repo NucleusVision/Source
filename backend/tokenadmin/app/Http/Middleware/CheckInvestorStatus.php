@@ -18,7 +18,7 @@
         public function handle($request, Closure $next) {
             $oInvestor = Investor::find($request->id);
 
-            if ($oInvestor->status == Investor::STATUS_PENDING) {
+            if ($oInvestor->status == Investor::STATUS_PENDING || ($oInvestor->prflag == 1 && $oInvestor->status != Investor::STATUS_REJECTED)) {
                 return $next($request);
             }
             
