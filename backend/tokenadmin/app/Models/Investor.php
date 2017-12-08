@@ -9,7 +9,7 @@ class Investor extends Model
     
     const STATUS_PENDING = "Pending";
     const STATUS_APPROVED = "Approved";
-    const STATUS_REJECTED= "REJECTED";
+    const STATUS_REJECTED= "Rejected";
     
     //
     protected $table = 'investors';

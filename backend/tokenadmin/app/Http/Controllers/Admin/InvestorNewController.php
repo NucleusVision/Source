@@ -12,7 +12,7 @@ use Validator;
 
 class InvestorNewController extends Controller
 {
-    public $apiDomain = '54.215.211.34:1337';//13.56.240.73:1337
+	public $apiDomain = '54.215.211.34:1337';//13.56.240.73:1337
     //
     /**
      * @return void
@@ -132,8 +132,15 @@ class InvestorNewController extends Controller
                     $isdisabled="disabled";
                     $statusClass = "";
                 }
+				
+				$isRejdisabled = "";
+				$statusRejClass = "investor-status";
+				if($row->status == Investor::STATUS_REJECTED){
+                    $isRejdisabled = "disabled";
+                    $statusRejClass = "";
+                }
                     
-				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/wp-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<button id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusRejClass." ".$isRejdisabled.'" style="margin-bottom:10px;width:70px;">Reject</button>&nbsp<a href="/admin/wp-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
             })
             ->make(true);
     }
@@ -596,31 +603,33 @@ class InvestorNewController extends Controller
         if($response != "failure"){
             $aData['status'] = $status;
             $oInvestor->update($aData);
-            
-            /*
+			
+	    /*		
             if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
-                $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
-                $post = "addr=".$oInvestor->id."&flag=".$flag;
-                $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
-                if($functionToCall == "addPreSaleAccount")$post .= "&bonus=".$oInvestor->bonus_per."&lockTimeout=".($oInvestor->lock_in_period*24*3600);
-
-    //            echo "http://".$this->apiDomain."/user/".$functionToCall;
-    //            print_r($post);
-    //            exit;
-
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $server_output = curl_exec ($ch);
-                curl_close ($ch);
-
-                $aObj = json_decode($server_output, true);
-                $aResp = ['message' => $aObj['data'], 'success' => '1'];
-            }
-             */
+            $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
+            $post = "addr=".$oInvestor->id."&flag=".$flag;
+            $functionToCall = (!empty($oInvestor->prflag))?"addPreSaleAccount":"whitelistAccount";
+            if($functionToCall == "addPreSaleAccount")$post .= "&bonus=".$oInvestor->bonus_per."&lockTimeout=".($oInvestor->lock_in_period*24*3600);
             
+//            echo "http://".$this->apiDomain."/user/".$functionToCall;
+//            print_r($post);
+//            exit;
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec ($ch);
+            curl_close ($ch);
+
+            $aObj = json_decode($server_output, true);
+            $aResp = ['message' => $aObj['data'], 'success' => '1'];
+            
+            }
+            */
+			
+			
         }
         
         return $response;
@@ -659,8 +668,15 @@ class InvestorNewController extends Controller
                     $isdisabled="disabled";
                     $statusClass = "";
                 }
+				
+				$isRejdisabled = "";
+				$statusRejClass = "investor-status";
+				if($row->status == Investor::STATUS_REJECTED){
+                    $isRejdisabled = "disabled";
+                    $statusRejClass = "";
+                }
                     
-				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
+				return '<button id="' . $row->investor_id . '" data-status="Approve"  class="btn btn-success btn-sm '.$statusClass." ".$isdisabled.'" style="margin-bottom:10px;width:70px;">Approve</button>&nbsp<a id="' . $row->investor_id . '" data-status="Reject"  class="btn btn-danger btn-sm '.$statusRejClass." ".$isRejdisabled.'" style="margin-bottom:10px;width:70px;">Reject</a>&nbsp<a href="/admin/pr-investors/' . $row->investor_id . '/edit" class="btn btn-primary btn-sm '.$isdisabled.'" style="margin-bottom:10px;width:70px;">Edit</a>&nbsp'; 
                 
             })
             ->make(true);
