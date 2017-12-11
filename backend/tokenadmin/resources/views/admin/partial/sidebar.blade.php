@@ -46,7 +46,7 @@
                 </a>
             </li>
             
-            <li class="{{ Request::is('admin/show-transactions', 'admin/show-transactions/*') ? 'active' : '' }}">
+            <li class="{{ Request::is('admin/show-transactions', 'admin/show-transactions/*', 'admin/tr-search-results') ? 'active' : '' }}">
                 <a href="{{ route("admin::showTransactions") }}">
                     <i class="icon-wallet"></i> <span>Show Transactions</span>
                 </a>

@@ -87,13 +87,15 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::post('settings/update', ['uses' => 'SettingsController@update', 'as' => 'settingsUpdate']);        
         Route::get('settings/{id}/view', ['uses' => 'SettingsController@view', 'as' => 'settingsView']); 
         Route::post('settings/delete', ['uses' => 'SettingsController@delete', 'as' => 'settingsDelete']);
+        Route::any('settings/load-ico-settings', ['uses' => 'SettingsController@loadIcoSettings', 'as' => 'settingsloadIcoSettings']);
+        Route::any('settings/get-stats', ['uses' => 'SettingsController@getStats', 'as' => 'settingsgetStats']);
         
         
         //Show Transactions
         Route::get('show-transactions', ['uses' => 'TransactionController@index', 'as' => 'showTransactions']); 
         Route::post('ajax-get-investors', ['as'=>'ajaxGetInvestors', 'uses'=>'TransactionController@ajaxGetInvestors']);
         Route::post('tr-search-form1', ['as'=>'trSearchForm1', 'uses'=>'TransactionController@trSearchForm1']);
-        Route::post('tr-search-form2', ['as'=>'trSearchForm2', 'uses'=>'TransactionController@trSearchForm2']);
+        Route::get('tr-search-results', ['as'=>'trSearchResults1', 'uses'=>'TransactionController@trSearchResults1']);
         
         
     });

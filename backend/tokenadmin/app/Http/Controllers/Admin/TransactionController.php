@@ -49,19 +49,68 @@ class TransactionController extends Controller
     }
     
     public function trSearchForm1(Request $request) {
-        $oEtherScan = new Etherscan($this->esApiKey);
-        $txnResult = $oEtherScan->transactionList("0x676e1c5be0dae5523813afd09f0ff1eed75d48b4",0,99999999,"desc",1,10);
-        if($txnResult['status'] && $txnResult['message'] == "OK"){
-            $options = Investor::select(DB::raw('CONCAT(first_name, " ", last_name) as name, investor_id'))->orderBy('name', 'ASC')->get();
-            $txnlist = $txnResult['result'];
-            return view('admin.transactions.index')->with('txnlists', $txnlist)->with('investors', $options);
-        }else{
-            return view('admin.transactions.index')->with('error', "No Data Found")->with('investors', $options);
-        }
+        \Session::flash('requestData', $request->all());
+        return redirect()->route('admin::trSearchResults1');
     }
 
     public function trSearchForm2(Request $request) {
         
+    }
+    
+    public function trSearchResults1(Request $request) {
+        $error = "";
+        $errFlag = 0;
+        $addr = "";
+        $options = Investor::select(DB::raw('CONCAT(first_name, " ", last_name) as name, investor_id'))->orderBy('name', 'ASC')->get();
+        
+        if(session('requestData')){
+            $requestData = session('requestData');
+            //dd(session('requestData'));
+
+            if (empty($requestData['investor_name']) && empty($requestData['eth_addr'])) {
+                $errFlag = 1;
+                $error = "please choose Investor or enter ETH Wallet Address";
+                
+            }else{
+                if(!empty($requestData['investor_name'])){
+                    $oInvestor = Investor::find($requestData['investor_name']);
+                    if($oInvestor){
+                        $addr = $oInvestor->id;   
+                    }else{
+                        $errFlag = 1;
+                        $error = "invalid Investor";
+                    }
+                }else{
+                    $addr = trim($requestData['eth_addr']);
+                }
+                
+            }
+            if($errFlag){
+                return redirect()->route('admin::showTransactions')->with('error', $error);
+            }else{
+                $oEtherScan = new Etherscan($this->esApiKey);
+                $arrBal = $oEtherScan->balance($addr);
+                if($arrBal['status'] && $arrBal['message'] == "OK"){
+                    //\Session::flash('eth_balance', (float)($arrBal['result']/pow(10, 18)));
+                    \Session::flash('eth_balance', (float)$arrBal['result'] / pow(10, 18));
+                }
+                $txnResult = $oEtherScan->transactionList($addr,0,99999999,"desc",1,14);
+                if($txnResult['status'] && $txnResult['message'] == "OK"){
+                    $txnlist = $txnResult['result'];
+                    //dd($txnlist);
+                    \Session::flash('txnlists', $txnlist);
+                    \Session::flash('no_of_txns', count($txnlist));
+                    \Session::flash('sel_eth_addr', $requestData['eth_addr']);
+                    \Session::flash('sel_investor_type', $requestData['investor_type']);
+                    \Session::flash('sel_investor_name', $requestData['investor_name']);
+                    return view('admin.transactions.index')->with('investors', $options)->with('txnlists', $txnlist);
+                }else{
+                    \Session::flash('info_message', $txnResult['message']);
+                }
+                //return view('admin.transactions.index')->with('investors', $options);
+            }
+            
+        }
     }
     
 }

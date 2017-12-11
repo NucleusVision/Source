@@ -12,14 +12,13 @@
         <div class="box-header with-border">
           <h3 class="box-title">Show Transactions</h3>
         </div>
-          <?php if(count($errors) > 0): ?>
-            <div class="alert alert-danger">
-                <ul>
-                    <?php foreach($errors->all() as $error): ?>
-                        <li><?php echo e($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+        <?php if(session('error')): ?>
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <ul>
+                <li><?php echo e(session('error')); ?></li>
+            </ul>
+        </div>
         <?php endif; ?>
         <div class="box tr-form-container">   
               <?php echo e(csrf_field()); ?>
@@ -33,9 +32,9 @@
                                     <label for="">Investor Type</label>
                                     <select class="form-control" id="investor_type" name="investor_type">
                                         <option value="" selected="selected">All</option>
-                                        <option value="whitelisted">White Listed</option>
-                                        <option value="public">Public</option>
-                                        <option value="private">Private</option>
+                                        <option value="whitelisted" <?php if(session('sel_investor_type') == "whitelisted"): ?> selected <?php endif; ?>>White Listed</option>
+                                        <option value="public" <?php if(session('sel_investor_type') == "public"): ?> selected <?php endif; ?>>Public</option>
+                                        <option value="private" <?php if(session('sel_investor_type') == "private"): ?> selected <?php endif; ?>>Private</option>
                                     </select>
                                 </div>
                                 <div class="sel-investor">
@@ -43,23 +42,19 @@
                                     <select class="form-control" id="investor_name" name="investor_name">
                                         <option value="" selected="selected">Select Investor</option>
                                         <?php foreach($investors as $investor): ?>
-                                        <option value="<?php echo e($investor->investor_id); ?>"><?php echo e($investor->name); ?></option>
+                                        <option value="<?php echo e($investor->investor_id); ?>" <?php if(session('sel_investor_name') == $investor->investor_id): ?> selected <?php endif; ?>><?php echo e($investor->name); ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="input-btn">
                                     <input class="btn btn-success btn-sm" type="submit" name="status" value="Submit">
                                 </div>
-                            </form>
                             <div class="txt">
                                 (or)
                             </div>
-                            <form id="tr-search-form2" method="post" action="<?php echo e(route('admin::trSearchForm2')); ?>">
-                                <?php echo e(csrf_field()); ?>
-
                                 <div class="sel-investor">
                                     <label for="">ETH Wallet Address</label>
-                                    <input type="text" name="eth_addr" id="eth_addr" value="" class="form-control" />
+                                    <input type="text" name="eth_addr" id="eth_addr" value="<?php if(session('sel_eth_addr')): ?><?php echo e(session('sel_eth_addr')); ?><?php endif; ?>" class="form-control" />
                                 </div>
                                 <div class="input-btn">
                                     <input class="btn btn-success btn-sm" type="submit" name="status" value="Submit">
@@ -70,37 +65,37 @@
         </div>
         
         <div class="box-body tr-form-body-msg"> 
-            <?php if(count($errors) > 0): ?>
-            <div class="row mrb10 center-align"> 
-                <div class="alert alert-danger">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <ul>
-                        <?php foreach($errors->all() as $error): ?>
-                        <li><?php echo e($error); ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            </div>
-            <?php endif; ?>
-             <?php if(session('error')): ?>
+             <?php if(session('info_message')): ?>
                 <div class="alert alert-info fade in">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <?php echo e(session('error')); ?>
+                        <?php echo e(session('info_message')); ?>
 
                 </div>
+            <?php endif; ?>
+            <?php if(session('eth_balance')): ?>
+            <div class="row">
+                <div class="col-md-2"><b>ETH Balance :</b></div><div class="col-md-3"> <?php echo e(session('eth_balance')); ?> </div>
+            </div>
+            <?php endif; ?>
+            <?php if(session('no_of_txns')): ?>
+            <div class="row">
+                <div class="col-md-3"><b>No Of Transactions : </b></div><div class="col-md-3"> <?php echo e(session('no_of_txns')); ?> </div>
+            </div>
             <?php endif; ?>
           <table id="tr-search-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
-                <th>blockNumber</th>
-                <th>timeStamp</th>
-                <th>hash</th>
+                <th>TxHash</th> 
+                <th>Block</th>
+                <th>Age</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Value</th>
+                <th>TxFee</th>
+                <!--
                 <th>nonce</th>
                 <th>blockHash</th>
                 <th>transactionIndex</th>
-                <th>from</th>
-                <th>to</th>
-                <th>value</th>
                 <th>gas</th>
                 <th>gasPrice</th>
                 <th>isError</th>
@@ -109,21 +104,34 @@
                 <th>cumulativeGasUsed</th>
                 <th>gasUsed</th>
                 <th>confirmations</th>
+                -->
               </tr>
             </thead>
             <tbody>
                 <?php if(session('txnlists')): ?>
                 <?php foreach($txnlists as $key=>$item): ?>
                 <tr>
+                <td><?php echo e($item['hash']); ?></td>    
                 <td><?php echo e($item['blockNumber']); ?></td>
-                <td><?php echo e($item['timeStamp']); ?></td>
-                <td><?php echo e($item['hash']); ?></td>
+                <td>
+                    <?php
+                    
+                    echo \App\Models\Investor::time_elapsed_string("@".$item['timeStamp'], true);
+                    
+                    //$now = \Carbon\Carbon::now('UTC');
+                    //echo $item['timeStamp']."<br/>";
+                    //echo \Carbon\Carbon::createFromTimeStamp($item['timeStamp'])->diffForHumans();
+                    
+                    ?>
+                </td>
+                <td><?php echo e($item['from']); ?></td>
+                <td><?php echo e($item['to']); ?></td>
+                <td><?php echo e($item['value']/1000000000000000000); ?> Ether</td>
+                <td><?php echo e(($item['gasPrice']*$item['gasUsed'])/1000000000000000000); ?></td>
+                <!--
                 <td><?php echo e($item['nonce']); ?></td>
                 <td><?php echo e($item['blockHash']); ?></td>
                 <td><?php echo e($item['transactionIndex']); ?></td>
-                <td><?php echo e($item['from']); ?></td>
-                <td><?php echo e($item['to']); ?></td>
-                <td><?php echo e($item['value']); ?></td>
                 <td><?php echo e($item['gas']); ?></td>
                 <td><?php echo e($item['gasPrice']); ?></td>
                 <td><?php echo e($item['isError']); ?></td>
@@ -132,6 +140,7 @@
                 <td><?php echo e($item['cumulativeGasUsed']); ?></td>
                 <td><?php echo e($item['gasUsed']); ?></td>
                 <td><?php echo e($item['confirmations']); ?></td>
+                -->
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>
@@ -181,7 +190,15 @@
                 });
             });
             
-            $('#tr-search-list').dataTable();
+
+            $('#tr-search-list').DataTable({
+                "scrollX": true,
+                "bSort" : false,
+                "pageLength": 25,
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false
+            });
             
             
       </script>

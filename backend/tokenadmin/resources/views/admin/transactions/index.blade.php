@@ -14,14 +14,13 @@
         <div class="box-header with-border">
           <h3 class="box-title">Show Transactions</h3>
         </div>
-          @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        @if (session('error'))
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <ul>
+                <li>{{ session('error') }}</li>
+            </ul>
+        </div>
         @endif
         <div class="box tr-form-container">   
               {{ csrf_field() }}
@@ -33,9 +32,9 @@
                                     <label for="">Investor Type</label>
                                     <select class="form-control" id="investor_type" name="investor_type">
                                         <option value="" selected="selected">All</option>
-                                        <option value="whitelisted">White Listed</option>
-                                        <option value="public">Public</option>
-                                        <option value="private">Private</option>
+                                        <option value="whitelisted" @if(session('sel_investor_type') == "whitelisted") selected @endif>White Listed</option>
+                                        <option value="public" @if(session('sel_investor_type') == "public") selected @endif>Public</option>
+                                        <option value="private" @if(session('sel_investor_type') == "private") selected @endif>Private</option>
                                     </select>
                                 </div>
                                 <div class="sel-investor">
@@ -43,22 +42,19 @@
                                     <select class="form-control" id="investor_name" name="investor_name">
                                         <option value="" selected="selected">Select Investor</option>
                                         @foreach($investors as $investor)
-                                        <option value="{{ $investor->investor_id }}">{{ $investor->name }}</option>
+                                        <option value="{{ $investor->investor_id }}" @if(session('sel_investor_name') == $investor->investor_id) selected @endif>{{ $investor->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="input-btn">
                                     <input class="btn btn-success btn-sm" type="submit" name="status" value="Submit">
                                 </div>
-                            </form>
                             <div class="txt">
                                 (or)
                             </div>
-                            <form id="tr-search-form2" method="post" action="{{ route('admin::trSearchForm2') }}">
-                                {{ csrf_field() }}
                                 <div class="sel-investor">
                                     <label for="">ETH Wallet Address</label>
-                                    <input type="text" name="eth_addr" id="eth_addr" value="" class="form-control" />
+                                    <input type="text" name="eth_addr" id="eth_addr" value="@if(session('sel_eth_addr')){{ session('sel_eth_addr') }}@endif" class="form-control" />
                                 </div>
                                 <div class="input-btn">
                                     <input class="btn btn-success btn-sm" type="submit" name="status" value="Submit">
@@ -69,36 +65,36 @@
         </div>
         
         <div class="box-body tr-form-body-msg"> 
-            @if (count($errors) > 0)
-            <div class="row mrb10 center-align"> 
-                <div class="alert alert-danger">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            @endif
-             @if (session('error'))
+             @if (session('info_message'))
                 <div class="alert alert-info fade in">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{ session('error') }}
+                        {{ session('info_message') }}
                 </div>
+            @endif
+            @if (session('eth_balance'))
+            <div class="row">
+                <div class="col-md-2"><b>ETH Balance :</b></div><div class="col-md-3"> {{ session('eth_balance') }} </div>
+            </div>
+            @endif
+            @if (session('no_of_txns'))
+            <div class="row">
+                <div class="col-md-3"><b>No Of Transactions : </b></div><div class="col-md-3"> {{ session('no_of_txns') }} </div>
+            </div>
             @endif
           <table id="tr-search-list" class="table table-striped table-bordered" cellspacing="0" width="100%">
             <thead>
               <tr>
-                <th>blockNumber</th>
-                <th>timeStamp</th>
-                <th>hash</th>
+                <th>TxHash</th> 
+                <th>Block</th>
+                <th>Age</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Value</th>
+                <th>TxFee</th>
+                <!--
                 <th>nonce</th>
                 <th>blockHash</th>
                 <th>transactionIndex</th>
-                <th>from</th>
-                <th>to</th>
-                <th>value</th>
                 <th>gas</th>
                 <th>gasPrice</th>
                 <th>isError</th>
@@ -107,21 +103,34 @@
                 <th>cumulativeGasUsed</th>
                 <th>gasUsed</th>
                 <th>confirmations</th>
+                -->
               </tr>
             </thead>
             <tbody>
                 @if (session('txnlists'))
                 @foreach($txnlists as $key=>$item)
                 <tr>
+                <td>{{ $item['hash'] }}</td>    
                 <td>{{ $item['blockNumber'] }}</td>
-                <td>{{ $item['timeStamp'] }}</td>
-                <td>{{ $item['hash'] }}</td>
+                <td>
+                    <?php
+                    
+                    echo \App\Models\Investor::time_elapsed_string("@".$item['timeStamp'], true);
+                    
+                    //$now = \Carbon\Carbon::now('UTC');
+                    //echo $item['timeStamp']."<br/>";
+                    //echo \Carbon\Carbon::createFromTimeStamp($item['timeStamp'])->diffForHumans();
+                    
+                    ?>
+                </td>
+                <td>{{ $item['from'] }}</td>
+                <td>{{ $item['to'] }}</td>
+                <td>{{ $item['value']/1000000000000000000 }} Ether</td>
+                <td>{{ ($item['gasPrice']*$item['gasUsed'])/1000000000000000000 }}</td>
+                <!--
                 <td>{{ $item['nonce'] }}</td>
                 <td>{{ $item['blockHash'] }}</td>
                 <td>{{ $item['transactionIndex'] }}</td>
-                <td>{{ $item['from'] }}</td>
-                <td>{{ $item['to'] }}</td>
-                <td>{{ $item['value'] }}</td>
                 <td>{{ $item['gas'] }}</td>
                 <td>{{ $item['gasPrice'] }}</td>
                 <td>{{ $item['isError'] }}</td>
@@ -130,6 +139,7 @@
                 <td>{{ $item['cumulativeGasUsed'] }}</td>
                 <td>{{ $item['gasUsed'] }}</td>
                 <td>{{ $item['confirmations'] }}</td>
+                -->
                 </tr>
                 @endforeach
                 @endif
@@ -179,7 +189,15 @@
                 });
             });
             
-            $('#tr-search-list').dataTable();
+
+            $('#tr-search-list').DataTable({
+                "scrollX": true,
+                "bSort" : false,
+                "pageLength": 25,
+                "scrollY": "200px",
+                "scrollCollapse": true,
+                "paging": false
+            });
             
             
       </script>
