@@ -90,6 +90,7 @@ class TransactionController extends Controller
             }else{
                 $oEtherScan = new Etherscan($this->esApiKey);
                 $arrBal = $oEtherScan->balance($addr);
+				
                 if($arrBal['status'] && $arrBal['message'] == "OK"){
                     //\Session::flash('eth_balance', (float)($arrBal['result']/pow(10, 18)));
                     \Session::flash('eth_balance', (float)$arrBal['result'] / pow(10, 18));
@@ -105,7 +106,8 @@ class TransactionController extends Controller
                     \Session::flash('sel_investor_name', $requestData['investor_name']);
                     return view('admin.transactions.index')->with('investors', $options)->with('txnlists', $txnlist);
                 }else{
-                    \Session::flash('info_message', $txnResult['message']);
+					\Session::flash('info_message', $txnResult['message']);
+					return view('admin.transactions.index')->with('investors', $options);
                 }
                 //return view('admin.transactions.index')->with('investors', $options);
             }

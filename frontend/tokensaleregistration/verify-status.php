@@ -10,14 +10,7 @@ session_start();
     <title>Nucleus - Token Sale</title>  
     <link rel="stylesheet" href="css/global.css">
     <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/sweetalert.min.js"></script>
-    <script src="js/form-scripts.js"></script>
-    <script src="js/app.js"></script>
     <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16">
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107563572-1"></script>

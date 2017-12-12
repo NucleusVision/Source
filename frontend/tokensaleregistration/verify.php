@@ -17,19 +17,38 @@ if(isset($_GET['email']) && !empty($_GET['email']) && isset($_GET['code']) && !e
 $email = clean_data($_REQUEST['email']);
 $code = clean_data($_REQUEST['code']);
    
-$investor_sql = "SELECT email, email_activated, activation_code, kyc_completed FROM user_verify WHERE email='".$email."' and activation_code='".$code."'";
+$investor_sql = "SELECT email, email_activated, activation_code, kyc_completed FROM user_verify WHERE email = :email and activation_code = :code";
 
-$investor_result = mysqli_query($conn, $investor_sql);
-    if (mysqli_num_rows($investor_result) > 0) {
-			$user_row = mysqli_fetch_array($investor_result, MYSQLI_ASSOC);
+$stmt = $conn->prepare($investor_sql);
+	
+$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+$stmt->bindValue(':code', $code, PDO::PARAM_STR);
+
+$stmt->execute();
+
+$stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+$is_user_found = $stmt->fetch();
+
+		if ($is_user_found !== false) {
 			
-			if($user_row['email_activated'] != 1){
+			if($is_user_found['email_activated'] != 1){
 				
-			if($user_row['kyc_completed'] != 1){	
+			if($is_user_found['kyc_completed'] != 1){	
 				
-            $update_user_verify = "UPDATE user_verify SET email_activated=1 WHERE email = '".$email."' AND activation_code = '".$code."'";
-            mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-            
+            $update_user_verify = "UPDATE user_verify SET email_activated=1 WHERE email = :email AND activation_code = :code";
+			
+			$stmt = $conn->prepare($update_user_verify);
+	
+			$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+			$stmt->bindValue(':code', $code, PDO::PARAM_STR);
+
+			$stmt->execute();
+			
+			if(!$stmt->execute()){
+				die('error');
+			}
+
             $message = "Your email has been verified successfully.";
             
             try{
@@ -69,7 +88,7 @@ $investor_result = mysqli_query($conn, $investor_sql);
                                 $isMailSent = false;
                         }
                 }
-        }catch(\Exception $e){
+        }catch(Exception $e){
                 $isMailSent = false;
         }
 		
@@ -89,7 +108,7 @@ $investor_result = mysqli_query($conn, $investor_sql);
 }
         
         
-}catch(\Exception $e){
+}catch(Exception $e){
     $message = "Invalid url (or) Email has already been verified.";
 }
 

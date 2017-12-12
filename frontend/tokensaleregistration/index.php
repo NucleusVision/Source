@@ -5,7 +5,7 @@
     <meta name="viewport" content=
     "width=device-width, initial-scale=1.0" />
     <title>Nucleus - Token Sale</title>
-    <link rel="stylesheet" href="css/register.css" type="text/css" />
+    <link rel="stylesheet" href="css/step1_register.css" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -2001,7 +2001,7 @@
 "text/javascript">
 </script><script src="js/plugins/easytimer.min.js" type=
 "text/javascript">
-</script><script src="js/plugins/register.min.js" type=
+</script><script src="js/plugins/step1_register.min.js" type=
 "text/javascript">
 </script>
   </body>

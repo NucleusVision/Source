@@ -27,44 +27,73 @@ $response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?sec
 $response = json_decode($response, true);
 if($response["success"] === true)
 {    
-    $investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $investor_result = mysqli_query($conn, $investor_sql);
+    $investor_sql = 'SELECT email FROM investors WHERE email = :email';
 	
-    if (mysqli_num_rows($investor_result) > 0) {
+	$stmt = $conn->prepare($investor_sql);
+	
+	$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+	
+	$stmt->execute();
+	
+	$stmt->setFetchMode(PDO::FETCH_ASSOC);
+	
+	$is_investor_found = $stmt->fetch();
+	
+    if ($is_investor_found !== false) {
         $code = 400;
         $status = "Failed";
         $message = "Email already registered.";
     } else {
-        $token = "";        
-        $user_verify_sql = "SELECT email,activation_code,email_activated,created_at FROM user_verify WHERE email='".$email."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
+        $token = "";   
+		
+        $user_verify_sql = "SELECT email,activation_code,email_activated,created_at FROM user_verify WHERE email = :email";
+	
+		$stmt = $conn->prepare($user_verify_sql);
+		
+		$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+		
+		$stmt->execute();
+		
+		$stmt->setFetchMode(PDO::FETCH_ASSOC);
+		
+		$is_user_found = $stmt->fetch();
 
-        if (mysqli_num_rows($user_verify_result) > 0) {
-			$user_verify_row = mysqli_fetch_array($user_verify_result, MYSQLI_ASSOC);
-            if( $user_verify_row['email_activated'] == 1){
+        if ($is_user_found !== false) {
+            if( $is_user_found['email_activated'] == 1){
                 $code = 400;
                 $status = "Failed";
                 $message = "Your email has already been verified.Please visit http://tokensale.enterstargate.com to complete KYC Details.";
             }else{
-                $user_created_at = $user_verify_row['created_at'];
-                $time1 = date("Y-m-d H:i:s");
-                $time2 = $user_created_at;
-                $hourdiff = round((strtotime($time1) - strtotime($time2))/3600,1);
+                $user_created_at = $is_user_found['created_at'];
+                $created_at = date("Y-m-d H:i:s");
 
-                //file_put_contents("test.txt", "time1: ".$time1."time2: ".$time2."hour diff".$hourdiff);
+				$token = sha1(uniqid().mt_rand().time());
+				$update_user_verify = "UPDATE user_verify SET activation_code = :token , created_at = :created_at WHERE email = :email";
 
-                //if($hourdiff > 1){
-                    $token = sha1(uniqid().mt_rand().time());
-                    $update_user_verify = "UPDATE user_verify SET activation_code = '".$token."',created_at='".$time1."' WHERE email = '".$email."'";		
-                    mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-                //}else{
-                    //$token = $user_verify_row['activation_code'];
-                //}
+				$stmt = $conn->prepare($update_user_verify);
+				
+				$stmt->bindValue(':token', $token, PDO::PARAM_STR);
+				$stmt->bindValue(':created_at', $created_at, PDO::PARAM_STR);
+				$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+				
+				if(!$stmt->execute()){
+					die('error');
+				}	
             }
         } else {
             $token = sha1(uniqid().mt_rand().time());
-            $insert_user_verify = "insert into user_verify (email, activation_code) values('".$email."', '".$token."');";
-            mysqli_query($conn, $insert_user_verify);
+			$created_at = date("Y-m-d H:i:s");
+            $insert_user_verify = "insert into user_verify(email, activation_code, created_at) values(:email, :token, :created_at);";
+            
+			$stmt = $conn->prepare($insert_user_verify);
+				
+			$stmt->bindValue(':token', $token, PDO::PARAM_STR);
+			$stmt->bindValue(':created_at', $created_at, PDO::PARAM_STR);
+			$stmt->bindValue(':email', $email, PDO::PARAM_STR);
+			
+			if(!$stmt->execute()){
+				die('error');
+			}
         }
         
 		if($code != 400 && $code == ""){
@@ -103,7 +132,7 @@ if($response["success"] === true)
             curl_close($ch);
 
             if ($curlResp === FALSE) {
-                    throw new \Exception(); 
+                    throw new Exception(); 
             }else{
                     /*
                     $response = json_decode($curlResp);
@@ -118,7 +147,7 @@ if($response["success"] === true)
                             $isMailSent = false;
                     }
             }
-        }catch(\Exception $e){
+        }catch(Exception $e){
                 $isMailSent = false;
         } 
 		
@@ -144,7 +173,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

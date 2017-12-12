@@ -2,11 +2,7 @@
 @import url('bootstrap.min1.css');
 @import url('font-awesome.css');
 @import url('animate.css');
-@import url('owl.carousel.min.css');
-@import url('owl.theme.default.min.css');
-@import url('sweetalert.css');
-@import url('jquery.steps.css');
-@import url('bootstrap-datetimepicker.css');
+
 body{
 	font-family: 'Titillium Web', sans-serif;
 	font-size: 16px;
