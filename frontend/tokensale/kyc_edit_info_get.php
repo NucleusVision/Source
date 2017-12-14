@@ -17,27 +17,32 @@ try{
     $email = clean_data($_POST['email']);
     $verificationCode = clean_data($_POST['verificationCode']);
 
-    $is_investor_sql = "SELECT `id`, `email`, `first_name`, `last_name`, DATE_FORMAT(dob,'%m/%d/%Y') AS `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2` FROM investors WHERE email='".$email."'";
-    
-    $is_investor_result = mysqli_query($conn, $is_investor_sql);
-    
-    if (mysqli_num_rows($is_investor_result) > 0) {
-        
-    $investor_kyc_row = mysqli_fetch_array($is_investor_result, MYSQLI_ASSOC);
+    $is_investor_sql = "SELECT `id`, `email`, `first_name`, `last_name`, DATE_FORMAT(dob,'%m/%d/%Y') AS `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, status FROM investors WHERE email = :email";
 
-    if($investor_kyc_row['status'] == 'Approved'){
+    $stmt = $conn->prepare($is_investor_sql);
+	
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+    $investor_data = $stmt->fetch();
+
+    if ($investor_data !== false) {
+
+    if($investor_data['status'] == 'Approved'){
         $code = 400;
         $status = "Failed";
         $message = "Your application is already approved.";
     } else {       
-        $user_verify_sql = "SELECT email,kyc_edit_token,created_at FROM user_verify WHERE email='".$email."' AND kyc_edit_token='".$verificationCode."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
+        $user_data = is_user_exist_with_kyc_token($email, $verificationCode, $conn);
 
-        if (mysqli_num_rows($user_verify_result) > 0) {
+        if ($user_data !== false) {
             $code = 200;
             $status = "Success";
             $message = "Enter Details";
-            $result['kyc_data'] = $investor_kyc_row;
+            $result['kyc_data'] = $investor_data;
         } else {
             $code = 400;
             $status = "Failed";
@@ -52,7 +57,7 @@ try{
 } 
     
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

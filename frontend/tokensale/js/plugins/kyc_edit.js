@@ -126,8 +126,12 @@ function nextStep2() {
         1 > $(this).val().length && (a = !0);
     });
     
+    if(0 == a){
+        $("#submit-page-review").html("");
+        $("#submit-page-review").append("<p><span>ETH Wallet: </span> " + $("#addressInput").val() + "</p>", "<p><span>First name: </span> " + $("#firstName").val() + "</p>", "<p><span>Last name: </span>" + $("#lastName").val() + "</p>", "<p><span>" + $("#id-label").text() + " : </span>" + $("#id").val() + "</p>", "<p><span>D.O.B: </span>" + $("#datepicker").val() + "</p>", "<p><span>Nationality: </span>" + $("#nationality").val() + "</p>", "<p><span>Gender: </span>" + $("#gender-select-box").val() + "</p>", "<p><span>Residence: </span>" + $("#residence").val() + "</p>");
+    }
     
-    0 == $("#submit-page-review").children().length && $("#submit-page-review").append("<p><span>ETH Wallet: </span> " + $("#addressInput").val() + "</p>", "<p><span>First name: </span> " + $("#firstName").val() + "</p>", "<p><span>Last name: </span>" + $("#lastName").val() + "</p>", "<p><span>" + $("#id-label").text() + " : </span>" + $("#id").val() + "</p>", "<p><span>D.O.B: </span>" + $("#datepicker").val() + "</p>", "<p><span>Nationality: </span>" + $("#nationality").val() + "</p>", "<p><span>Gender: </span>" + $("#gender-select-box").val() + "</p>", "<p><span>Residence: </span>" + $("#residence").val() + "</p>");
+    //0 == $("#submit-page-review").children().length && $("#submit-page-review").append("<p><span>ETH Wallet: </span> " + $("#addressInput").val() + "</p>", "<p><span>First name: </span> " + $("#firstName").val() + "</p>", "<p><span>Last name: </span>" + $("#lastName").val() + "</p>", "<p><span>" + $("#id-label").text() + " : </span>" + $("#id").val() + "</p>", "<p><span>D.O.B: </span>" + $("#datepicker").val() + "</p>", "<p><span>Nationality: </span>" + $("#nationality").val() + "</p>", "<p><span>Gender: </span>" + $("#gender-select-box").val() + "</p>", "<p><span>Residence: </span>" + $("#residence").val() + "</p>");
     
     //alert($("#submit-page-review").html());
     //alert($("#firstName").val());

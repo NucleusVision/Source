@@ -91,28 +91,23 @@ $email = clean_data($_POST['email']);
 $verificationCode = clean_data($_POST['verificationCode']);
 
 $captcha = $_POST['response'];
-
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
 $ip = $_SERVER['REMOTE_ADDR'];
-$response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
-$response = json_decode($response, true);
-if($response["success"] === true)
-{    
-    $is_investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $is_investor_result = mysqli_query($conn, $is_investor_sql);
 
-    if (mysqli_num_rows($is_investor_result) > 0) {
+if(g_captcha_verify($ip, $captcha))
+{    
+    $investor_data = is_investor_exist($email, $conn);
+
+    if ($investor_data !== false) {
     
-    if($investor_kyc_row['status'] == 'Approved'){
+    if($investor_data['status'] == 'Approved'){
         $code = 400;
         $status = "Failed";
         $message = "Your application is already approved.";
     }  else {
-        $token = "";        
-        $user_verify_sql = "SELECT email,kyc_edit_token,created_at FROM user_verify WHERE email='".$email."' AND kyc_edit_token='".$verificationCode."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
+        
+        $user_data = is_user_exist_with_kyc_token($email, $verificationCode, $conn);
 
-        if (mysqli_num_rows($user_verify_result) > 0) {
+        if ($user_data !== false) {
             
             $eth = clean_data($_POST['eth']);
             $fName = clean_data($_POST['fName']);
@@ -142,21 +137,43 @@ if($response["success"] === true)
                
             $update_investors = "";    
  
+            $placeholder_data = array(
+                        ':eth' => $eth, 
+                        ':fName' => $fName,
+                        ':lName' => $lName,
+                        ':dob' => $dob,
+                        ':nationality' => $nationality,
+                        ':gender' => $gender,
+                        ':residence' => $residence,
+                        ':id_type' => $id_type,
+                        ':id_num' => $id_num,
+                        ':email' => $email,
+                    );
+            
             if($is_doc_change == "no" && $is_selfie_change == "no"){
-                $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`status`='Pending' WHERE email = '".$email."'";
+                $update_investors = "UPDATE investors SET `id`=:eth,`first_name`=:fName,`last_name`=:lName,`dob`=:dob,`nationality`=:nationality,`gender`=:gender,`residence`=:residence,`id_type`=:id_type,`id_num`=:id_num,`status`='Pending' WHERE email = :email";
             }else{
                 if($is_doc_change == "yes" && $is_selfie_change == "no"){
-                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc1`='".$document."',`thumb1`='".$thumb1."',`status`='Pending' WHERE email = '".$email."'";
-                    
+                    $update_investors = "UPDATE investors SET `id`=:eth,`first_name`=:fName,`last_name`=:lName,`dob`=:dob,`nationality`=:nationality,`gender`=:gender,`residence`=:residence,`id_type`=:id_type,`id_num`=:id_num,`doc1`=:document,`thumb1`=:thumb1,`status`='Pending' WHERE email = :email";
+                   $placeholder_data[':document'] = $document;
+                   $placeholder_data[':thumb1'] = $thumb1;
                 }elseif($is_doc_change == "no" && $is_selfie_change == "yes"){
-                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc2`='".$selfie."',`thumb2`='".$thumb2."',`status`='Pending' WHERE email = '".$email."'";
+                    $update_investors = "UPDATE investors SET `id`=:eth,`first_name`=:fName,`last_name`=:lName,`dob`=:dob,`nationality`=:nationality,`gender`=:gender,`residence`=:residence,`id_type`=:id_type,`id_num`=:id_num,`doc2`=:selfie,`thumb2`=:thumb2,`status`='Pending' WHERE email = :email";
+                    $placeholder_data[':selfie'] = $selfie;
+                    $placeholder_data[':thumb2'] = $thumb2;
                 }elseif($is_doc_change == "yes" && $is_selfie_change == "yes"){
-                    $update_investors = "UPDATE investors SET `id`='".$eth."',`first_name`='".$fName."',`last_name`='".$lName."',`dob`='".$dob."',`nationality`='".$nationality."',`gender`='".$gender."',`residence`='".$residence."',`id_type`='".$id_type."',`id_num`='".$id_num."',`doc1`='".$document."',`doc2`='".$selfie."',`thumb1`='".$thumb1."',`thumb2`='".$thumb2."',`status`='Pending' WHERE email = '".$email."'";
+                    $update_investors = "UPDATE investors SET `id`=:eth,`first_name`=:fName,`last_name`=:lName,`dob`=:dob,`nationality`=:nationality,`gender`=:gender,`residence`=:residence,`id_type`=:id_type,`id_num`=:id_num,`doc1`=:document,`doc2`=:selfie,`thumb1`=:thumb1,`thumb2`=:thumb2,`status`='Pending' WHERE email = :email";
+                    $placeholder_data[':document'] = $document;
+                    $placeholder_data[':thumb1'] = $thumb1;
+                    $placeholder_data[':selfie'] = $selfie;
+                    $placeholder_data[':thumb2'] = $thumb2;
                 }
                 
-            }
+            }   
+            
+                                $stmt = $conn->prepare($update_investors);
 
-				if(mysqli_query($conn, $update_investors)){
+				if($stmt->execute($placeholder_data)){
 					
 				//$update_user_verify = "UPDATE user_verify SET kyc_completed = 1 WHERE email = '".$email."'";		
 				//mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));	
@@ -241,7 +258,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

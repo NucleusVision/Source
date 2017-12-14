@@ -91,29 +91,22 @@ $email = clean_data($_POST['email']);
 $verificationCode = clean_data($_POST['verificationCode']);
 
 $captcha = $_POST['response'];
-
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
 $ip = $_SERVER['REMOTE_ADDR'];
-$response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
-$response = json_decode($response, true);
-if($response["success"] === true)
-{    
-    $investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $investor_result = mysqli_query($conn, $investor_sql);
 
-    if (mysqli_num_rows($investor_result) > 0) {
+if(g_captcha_verify($ip, $captcha))
+{     
+    $investor_data = is_investor_exist($email, $conn);
+    if ($investor_data !== false) {
         $code = 400;
         $status = "Failed";
         $message = "Email already registered.";
     } else {
-        $token = "";        
-        $user_verify_sql = "SELECT email,token,created_at FROM user_verify WHERE email='".$email."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
+        
+        $user_data = is_user_exist($email, $conn);
 
-        if (mysqli_num_rows($user_verify_result) > 0) {
+        if ($user_data !== false) {
             
             $eth = clean_data($_POST['eth']);
-            $bc = clean_data($_POST['bc']);
             $fName = clean_data($_POST['fName']);
             $lName = clean_data($_POST['lName']);
             $dob = date("Y-m-d", strtotime(clean_data($_POST['dob'])));
@@ -129,20 +122,39 @@ if($response["success"] === true)
             if($document && $selfie && $thumb1 && $thumb2){
             
             $cur_time=date('Y-m-d H:i:s');
-		
-            $insert_investors =  "";         
-                        
-            if(!empty($bc)){            
-            $insert_investors = "insert into investors (`id`, `bitcoin_id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$bc."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
-            }else{
-                $insert_investors = "insert into investors (`id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values('".$eth."', '".$email."', '".$fName."', '".$lName."', '".$dob."', '".$nationality."', '".$gender."', '".$residence."', '".$id_type."', '".$id_num."', '".$document."', '".$selfie."', '".$thumb1."', '".$thumb2."', '".$cur_time."');";
-            }
+		           
+            $insert_investors = "insert into investors (`id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `created_at`) values(:eth, :email, :fName, :lName, :dob, :nationality, :gender, :residence, :id_type, :id_num, :document, :selfie, :thumb1, :thumb2, :cur_time);";
+                               
+                                $stmt = $conn->prepare($insert_investors);
 
-				if(mysqli_query($conn, $insert_investors)){
-					
-				$update_user_verify = "UPDATE user_verify SET kyc_completed = 1 WHERE email = '".$email."'";		
-				mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));	
-            
+                                $stmt->bindValue(':eth', $eth, PDO::PARAM_STR);
+                                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+                                $stmt->bindValue(':fName', $fName, PDO::PARAM_STR);
+                                $stmt->bindValue(':lName', $lName, PDO::PARAM_STR);
+                                $stmt->bindValue(':dob', $dob, PDO::PARAM_STR);
+                                $stmt->bindValue(':nationality', $nationality, PDO::PARAM_STR);
+                                $stmt->bindValue(':gender', $gender, PDO::PARAM_STR);
+                                $stmt->bindValue(':residence', $residence, PDO::PARAM_STR);
+                                $stmt->bindValue(':id_type', $id_type, PDO::PARAM_STR);
+                                $stmt->bindValue(':id_num', $id_num, PDO::PARAM_STR);
+                                $stmt->bindValue(':document', $document, PDO::PARAM_STR);
+                                $stmt->bindValue(':selfie', $selfie, PDO::PARAM_STR);
+                                $stmt->bindValue(':thumb1', $thumb1, PDO::PARAM_STR);
+                                $stmt->bindValue(':thumb2', $thumb2, PDO::PARAM_STR);
+                                $stmt->bindValue(':cur_time', $cur_time, PDO::PARAM_STR);
+
+
+				if($stmt->execute()){
+                                    
+                                $update_user_verify = "UPDATE user_verify SET kyc_completed = 1 WHERE email = :email";
+
+                                $stmt = $conn->prepare($update_user_verify);
+                                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+
+                                if(!$stmt->execute()){
+                                    die('error');
+                                }	    
+                                    
 				$code = 200;
 				$status = "Success";
 				$message = "Request submitted successfully.";
@@ -214,7 +226,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

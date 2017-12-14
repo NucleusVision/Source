@@ -15,28 +15,22 @@ $status = "";
 $message = "";
 
 $email = clean_data($_POST['email']);
-$captcha = $_POST['response'];
 $verificationCode = clean_data($_POST['verificationCode']);
 
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
+$captcha = $_POST['response'];
 $ip = $_SERVER['REMOTE_ADDR'];
-$response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
-$response = json_decode($response, true);
-if($response["success"] === true)
-{    
-    $investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $investor_result = mysqli_query($conn, $investor_sql);
 
-    if (mysqli_num_rows($investor_result) > 0) {
+if(g_captcha_verify($ip, $captcha))
+{    
+    $investor_data = is_investor_exist($email, $conn);
+    if ($investor_data !== false) {
         $code = 400;
         $status = "Failed";
         $message = "Email already registered.";
     } else {
-        $token = "";        
-        $user_verify_sql = "SELECT email,token,created_at FROM user_verify WHERE email='".$email."' AND token='".$verificationCode."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
-
-        if (mysqli_num_rows($user_verify_result) > 0) {
+        $user_data = is_user_exist_with_token($email, $verificationCode, $conn);
+        
+        if ($user_data !== false) {
             $code = 200;
             $status = "Success";
             $message = "Enter Details";
@@ -54,7 +48,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

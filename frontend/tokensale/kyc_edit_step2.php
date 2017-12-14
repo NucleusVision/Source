@@ -15,31 +15,26 @@ $status = "";
 $message = "";
 
 $email = clean_data($_POST['email']);
-$captcha = $_POST['response'];
 $verificationCode = clean_data($_POST['verificationCode']);
 
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
 $ip = $_SERVER['REMOTE_ADDR'];
-$response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
-$response = json_decode($response, true);
-if($response["success"] === true)
-{    
-    $is_investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $is_investor_result = mysqli_query($conn, $is_investor_sql);
-    
-    if (mysqli_num_rows($is_investor_result) > 0) {
-        
-    $investor_kyc_row = mysqli_fetch_array($is_investor_result, MYSQLI_ASSOC);
+$captcha = $_POST['response'];
 
-    if($investor_kyc_row['status'] == 'Approved'){
+if(g_captcha_verify($ip, $captcha))
+{    
+    $investor_data = is_investor_exist($email, $conn);
+    
+    if ($investor_data !== false) {
+        
+    if($investor_data['status'] == 'Approved'){
         $code = 400;
         $status = "Failed";
         $message = "Your application is already approved.";
     } else {       
-        $user_verify_sql = "SELECT email,kyc_edit_token,created_at FROM user_verify WHERE email='".$email."' AND kyc_edit_token='".$verificationCode."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
-
-        if (mysqli_num_rows($user_verify_result) > 0) {
+        
+        $user_data = is_user_exist_with_kyc_token($email, $verificationCode, $conn);
+        
+        if ($user_data !== false) {
             $code = 200;
             $status = "Success";
             $message = "Enter Details";
@@ -66,7 +61,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     //$message = $e->getMessage();

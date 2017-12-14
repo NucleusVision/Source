@@ -23,12 +23,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $response = json_decode($response, true);
     if($response["success"] === true)
     {    
-        $investor_sql = "SELECT email, status FROM investors WHERE email='".$email."' and id_num='".$doc_id."'";
-        $investor_result = mysqli_query($conn, $investor_sql);
+        $investor_sql = "SELECT email, status FROM investors WHERE email=:email and id_num=:doc_id";
 
-        if (mysqli_num_rows($investor_result) > 0) {
-            $investor_row = mysqli_fetch_array($investor_result, MYSQLI_ASSOC);
-			$_SESSION["status"] = $investor_row['status'];
+        $stmt = $conn->prepare($investor_sql);
+	
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':doc_id', $doc_id, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $investor_data = $stmt->fetch();
+
+        if ($investor_data !== false) {
+            $_SESSION["status"] = $investor_data['status'];
             header('Location: status-view.php');
         } else {
             $message = "Invalid Email ID or Document ID.";
@@ -40,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     }
-}catch(\Exception $e){
+}catch(Exception $e){
         $message = "The server is currently busy. Please try again later.";
 }
 ?>
@@ -54,12 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/sweetalert.min.js"></script>
-    <script src="js/form-scripts.js"></script>
-    <script src="js/app.js"></script>
     <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16">
 	<style>
 		.text-xs-center {
@@ -104,12 +107,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="row justify-content-center">
         <div class="col-lg-6 align-self-center">
             <div class="tsr-container">
-                <form action="status.php" id="status-form" method="post">
+                <form action="status" id="status-form" method="post">
                     <p align="center"><img src="img/nucleus-icon.png" class="nucleus-logo"></p>
                 <h2 align="center">Nucleus Token Sale Registration Status</h2> 
                 <div style="width:500px;margin:auto;margin-top:10px;">
                 <p class="mrt10">
-                 
                 <?php if(isset($message) && !empty($message)){    ?>
                 <div class="alert alert-danger alert-dismissable">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

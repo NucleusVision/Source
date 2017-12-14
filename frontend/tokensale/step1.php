@@ -19,58 +19,50 @@ $status = "";
 $message = "";
 
 $email = clean_data($_POST['email']);
+
 $captcha = $_POST['response'];
-
-$secretKey = "6LegUjYUAAAAAG_lvOTZeN_JIXIewR2v_ZkjbYgh";
 $ip = $_SERVER['REMOTE_ADDR'];
-$response=file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip);
-$response = json_decode($response, true);
-if($response["success"] === true)
-{    
-    $investor_sql = "SELECT email FROM investors WHERE email='".$email."'";
-    $investor_result = mysqli_query($conn, $investor_sql);
 
-    if (mysqli_num_rows($investor_result) > 0) {
+if(g_captcha_verify($ip, $captcha))
+{     
+    $investor_data = is_investor_exist($email, $conn);
+    if ($investor_data !== false) {
         $code = 400;
         $status = "Failed";
         $message = "Email already registered.";
     } else {
         $token = "";        
-        $user_verify_sql = "SELECT email,token,created_at,email_activated FROM user_verify WHERE email='".$email."'";
-        $user_verify_result = mysqli_query($conn, $user_verify_sql);
-
-        if (mysqli_num_rows($user_verify_result) > 0) {
-            $user_verify_row = mysqli_fetch_array($user_verify_result, MYSQLI_ASSOC);
+        $user_data = is_user_exist($email, $conn);
+        
+        if ($user_data !== false) {
 			
-			if($user_verify_row['email_activated'] == 1){
-				$user_created_at = $user_verify_row['created_at'];
-				$time1 = date("Y-m-d H:i:s");
-				$time2 = $user_created_at;
-				$hourdiff = round((strtotime($time1) - strtotime($time2))/3600,1);
-				
-				//file_put_contents("test.txt", "time1: ".$time1."time2: ".$time2."hour diff".$hourdiff);
+            if($user_data['email_activated'] == 1){
+                $token = bin2hex(openssl_random_pseudo_bytes(16));
+                $created_at = date("Y-m-d H:i:s");
 
-				//if($hourdiff > 1){
-					$token = bin2hex(openssl_random_pseudo_bytes(16));
-					$update_user_verify = "UPDATE user_verify SET token = '".$token."',created_at='".$time1."' WHERE email = '".$email."'";		
-					mysqli_query($conn, $update_user_verify) or die(mysqli_error($conn));
-				//}else{
-					//$token = $user_verify_row['token'];
-				//}
-				
-			}else{
-				$code = 400;
-				$status = "Failed";
-				$message = "Your email is not verified.Please check your email for activation link.";
-			}
+                $update_user_verify = "UPDATE user_verify SET token = :token , created_at = :created_at WHERE email = :email";
+
+                $stmt = $conn->prepare($update_user_verify);
+
+                $stmt->bindValue(':token', $token, PDO::PARAM_STR);
+                $stmt->bindValue(':created_at', $created_at, PDO::PARAM_STR);
+                $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+
+                if(!$stmt->execute()){
+                    die('error');
+                }	
+                
+
+            }else{
+                    $code = 400;
+                    $status = "Failed";
+                    $message = "Your email is not verified.Please check your email for activation link.";
+            }
 			
         } else {
-            //$token = bin2hex(openssl_random_pseudo_bytes(16));
-            //$insert_user_verify = "insert into user_verify (email, token) values('".$email."', '".$token."');";
-            //mysqli_query($conn, $insert_user_verify);
-			$code = 400;
-			$status = "Failed";
-			$message = "Your email need to be verified.Please visit http://tokensaleregistration.enterstargate.com to complete verification process.";
+                    $code = 400;
+                    $status = "Failed";
+                    $message = "Your email need to be verified.Please visit http://tokensaleregistration.enterstargate.com to complete verification process.";
         }
         
 		if($code != 400 || $code==""){
@@ -151,7 +143,7 @@ else
     $message = "Failed to verify ReCaptcha";
 }
 
-}catch(\Exception $e){
+}catch(Exception $e){
     $code = 400;
     $status = "Failed";
     $message = $e->getMessage();
