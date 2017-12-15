@@ -1,6 +1,7 @@
 <?php
 // Start the session
 session_start();
+include "version.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,10 +9,10 @@ session_start();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Nucleus - Token Sale</title>  
-    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/global.css<?php echo $v; ?>">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="img/favicon.png<?php echo $v; ?>" type="image/png" sizes="16x16">
     <!-- Global Site Tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107563572-1"></script>
     <script>
@@ -45,7 +46,7 @@ session_start();
         <div class="col-lg-6 align-self-center">
             <div class="tsr-container">
               <form>
-                <p align="center"><img src="img/nucleus-icon.png" class="nucleus-logo"></p>
+                <p align="center"><img src="img/nucleus-icon.png<?php echo $v; ?>" class="nucleus-logo"></p>
                 <h2 align="center">Nucleus Token Sale</h2>
 				<?php
 				$color='blue';

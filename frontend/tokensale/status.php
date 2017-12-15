@@ -8,6 +8,7 @@ function clean_data($data) {
   return $data;
 }
 try{
+include "version.php";
 $Err = "";
 require 'config.php';
 $message = "";
@@ -59,11 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Nucleus - Token Sale</title>  
-    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/global.css<?php echo $v; ?>">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="img/favicon.png<?php echo $v; ?>" type="image/png" sizes="16x16">
 	<style>
 		.text-xs-center {
 			text-align: center;
@@ -108,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-lg-6 align-self-center">
             <div class="tsr-container">
                 <form action="status" id="status-form" method="post">
-                    <p align="center"><img src="img/nucleus-icon.png" class="nucleus-logo"></p>
+                    <p align="center"><img src="img/nucleus-icon.png<?php echo $v; ?>" class="nucleus-logo"></p>
                 <h2 align="center">Nucleus Token Sale Registration Status</h2> 
                 <div style="width:500px;margin:auto;margin-top:10px;">
                 <p class="mrt10">

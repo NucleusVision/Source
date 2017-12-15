@@ -1,3 +1,6 @@
+<?php 
+	$v = '?v=1.2.2';
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,15 +9,15 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link href="/assets/css/global.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/global.css<?php echo $v; ?>" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/custom.css<?php echo $v; ?>" rel="stylesheet" type="text/css" />
     <script src="/assets/js/jquery.min.js" type="text/javascript"></script>
     <!-- <script src="/assets/js/sweetalert.js"></script> -->
     <script src="/assets/js/sweetalert2.all.min.js"></script>
     <script src="/assets/js/core.js"></script>
     <script src="<?php echo e(asset("assets/js/notify.min.js")); ?>" type="text/javascript"></script>
     <script src="<?php echo e(asset("assets/js/notify-metro.js")); ?>" type="text/javascript"></script>	
-    <link rel="icon" href="<?php echo e(asset('assets/img/favicon.png')); ?>" type="image/png" sizes="16x16">
+    <link rel="icon" href="<?php echo e(asset('assets/img/favicon.png')); ?><?php echo $v; ?>" type="image/png" sizes="16x16">
   </head>
   <body class="sidebar-mini">
         <div class="wrapper">  
@@ -47,11 +50,11 @@
       
         <script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="/assets/js/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-        <script src="/assets/js/app.min.js" type="text/javascript"></script>
+        <script src="/assets/js/app.min.js<?php echo $v; ?>" type="text/javascript"></script>
         <script src="/assets/js/jquery.validate.min.js"></script>
         <script src="/assets/js/moment-with-locales.js"></script>
         <script src="/assets/js/bootstrap-datetimepicker.js"></script>
-        <script src="/assets/js/custom.js"></script>
+        <script src="/assets/js/custom.js<?php echo $v; ?>"></script>
     </body>
 </html>    
         

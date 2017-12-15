@@ -105,6 +105,7 @@ if($response["success"] === true)
             $fields_string = "";
 
             //$url = 'http://tokenadmin.enterstargate.com/investors/verify/email';
+			//$url = 'http://redemptiondata.bellboi.com/ajaxVerifyMail.php';
             $url = 'http://redemptiondata.bellboi.com/ajaxVerifyMail_test.php';
 
             $fields = array(

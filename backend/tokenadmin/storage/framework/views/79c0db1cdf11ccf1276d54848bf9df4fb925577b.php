@@ -1,7 +1,7 @@
 <header class="main-header">
     <a href="<?php echo e(route('admin::dashboard')); ?>" class="logo">
-        <span class="logo-mini"><img src="/assets/img/logo-icon-small.png" alt=""></span>
-        <span class="logo-lg"><img src="/assets/img/logo.png" alt=""></span>
+        <span class="logo-mini"><img src="/assets/img/logo-icon-small.png<?php echo $v; ?>" alt=""></span>
+        <span class="logo-lg"><img src="/assets/img/logo.png<?php echo $v; ?>" alt=""></span>
     </a>
     <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="sidebar-toggle" data-target="#navbarCollapse" data-toggle="offcanvas" role="button">

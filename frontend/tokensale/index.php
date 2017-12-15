@@ -1,3 +1,6 @@
+<?php 
+	include "version.php";
+?>
 <!DOCTYPE HTML>
   <head>
     <meta charset="utf-8" />
@@ -5,12 +8,12 @@
     <meta name="viewport" content=
     "width=device-width, initial-scale=1.0" />
     <title>Nucleus - Token Sale</title>
-    <link rel="stylesheet" href="css/register.css" type="text/css" />
+    <link rel="stylesheet" href="css/register.css<?php echo $v; ?>" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700,900" rel="stylesheet" type="text/css" />
-    <link rel="icon" href="img/favicon.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="img/favicon.png<?php echo $v; ?>" type="image/png" sizes="16x16" />
     <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&amp;render=explicit' type="text/javascript">
     </script>
   </head>
@@ -39,7 +42,7 @@
                 </div>
               </div>
             </div><img class="nucleus-logo" src=
-            "img/nucleus-icon.png" />
+            "img/nucleus-icon.png<?php echo $v; ?>" />
             <h1 id="registration-header">
               Nucleus Token Sale Registration
             </h1>
@@ -204,11 +207,25 @@
                       <label>Date of birth</label> <input class=
                       "form-control acct-input" id="datepicker"
                       placeholder="mm/dd/yyyy" />
-                      <div id="select-boxes">
+                      <!-- <div id="select-boxes">
                         <div id="nationality-box" class="col-xs-6">
+						-->
+						<label>Gender</label> <select id=
+						"gender-select-box" class="acct-input form-control">
+						  <option value="">
+							-- select one --
+						  </option>
+						  <option value="Male" title="Male">
+							Male
+						  </option>
+						  <option value="Female" title=
+						  "Female">
+							Female
+						  </option>
+						</select>
                           <label>Nationality</label> <select id=
                           "nationality" name="nationality" class=
-                          "acct-input">
+                          "acct-input form-control">
                             <option value="">
                               -- select one --
                             </option>
@@ -1004,25 +1021,18 @@
                               UNKNOWN
                             </option>
                           </select>
+						  <!--
                         </div>
                         <div class="col-xs-6">
                           <div id="gender-box">
-                            <label>Gender</label> <select id=
-                            "gender-select-box" class="acct-input">
-                              <option value="">
-                                -- select one --
-                              </option>
-                              <option value="Male" title="Male">
-                                Male
-                              </option>
-                              <option value="Female" title=
-                              "Female">
-                                Female
-                              </option>
-                            </select>
+						  -->
+						  
+						  <!--
                           </div>
                         </div>
-                      </div><label>Country of Residence</label>
+                      </div>
+					  -->
+					  <label>Country of Residence</label>
                       <select id="residence" class=
                       "acct-input form-control">
                         <option value="">
@@ -2057,7 +2067,7 @@
 "text/javascript">
 </script><script src="js/plugins/easytimer.min.js" type=
 "text/javascript">
-</script><script src="js/plugins/register.min.js" type=
+</script><script src="js/plugins/register.min.js<?php echo $v; ?>" type=
 "text/javascript">
 </script>
   </body>

@@ -1,3 +1,6 @@
+<?php 
+	$v = '?v=1.2.2';
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,11 +9,11 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="/assets/shortcut icon" type="image/x-icon" href="favicon.ico">
         <link href="/assets/css/global.css" rel="stylesheet" type="text/css" />
-        <link rel="icon" href="{{ asset('/assets/img/favicon.png') }}" type="image/png" sizes="16x16">
+        <link rel="icon" href="{{ asset('/assets/img/favicon.png') }}<?php echo $v; ?>" type="image/png" sizes="16x16">
     </head>
     <body class="login">
         <div class="logo">
-            <a href="{{ url('/') }}"><img src="/assets/img/logo-main.png" alt=""></a>
+            <a href="{{ url('/') }}"><img src="/assets/img/logo-main.png<?php echo $v; ?>" alt=""></a>
         </div>
         <div class="content">
             <form id="adminLogin" action="{{ route('admin.login') }}" method="post">
