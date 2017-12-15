@@ -20,7 +20,7 @@ var _baseAccPwd = "123";
 var _ownerWallet = _ownerAcc; //"0x20154D90491630A3d8EA09deD4e8D14269Ac22dF"; //"0x15a99D10a6b9f6b3F8962133482508295190B7DC";
 
 const _contractFileName = "contracts/nucleus_token3.sol";
-var _contractAddress = "0x46692F445ECB1A1A65bE9F718F46c3AaBa7C683b"; //"0x070F441594d72F572Da49110F5FCC18EAdA7d580"; //"0x7d8BEee4E2AFa2504df055EC6eCd1014388cF87a"; //"0xcD7819aD0ef9E33d5441eC6b13aBD22D4cB4e995"; //"0xA3A5e6D92EBd55ee62cc6D07088FeD5673E7ED30"; //"0x113aE280661d1d74c142864F2F16002AD581e8e3"; //"0xEB9b5C80ab6D7dD8d9da1223A4467e8D744645CC"; //"0xaa1e29854f9f4d41cf386e2858972f23da5bffe1"; //"0x89693da18c7741e51221Ef28A9Aa0B99daF8A97E"; //"0xa56e415bde7283d4e6717b471935ed0850691027"; //"0x97F26A2e110a3f020Af68b100E620615efD1D221";
+var _contractAddress = "0xd8DB7A7D1d83A3F51924d7EC5c83Eb9F1491CF87"; //"0xb238630CDb3875384Bc62C165DEF7A5899F2189A"; //"0x46692F445ECB1A1A65bE9F718F46c3AaBa7C683b"; //"0x070F441594d72F572Da49110F5FCC18EAdA7d580"; //"0x7d8BEee4E2AFa2504df055EC6eCd1014388cF87a"; //"0xcD7819aD0ef9E33d5441eC6b13aBD22D4cB4e995"; //"0xA3A5e6D92EBd55ee62cc6D07088FeD5673E7ED30"; //"0x113aE280661d1d74c142864F2F16002AD581e8e3"; //"0xEB9b5C80ab6D7dD8d9da1223A4467e8D744645CC"; //"0xaa1e29854f9f4d41cf386e2858972f23da5bffe1"; //"0x89693da18c7741e51221Ef28A9Aa0B99daF8A97E"; //"0xa56e415bde7283d4e6717b471935ed0850691027"; //"0x97F26A2e110a3f020Af68b100E620615efD1D221";
 const _contractName = "NucleusTokenSale"; //"NCashToken";
 
 const _reserveWallet = "0x3559c44dcec5874c8747f6ff6f80415b57443017"; //"0xd425114da1911d533806f382ae4a098135bea93e";
@@ -82,6 +82,29 @@ class Interface {
         _contract = NCash.at(_contractAddress);
         return _contract;
     }
+
+    getUnlockTime(acc, cb) {
+        console.log("getUnlockTime("+acc+")");
+        this.unlockBaseAccount().then(
+            function (a) {
+                if (a == true) {
+                    console.log("getting bytecode...");
+                    const bytecode = fs.readFileSync("contracts/NCashToken.bin");
+                    console.log("parsing ABI...");
+                    const abi = JSON.parse(fs.readFileSync("contracts/NCashToken.abi"));
+                    console.log("creating contract...");
+                    var NCashToken = web3.eth.contract(abi);
+                    var _NCashContract = NCashToken.at("0xf0c05df7e6c2890ac7b61c6e6dd2bc0e5959b19b");
+                    var tt = _NCashContract.getUnlockTime(acc);
+                    console.log("_contract.getUnlockTime: "+ tt);
+                    if(cb) cb(null, tt);
+                } else {
+                    console.log("Unlock error");
+                    if(cb) cb("Unlock error");
+                }
+            });
+    }
+
 
     // Returns the current balance of a contract or account
     etherBalance(contract) {
@@ -207,7 +230,7 @@ class Interface {
 
                     console.log("start deployment...");
                     _contract = NCash.new(
-                        initialAmount, "NC09Test", 0, "NCN09", "NCC09Test", "NCC09", 
+                        initialAmount, "NC11Test", 0, "NCN11", "NCC11Test", "NCC11", 
                         // _reserveWallet, _teamWallet, _partnersWallet,
                         // _reservePercent, _teamPercent, _partnersPercent,
                         _baseAcc, //_ownerWallet, _btcWallet, 

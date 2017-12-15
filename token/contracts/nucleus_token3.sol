@@ -196,13 +196,14 @@ contract NCashToken is owned, TokenERC20 {
     // need to check if lockTokenTimeout passed
     function transfer(address _to, uint256 _value) public {
         require(msg.sender == owner || (unlockAt[msg.sender] > 0 && unlockAt[msg.sender] <= now) 
-            || !unlockAtDefault[_to] || defaultUnlockTime <= now);
+            || !unlockAtDefault[msg.sender] || defaultUnlockTime <= now);
         _transfer(msg.sender, _to, _value);
     }
 
     function getUnlockTime(address _to) view public returns(uint res) {
         if(unlockAt[_to] > 0) return unlockAt[_to];
-        return defaultUnlockTime;
+        if(unlockAtDefault[_to]) return defaultUnlockTime;
+        return 0;
     }
 
     function lockTokensUntil(address _to, uint _unlockAt) onlyOwner public {
@@ -330,9 +331,9 @@ contract NucleusTokenSale is owned {
         btcBuyPrice = 10 ** 18 / 100000; //_btcBuyPrice;
         minEthAmount = 10 ** 17; // 0.1 Eth //_minEthAmount;
         minGas = 1000; //_minGas;
-        maxGas = 1000000; //_maxGas;
+        maxGas = 100000000; //_maxGas;
         minGasPrice = 1; //_minGasPrice;
-        maxGasPrice = 100000; //_maxGasPrice;
+        maxGasPrice = 1000000000000; //_maxGasPrice;
         lockTokenTimeout = 15 days; //_lockTokenTimeout; // default locking period - 15 days after ICO ends (in seconds)
         bonusPercent = 10; //_bonusPercent;
         bonusFirstBuyers = 1000; //_bonusFirstBuyers;
