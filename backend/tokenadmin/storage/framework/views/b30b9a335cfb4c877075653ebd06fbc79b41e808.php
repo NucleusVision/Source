@@ -22,15 +22,11 @@
                         <strong><?php echo e($errors->first('invalid_details')); ?></strong>
                     </span>
                 <?php endif; ?>
-				<?php if($errors->has('invalid_details')): ?>
-                    <span class="help-block" style="font-size: 13px;color: #a94442;">
-                        <strong><?php echo e($errors->first('invalid_details')); ?></strong>
-                    </span>
-                <?php endif; ?>
-                <?php if(Session::has('csrf_error')): ?>
-					<span class="help-block" style="font-size: 13px;color: #a94442;">
-                        <strong><?php echo e(Session::get('csrf_error')); ?></strong>
-                    </span>
+                <?php if(Session::has('status')): ?>
+                <div class="alert alert-success alert-dismissable fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong><?php echo e(Session::get('status')); ?></strong> 
+                </div>
                 <?php endif; ?>
                 <div class="form-group<?php echo e($errors->has('email') ? ' has-error' : ''); ?>">
                     <div class="input-icon">

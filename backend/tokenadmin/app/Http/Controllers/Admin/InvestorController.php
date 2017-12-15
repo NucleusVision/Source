@@ -232,14 +232,12 @@ class InvestorController extends Controller
         if($status == Investor::STATUS_APPROVED || $status == Investor::STATUS_REJECTED){
             $flag = ($status == Investor::STATUS_APPROVED)?'1':'0';
             $post = "addr=".$oInvestor->id."&flag=".$flag;
-            $functionToCall = (!empty($oInvestor->prflag))?"whitelist":"approve";
-//            
-//            echo "http://".$this->apiDomain."/user/".$functionToCall."Account";
-//            print_r($post);
-//            exit;
+
+            $urlToCall = "http://".$this->apiDomain."/user/approveAccount";
+            //echo $urlToCall;print_r($post);exit;
             
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,"http://".$this->apiDomain."/user/".$functionToCall."Account");
+            curl_setopt($ch, CURLOPT_URL, $urlToCall);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -60,6 +60,7 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::get('investors-new/{id}/view', ['uses' => 'InvestorNewController@view', 'as' => 'investorsNewView']); 
         Route::get('investors-new/delete/{id}', ['uses' => 'InvestorNewController@delete', 'as' => 'investorsNewDelete']);
         Route::post('investors-new/status/change', ['uses' => 'InvestorNewController@changeStatus', 'as' => 'investorschangeStatus']);
+		Route::post('investors-new/flag/update', ['uses' => 'InvestorNewController@InvestorFlagUpdate', 'as' => 'InvestorFlagUpdate']); 
         
         
          //PR Investors New
