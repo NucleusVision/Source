@@ -33,7 +33,7 @@ Route::group(['middlewareGroups' => 'web'], function () {
     Route::get('password/reset/{token?}', ['as' => 'auth.password.reset', 'uses' => 'Auth\PasswordController@showResetForm']);
     Route::post('password/reset', ['as' => 'auth.password.reset', 'uses' => 'Auth\PasswordController@reset']);
 
-    Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin::', 'middleware' => 'admin'], function () {
+    Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin::', 'middleware' => 'admin'], function ()    {
         
         //Dashboard
         Route::get('dashboard', ['uses' => 'IndexController@index', 'as' => 'dashboard']);
@@ -60,7 +60,8 @@ Route::group(['middlewareGroups' => 'web'], function () {
         Route::get('investors-all/{id}/view', ['uses' => 'InvestorNewController@view', 'as' => 'investorsNewView']); 
         Route::get('investors-all/delete/{id}', ['uses' => 'InvestorNewController@delete', 'as' => 'investorsNewDelete']);
         Route::post('investors-all/status/change', ['uses' => 'InvestorNewController@changeStatus', 'as' => 'investorschangeStatus']);
-        Route::post('investors-all/flag/update', ['uses' => 'InvestorNewController@InvestorFlagUpdate', 'as' => 'InvestorFlagUpdate']); 
+        Route::post('investors-all/flag/update', ['uses' => 'InvestorNewController@InvestorFlagUpdate', 'as' => 'InvestorFlagUpdate']);
+        Route::post('investors-all/get-investor-images', ['uses' => 'InvestorNewController@getInvestorImages', 'as' => 'getInvestorImages']);
         
         
          //PR Investors New

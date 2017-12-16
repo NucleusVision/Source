@@ -24,13 +24,8 @@
                         <strong>{{ $errors->first('invalid_details') }}</strong>
                     </span>
                 @endif
-				@if ($errors->has('invalid_details'))
-                    <span class="help-block" style="font-size: 13px;color: #a94442;">
-                        <strong>{{ $errors->first('invalid_details') }}</strong>
-                    </span>
-                @endif
                 @if(Session::has('csrf_error'))
-					<span class="help-block" style="font-size: 13px;color: #a94442;">
+                    <span class="help-block" style="font-size: 13px;color: #a94442;">
                         <strong>{{ Session::get('csrf_error') }}</strong>
                     </span>
                 @endif

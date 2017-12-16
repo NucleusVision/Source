@@ -14,7 +14,7 @@
         <div class="box-header with-border">
           <h3 class="box-title">List of Whitelisted/Public Investors</h3>
         </div>
-          <div class="row" style="margin-left: 3px;">  
+        <div class="row" style="margin-left: 3px;">  
         <form name="form1" id="form1" method="get">
             <div class="col-md-3">
                 <div class="form-group">
@@ -70,17 +70,85 @@
     </div>
   </div>
 </div>
+
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade" id="errormodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
       
       
   </div>
+<div class="overlay">
+    <div id="loader"></div>
+</div>
     <script src="/assets/js/jquery.dataTables.min.js"></script>
     <script src="/assets/js/dataTables.bootstrap.min.js"></script>
     <script src="/assets/js/dataTables.alphabetSearch.js"></script>
       <script> 
             
-           $(document).on('click', '.content .imageId', function (e) {               
-                $('#imagepreview').attr('src', $(this).attr('src')); // here asign the image to the modal when the user click the enlarge link
-                $('#imagemodal').modal('show');
+            $(document).on('click', '.content .imageId', function (e) {
+               var a = {
+                    lines: 11,
+                    length: 22,
+                    width: 10,
+                    radius: 25,
+                    scale: 1,
+                    corners: 1,
+                    color: "#d1d1d1",
+                    opacity: .3,
+                    rotate: 0,
+                    direction: 1,
+                    speed: 1,
+                    trail: 60,
+                    fps: 20,
+                    zIndex: 2E9,
+                    className: "spinner",
+                    top: "50%",
+                    left: "50%",
+                    shadow: !1,
+                    hwaccel: !1,
+                    position: "absolute"
+                };
+                e.preventDefault();
+                $(".overlay").show();
+                var c = document.getElementById("loader"),
+                d = (new Spinner(a)).spin(c);
+                
+                invid = $(this).attr('data-invid');
+                obj = $(this).attr('data-selobj');
+                
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('admin::getInvestorImages') }}",
+                    data: {id: invid, selobj:obj},
+                    success: function(a) {
+                        //console.log(a);
+                        d.stop(c);
+                        $(".overlay").hide();
+                        $('#imagepreview').attr('src', a.data); // here asign the image to the modal when the user click the enlarge link
+                        $('#imagemodal').modal('show');
+                    },
+                    error: function(a) {
+                        //console.log(a);
+                        d.stop(c);
+                        $(".overlay").hide();
+                        $("#errormodal .modal-body").text(a.message).css("color", "#C40404");
+                        $('#errormodal').modal('show');
+                    }
+                });
             });
        
             $(document).ready(function() { 

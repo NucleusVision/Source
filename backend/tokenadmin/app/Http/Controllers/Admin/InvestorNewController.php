@@ -47,7 +47,7 @@ class InvestorNewController extends Controller
     
     public function getInvestorsList(Request $request) {
 		
-        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name']);
+        $oSelect = Investor::select(['investor_id', 'thumb1', 'thumb2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name']);
 		
         if($request->type){
             if($request->type == "whitelisted"){
@@ -63,10 +63,10 @@ class InvestorNewController extends Controller
 		
 		return Datatables::of($investors)
 			->editColumn('doc1', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="id" />';
             })
 			->editColumn('doc2', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="selfie" />';
             })
 			->editColumn('prflag', function ($row) {
 				if($row->prflag == 1)
@@ -100,7 +100,7 @@ class InvestorNewController extends Controller
     
     public function getInvestorsWpList(Request $request) {
 		
-        $oSelect = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
+        $oSelect = Investor::select(['investor_id', 'thumb1', 'thumb2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name'])->where(function ($query) {
                         $query->where('prflag', '<>', 1)
                               ->orWhereNull('prflag');
                     });
@@ -116,10 +116,10 @@ class InvestorNewController extends Controller
 		
 		return Datatables::of($investors)
 			->editColumn('doc1', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="id" />';
             })
 			->editColumn('doc2', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="selfie" />';
             })
 			->editColumn('prflag', function ($row) {
 				if($row->prflag == 1)
@@ -647,20 +647,56 @@ class InvestorNewController extends Controller
     }
     
     
+    
+    public function getInvestorImages(Request $request) {
+        $response = array();
+        $code = 400;
+        $status = "Failed";
+        $message = "failure";
+        
+        try{
+            $id = $request->id;
+            $selobj = $request->selobj;
+
+            $oInvestor = Investor::find($id);
+
+            if($oInvestor){
+                $code = 200;
+                $status = "Success";
+                if($selobj == "id"){
+                    $response['data'] = config('constants.NUCLEUS_UPLOAD_URL').$oInvestor->doc1;
+                }elseif($selobj == "selfie"){
+                    $response['data'] = config('constants.NUCLEUS_UPLOAD_URL').$oInvestor->doc2;
+                }
+            }else{
+                $message = "Investor data not found.";
+            }
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+        }
+        
+        $response['status'] = $status;
+        $response['message'] = $message;
+        return response()->json($response);
+
+    }
+    
+    
+    
     public function prInvestors() {
         return \View::make('admin.prinvestors.index');
     }
     
     public function getprInvestorsList() {
 		
-		$investors = Investor::select(['investor_id', 'doc1', 'doc2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name', 'bonus_per', 'lock_in_period'])->where('prflag', '1')->orderBy('id', 'DESC');
+		$investors = Investor::select(['investor_id', 'thumb1', 'thumb2', 'prflag', 'bitcoin_id', 'nationality', 'status', 'first_name', 'last_name', 'bonus_per', 'lock_in_period'])->where('prflag', '1')->orderBy('id', 'DESC');
 		
 		return Datatables::of($investors)
-			->editColumn('doc1', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+    ->editColumn('doc1', function ($row) {
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb1 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="id" />';
             })
-			->editColumn('doc2', function ($row) {
-				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL'). $row->doc2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;"/>';
+            ->editColumn('doc2', function ($row) {
+				return '<img src="' .config('constants.NUCLEUS_UPLOAD_URL_THUMB'). $row->thumb2 . '" alt="' . $row->first_name . '" class="imageId" style="cursor:pointer;" data-invid="'.$row->investor_id.'" data-selobj="selfie" />';
             })
 			->editColumn('prflag', function ($row) {
 				if($row->prflag == 1)

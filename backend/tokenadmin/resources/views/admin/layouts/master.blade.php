@@ -15,6 +15,7 @@
     <!-- <script src="/assets/js/sweetalert.js"></script> -->
     <script src="/assets/js/sweetalert2.all.min.js"></script>
     <script src="/assets/js/core.js"></script>
+    <script src="/assets/js/spin.min.js" type="text/javascript"></script>
     <script src="{{ asset("assets/js/notify.min.js") }}" type="text/javascript"></script>
     <script src="{{ asset("assets/js/notify-metro.js") }}" type="text/javascript"></script>	
     <link rel="icon" href="{{ asset('assets/img/favicon.png') }}<?php echo $v; ?>" type="image/png" sizes="16x16">
