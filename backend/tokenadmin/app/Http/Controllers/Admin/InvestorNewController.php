@@ -475,7 +475,7 @@ class InvestorNewController extends Controller
         
         if($status == 'Approve'){
             $status = Investor::STATUS_APPROVED;
-	    
+	    $aData['approve_mail_time'] = Carbon::now()->addMinute();
             
             try{
                 
@@ -534,7 +534,7 @@ class InvestorNewController extends Controller
 			
         }else if($status == 'Reject'){
             $status = Investor::STATUS_REJECTED;
-            
+            $aData['reject_mail_time'] = Carbon::now()->addMinute();
             try{
                 
                 $kyc_verification_code = bin2hex(openssl_random_pseudo_bytes(16)); 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2017 at 03:35 PM
+-- Generation Time: Dec 16, 2017 at 11:49 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -47,6 +47,10 @@ CREATE TABLE `investors` (
   `prflag` varchar(1) DEFAULT NULL,
   `bonus_per` int(11) DEFAULT NULL,
   `lock_in_period` int(11) DEFAULT NULL,
+  `approve_mail_time` datetime DEFAULT NULL,
+  `approve_mail_sent` tinyint(4) NOT NULL DEFAULT '0',
+  `reject_mail_time` datetime DEFAULT NULL,
+  `reject_mail_sent` tinyint(4) NOT NULL DEFAULT '0',
   `created_by` varchar(100) DEFAULT NULL,
   `updated_by` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -57,11 +61,8 @@ CREATE TABLE `investors` (
 -- Dumping data for table `investors`
 --
 
-INSERT INTO `investors` (`investor_id`, `id`, `bitcoin_id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `status`, `prflag`, `bonus_per`, `lock_in_period`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(3, '0xe41d2489571d322189246dafa5ebde1f4699f499', NULL, 'satya.lst02@gmail.com', 'Sush', 'S', '2017-10-02', 'INDIAN', 'Female', 'UNITED STATES OF AMERICA', 'DRIVING LICENSE', 'DOE**MJ501P1', '2f4adbd3dac248dac2f085d55e2bb86b-2017-10-31-11-33-40.jpg', '292d954ee6337b4018915f17aaddb4fd-2017-10-31-11-33-40.jpg', NULL, NULL, 'Pending', '0', NULL, NULL, NULL, NULL, '2017-10-31 18:03:40', '2017-12-05 10:41:18'),
-(4, '0xe41d2489571d322189246dafa5ebde1f4699f497', NULL, 'satya.lst02@gmail.com', 'Mike', 'Ste', '1988-11-03', 'INDIAN', 'Male', 'INDIA', 'PASSPORT', 'gfhdhf6667', '7b98689146736ffe54b5e083e4603756-2017-11-01-05-07-18.png', '3c5fa2177c5d71ab0e72cf6b815b6767-2017-11-01-05-07-18.png', NULL, NULL, 'Pending', '1', 15, 12, NULL, NULL, '2017-11-01 11:37:18', '2017-12-05 09:00:34'),
-(11, '0xe41d2489571d322189246dafa5ebde1f4699f498', NULL, 'satya.lst02@gmail.com', 'Avi', 'Ptiti', '1998-11-05', 'INDIAN', 'Male', 'INDIA', 'PASSPORT', 'sdfsd', '6c8173e1cf7d07e4d7ea122a0c47351e-2017-11-02-09-26-56.png', 'b514d8dfaa5a1c69c03b96e27040c67e-2017-11-02-09-26-56.png', NULL, NULL, 'Pending', '0', NULL, NULL, NULL, NULL, '2017-12-04 06:26:56', '2017-11-14 03:19:28'),
-(15, '0xbb9bc244d798123fde783fcc1c72d3bb8c189413', 'dsadsad', 'satya.lst01@gmail.com', 'satya', 'b', '1987-11-04', 'ANGOLAN', 'Male', 'AMERICAN SAMOA', 'NRIC', '5454', 'c59faa3be9ed30f7066592015a10b98d-2017-11-17-04-46-31.jpg', '0c3ba36d03bf0920540a33385c4eb680-2017-11-17-04-46-31.jpg', '1510917391c59faa3be9ed30f7066592015a10b98d-2017-11-17-04-46-31.jpg', '15109173910c3ba36d03bf0920540a33385c4eb680-2017-11-17-04-46-31.jpg', 'Rejected', '1', 10, 10, NULL, NULL, '2017-11-17 11:16:31', '2017-12-06 11:56:55');
+INSERT INTO `investors` (`investor_id`, `id`, `bitcoin_id`, `email`, `first_name`, `last_name`, `dob`, `nationality`, `gender`, `residence`, `id_type`, `id_num`, `doc1`, `doc2`, `thumb1`, `thumb2`, `status`, `prflag`, `bonus_per`, `lock_in_period`, `approve_mail_time`, `approve_mail_sent`, `reject_mail_time`, `reject_mail_sent`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(2, '0xbb9bc244d798123fde783fcc1c72d3bb8c189432', NULL, 'satya.lst01@gmail.com', 'John', 'Smith', '2002-12-18', 'ALANDIC', 'Male', 'ANTIGUA AND BARBUDA', 'PASSPORT', '3344', '02c4bae7aa7a528c26024a2e6506d813-2017-11-03-03-42-22.jpg', '1e2eeb9a39695b1707108eedc7d930cc-2017-12-15-12-37-05.jpg', '1510914355c2d433c2befb5761a41aaad1297659e7-2017-11-17-03-55-55.jpg', '1510916992ec3d57d8a455080fda80f0cdc4c61907-2017-11-17-04-39-52.jpg', 'Rejected', '0', NULL, NULL, '2017-12-16 16:15:17', 0, '2017-12-16 16:17:49', 0, NULL, NULL, '2017-12-15 07:07:05', '2017-12-16 10:46:53');
 
 -- --------------------------------------------------------
 
@@ -166,7 +167,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `dt_sales_users`, `dt_sales_public`, `bonus_percentage`, `no_first_buyers`, `token_price`, `min_amount`, `audit_period_days`, `max_limit`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, '2017-10-31 19:28:00', '2017-10-31 19:28:00', 10, 5, 10, 1000, 90, '-', '', '', '2017-10-31 08:29:15', '2017-10-31 08:44:45');
+(1, '2017-11-27 10:00:00', '2017-11-27 11:00:00', 10, 5, 0, 0, 0, '-', '', '', '2017-10-31 08:29:15', '2017-12-11 07:55:21');
 
 -- --------------------------------------------------------
 
@@ -213,7 +214,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `email`, `password`, `status`, `remember_token`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'Nucleus', 'admin@nucleus.vision', '$2y$10$9/iAlrzitygiWbR9nhtjj.81ukUnsxCFEalC3d.ELuCyPqmMEGm4a', 'Active', 'ncxcr3FK8priEM8RhZf3ENa2yHCS9AeBEu3j7eC2Gs9To2qZUVRlLKARtiFa', NULL, NULL, '2017-10-27 07:40:08', '2017-11-23 03:32:28');
+(1, 'Admin', 'Nucleus', 'admin@nucleus.vision', '$2y$10$9/iAlrzitygiWbR9nhtjj.81ukUnsxCFEalC3d.ELuCyPqmMEGm4a', 'Active', 'V3limiRH8X937rSDjrdrpRujl45FsmSHtR9O95QOuPToxjzRJ3I9szyjKV7V', NULL, NULL, '2017-10-27 07:40:08', '2017-12-16 05:27:07');
 
 -- --------------------------------------------------------
 
@@ -285,7 +286,24 @@ INSERT INTO `user_logs` (`user_log_id`, `user_id`, `login_time`, `logout_time`, 
 (49, 1, '2017-11-24 15:42:31', NULL, '127.0.0.1'),
 (50, 1, '2017-12-01 11:45:20', NULL, '127.0.0.1'),
 (51, 1, '2017-12-05 10:10:40', NULL, '127.0.0.1'),
-(52, 1, '2017-12-06 10:52:12', NULL, '127.0.0.1');
+(52, 1, '2017-12-06 10:52:12', NULL, '127.0.0.1'),
+(53, 1, '2017-12-07 13:27:15', NULL, '127.0.0.1'),
+(54, 1, '2017-12-08 11:41:24', '2017-12-08 19:11:36', '127.0.0.1'),
+(55, 1, '2017-12-08 19:11:43', '2017-12-08 19:15:12', '127.0.0.1'),
+(56, 1, '2017-12-08 19:15:59', NULL, '127.0.0.1'),
+(57, 1, '2017-12-08 19:21:36', NULL, '127.0.0.1'),
+(58, 1, '2017-12-11 11:17:06', NULL, '127.0.0.1'),
+(59, 1, '2017-12-11 13:21:17', NULL, '127.0.0.1'),
+(60, 1, '2017-12-11 18:31:51', NULL, '127.0.0.1'),
+(61, 1, '2017-12-11 19:01:35', NULL, '127.0.0.1'),
+(62, 1, '2017-12-12 11:23:42', NULL, '127.0.0.1'),
+(63, 1, '2017-12-14 11:22:27', NULL, '127.0.0.1'),
+(64, 1, '2017-12-14 18:28:16', NULL, '127.0.0.1'),
+(65, 1, '2017-12-15 11:25:15', '2017-12-15 14:43:55', '127.0.0.1'),
+(66, 1, '2017-12-15 15:27:03', NULL, '127.0.0.1'),
+(67, 1, '2017-12-16 10:57:04', '2017-12-16 10:57:07', '127.0.0.1'),
+(68, 1, '2017-12-16 10:57:17', NULL, '127.0.0.1'),
+(69, 1, '2017-12-16 15:55:47', NULL, '127.0.0.1');
 
 -- --------------------------------------------------------
 
@@ -313,10 +331,7 @@ CREATE TABLE `user_verify` (
 --
 
 INSERT INTO `user_verify` (`id`, `email`, `token`, `activation_code`, `kyc_edit_token`, `email_activated`, `kyc_completed`, `kyc_edit_completed`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(3, 'sushmita@bellboi.com', '5d76b3de9cee6004cf1484b918f25da0', NULL, NULL, 0, 0, 0, NULL, NULL, '2017-10-31 17:50:27', NULL),
-(4, 'sush_111@hotmail.com', 'e845b7bec624f6421a2be6e9e86d2491', NULL, NULL, 0, 0, 0, NULL, NULL, '2017-11-03 17:24:27', NULL),
-(5, 'avinash.pitti@gmail.com', '44914e5e71e901f7d7b38b704f7a1cde', NULL, NULL, 0, 0, 0, NULL, NULL, '2017-11-01 11:30:48', NULL),
-(6, 'satya.lst01@gmail.com', '42e054984125ea2e0aa103e8f4138947', NULL, '12e0290e95cb6b34863eaafff3a1e97b', 1, 1, 0, NULL, NULL, '2017-11-17 11:07:37', '2017-12-06 11:56:50');
+(17, 'satya.lst01@gmail.com', '0251d8a27b2707285419ce30cace5731', '69491151424a5207233b4480e6f1566519266a04', '4503174da873c74060c57c8bebd2dbd4', 0, 0, 0, NULL, NULL, '2017-12-15 07:47:11', '2017-12-16 10:46:49');
 
 --
 -- Indexes for dumped tables
@@ -391,7 +406,7 @@ ALTER TABLE `user_verify`
 -- AUTO_INCREMENT for table `investors`
 --
 ALTER TABLE `investors`
-  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `roles`
 --
@@ -421,12 +436,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_logs`
 --
 ALTER TABLE `user_logs`
-  MODIFY `user_log_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `user_log_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 --
 -- AUTO_INCREMENT for table `user_verify`
 --
 ALTER TABLE `user_verify`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
