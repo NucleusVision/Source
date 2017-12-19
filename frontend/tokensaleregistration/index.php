@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content=
     "width=device-width, initial-scale=1.0" />
-    <title>Nucleus - Token Sale</title>
+    <title>NUCLEUS VISION - Token Sale</title>
     <link rel="stylesheet" href="css/step1_register.css<?php echo $v; ?>" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
@@ -44,7 +44,7 @@
             </div><img class="nucleus-logo" src=
             "img/nucleus-icon.png" />
             <h1 id="registration-header">
-              Nucleus Token Sale Registration
+              NUCLEUS VISION: Whitelist Sign Up(Activation Link)
             </h1>
             <div id="account-header">
               <h1>
@@ -129,7 +129,7 @@
                       you will be contributing ETH from and must be
                       ERC-20 compatible. This will be the same
                       Ethereum wallet address you will receive the
-                      Nucleus tokens.
+                      NUCLEUS VISION tokens.
                     </p>
                     <h3 class="announcement">
                       <span class="bold">DO NOT USE</span>
@@ -140,11 +140,11 @@
                     </h3>
                     <p>
                       Do not use addresses from exchanges you may
-                      not receive any Nucleus Token from. CakeCodes
+                      not receive any NUCLEUS VISION Token from. CakeCodes
                       Global SEZC, Inc. disclaims all
                       responsibility and liability to you if you
                       use exchange wallet, or other intermediary
-                      and do not receive Nucleus Tokens.
+                      and do not receive NUCLEUS VISION Tokens.
                     </p>
                     <div class="form-group">
                       <input class="form-control acct-input" id=
@@ -1945,7 +1945,7 @@
                       I have provided is correct.</label>
                       <label><input id="terms-checkbox" class=
                       "checkbox" type="checkbox" /> I have read and
-                      understood the Nucleus Token sale <a target=
+                      understood the NUCLEUS VISION Token sale <a target=
                       "_blank" href="#" rel="noopener" class=
                       "yellow-link">Terms of Service</a> and the
                       <a target="_blank" href="#" rel="noopener"
@@ -1971,7 +1971,7 @@
             </div>
             <div id="success-page" style="max-width:600px;margin-bottom:150px;">
               <div>
-                  <p style="font-family: 'Titillium Web', sans-serif; font-size: 24px; text-align: left; color: #ffaa00;">You have successfully signed up for the Nucleus Token Sale.</p>
+                  <p style="font-family: 'Titillium Web', sans-serif; font-size: 24px; text-align: left; color: #ffaa00;">You have successfully signed up for the NUCLEUS VISION Token Sale.</p>
                   <p style="font-family: 'Titillium Web', sans-serif; font-size: 24px; text-align: left; color: #ffaa00;">We have just sent you an email with a link that you can click to verify your account.</p>
               </div>
             </div>
@@ -1992,7 +1992,7 @@
       </div>
       <p align="center" class="mrt60">
         <a href="#" class="yellow-link">Privacy Policy</a><br />
-        © 2014 Nucleus Vision (formerly Bell Boi, Inc.)
+        © 2014 NUCLEUS VISION (formerly Bell Boi, Inc.)
       </p>
     </div><script src="js/plugins/jquery-3.2.1.min.js" type=
     "text/javascript">

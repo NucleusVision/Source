@@ -8,7 +8,7 @@ include "version.php";
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Nucleus - Token Sale</title>  
+    <title>NUCLEUS VISION - Token Sale</title>  
     <link rel="stylesheet" href="css/global.css<?php echo $v; ?>">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -47,7 +47,7 @@ include "version.php";
             <div class="tsr-container">
               <form>
                 <p align="center"><img src="img/nucleus-icon.png<?php echo $v; ?>" class="nucleus-logo"></p>
-                <h2 align="center">Nucleus Token Sale</h2>
+                <h2 align="center">NUCLEUS VISION Token Sale</h2>
 				<?php
 				$color='blue';
                 if(isset($_SESSION['verify-status'])){
@@ -64,7 +64,7 @@ include "version.php";
 			  <h2 align="center" class="mrt50">We will keep you posted on the next steps.</h2>      
 			  <?php } ?>
             </div>
-            <p align="center" class="mrt250"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 Nucleus Vision (formerly Bell Boi, Inc.)</p>
+            <p align="center" class="mrt250"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 NUCLEUS VISION (formerly Bell Boi, Inc.)</p>
         </div>    
       </div>
     </div>

@@ -519,8 +519,8 @@ class InvestorNewController extends Controller
              */
                 
                 \Mail::send('emails.approve_mail', ['name' => $oInvestor->first_name." ".$oInvestor->last_name, 'email' => $oInvestor->email], function ($m) use ($oInvestor) {
-                            $m->from('tokensale@nucleus.vision', 'Nucleus Vision');
-                            $m->to($oInvestor->email, $oInvestor->first_name." ".$oInvestor->last_name)->subject('Nucleus Token KYC Registration Results');
+                            $m->from('tokensale@nucleus.vision', 'NUCLEUS VISION');
+                            $m->to($oInvestor->email, $oInvestor->first_name." ".$oInvestor->last_name)->subject('NUCLEUS VISION Token KYC Registration Results');
                 });
                 
                 if(count(\Mail::failures()) > 0){
@@ -546,8 +546,8 @@ class InvestorNewController extends Controller
                 ]);
                 
                 \Mail::send('emails.comments_mail', ['name' => $oInvestor->first_name." ".$oInvestor->last_name, 'email' => $oInvestor->email, 'bodyMessage' => $request->rej_message, 'kyc_code' => $kyc_verification_code], function ($m) use ($oInvestor) {
-                            $m->from('tokensale@nucleus.vision', 'Nucleus Vision');
-                            $m->to($oInvestor->email, $oInvestor->first_name." ".$oInvestor->last_name)->subject('Nucleus Token KYC Registration Results');
+                            $m->from('tokensale@nucleus.vision', 'NUCLEUS VISION');
+                            $m->to($oInvestor->email, $oInvestor->first_name." ".$oInvestor->last_name)->subject('NUCLEUS VISION Token KYC Registration Results');
                 });
                 
                 if(count(\Mail::failures()) > 0){

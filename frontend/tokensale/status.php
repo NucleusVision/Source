@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Nucleus - Token Sale</title>  
+    <title>NUCLEUS VISION - Token Sale</title>  
     <link rel="stylesheet" href="css/global.css<?php echo $v; ?>">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="tsr-container">
                 <form action="status" id="status-form" method="post">
                     <p align="center"><img src="img/nucleus-icon.png<?php echo $v; ?>" class="nucleus-logo"></p>
-                <h2 align="center">Nucleus Token Sale Registration Status</h2> 
+                <h2 align="center">NUCLEUS VISION Token Sale Registration Status</h2> 
                 <div style="width:500px;margin:auto;margin-top:10px;">
                 <p class="mrt10">
                 <?php if(isset($message) && !empty($message)){    ?>
@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </form>
                 <div>
             </div>
-            <p align="center" class="mrt60"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 Nucleus Vision (formerly Bell Boi, Inc.)</p>
+            <p align="center" class="mrt60"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 NUCLEUS VISION (formerly Bell Boi, Inc.)</p>
             </div>    
       </div>
     </div>

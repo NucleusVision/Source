@@ -1,11 +1,11 @@
 <?php 
-	$v = '?v=1.2.2';
+	$v = '?v=1.2.3';
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Nucleus Vision | Login</title>
+        <title>NUCLEUS VISION | Login</title>
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="/assets/shortcut icon" type="image/x-icon" href="favicon.ico">
         <link href="/assets/css/global.css" rel="stylesheet" type="text/css" />
@@ -58,7 +58,7 @@
 				<!--
                 <h4><a href="{{ route('auth.register') }}">Sign Up</a> <span class="copyright">|</span> <a href="{{ route('auth.forgot.password') }}">Forgot password?</a></h4>-->
         <hr>
-                <p class="copyright">&copy; 2017 Nucleus Vision. All Rights Reserved.</p>
+                <p class="copyright">&copy; 2017 NUCLEUS VISION. All Rights Reserved.</p>
             </form>
         </div>
         <script src="/assets/js/jquery.min.js" type="text/javascript"></script>

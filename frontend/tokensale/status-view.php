@@ -8,7 +8,7 @@ include "version.php";
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Nucleus - Token Sale</title>  
+    <title>NUCLEUS VISION - Token Sale</title>  
     <link rel="stylesheet" href="css/global.css<?php echo $v; ?>">
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.min.js"></script>
@@ -49,7 +49,7 @@ include "version.php";
             <div class="tsr-container">
               <form>
                   <p align="center"><img src="img/nucleus-icon.png<?php echo $v; ?>" class="nucleus-logo"></p>
-                <h2 align="center">Nucleus Token Sale Registration Status</h2>
+                <h2 align="center">NUCLEUS VISION Token Sale Registration Status</h2>
 				<?php
 				$color='blue';
                 if(isset($_SESSION['status'])){
@@ -63,7 +63,7 @@ include "version.php";
                 <h2 align="center">Your current status is:<br><br/><b class="<?php echo $color; ?>"><?php if(isset($_SESSION['status'])){ echo $_SESSION['status']; unset($_SESSION['status']); }else{ header('Location: status.php'); }   ?></b></h2>      
               </form>
             </div>
-            <p align="center" class="mrt200"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 Nucleus Vision (formerly Bell Boi, Inc.)</p>
+            <p align="center" class="mrt200"><a href="#" class="yellow-link">Privacy Policy</a><br>&copy; 2014 NUCLEUS VISION (formerly Bell Boi, Inc.)</p>
         </div>    
       </div>
     </div>

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content=
     "width=device-width, initial-scale=1.0" />
-    <title>Nucleus - Token Sale</title>
+    <title>NUCLEUS VISION - Token Sale</title>
     <link rel="stylesheet" href="css/register.css<?php echo $v; ?>" type="text/css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css" />
@@ -44,7 +44,7 @@
             </div><img class="nucleus-logo" src=
             "img/nucleus-icon.png<?php echo $v; ?>" />
             <h1 id="registration-header">
-              Nucleus Token Sale Registration
+              NUCLEUS VISION Token Sale Registration
             </h1>
             <div id="account-header">
               <h1>
@@ -131,7 +131,7 @@
                       you will be contributing ETH from and must be
                       ERC-20 compatible. This will be the same
                       Ethereum wallet address you will receive the
-                      Nucleus tokens.
+                      NUCLEUS VISION tokens.
                     </p>
                     
                     
@@ -147,11 +147,11 @@
                     
                     <p>
                       Do not use addresses from exchanges you may
-                      not receive any Nucleus Token from. CakeCodes
+                      not receive any NUCLEUS VISION Token from. CakeCodes
                       Global SEZC, Inc. disclaims all
                       responsibility and liability to you if you
                       use exchange wallet, or other intermediary
-                      and do not receive Nucleus Tokens.
+                      and do not receive NUCLEUS VISION Tokens.
                     </p>
                     
                     <div class="form-group">
@@ -171,7 +171,7 @@
 
                     <!--
                     <p>
-                     The Bitcoin Wallet Address Should be the one you will be contributing BTC from.Please enter a valid Ethereum wallet address above to receive the Nucleus tokens.
+                     The Bitcoin Wallet Address Should be the one you will be contributing BTC from.Please enter a valid Ethereum wallet address above to receive the NUCLEUS VISION tokens.
                     </p>
                     
                     <div class="form-group">
@@ -1994,7 +1994,7 @@
                       I have provided is correct.</label>
                       <label><input id="terms-checkbox" class=
                       "checkbox" type="checkbox" /> I have read and
-                      understood the Nucleus Token sale <a target=
+                      understood the NUCLEUS VISION Token sale <a target=
                       "_blank" href="#" rel="noopener" class=
                       "yellow-link">Terms of Service</a> and the
                       <a target="_blank" href="#" rel="noopener"
@@ -2029,7 +2029,7 @@
                   "_blank" href="/status" rel="noopener" class=
                   "yellow-link">https://nucleus.vision/status</a>
                   to see if you’re approved to participate in the
-                  Nucleus Token Crowdsale. Please check
+                  NUCLEUS VISION Token Crowdsale. Please check
                   <a target="_blank" href=
                   "https://nucleus.vision" rel=
                   "noopener" class=
@@ -2055,7 +2055,7 @@
       </div>
       <p align="center" class="mrt60">
         <a href="#" class="yellow-link">Privacy Policy</a><br />
-        © 2014 Nucleus Vision (formerly Bell Boi, Inc.)
+        © 2014 NUCLEUS VISION (formerly Bell Boi, Inc.)
       </p>
     </div><script src="js/plugins/jquery-3.2.1.min.js" type=
     "text/javascript">
