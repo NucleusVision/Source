@@ -1,11 +1,11 @@
 <?php 
-	$v = '?v=1.2.2';
+	$v = '?v=1.2.3';
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Nucleus Vision | Admin</title>
+    <title>NUCLEUS VISION | Admin</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">

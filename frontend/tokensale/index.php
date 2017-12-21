@@ -2027,13 +2027,13 @@
                   You’ve completed the registration process. You
                   will be able to check your status at <a target=
                   "_blank" href="/status" rel="noopener" class=
-                  "yellow-link">https://nucleus.vision/status</a>
+                  "yellow-link">HTTPS://NUCLEUS.VISION/STATUS</a>
                   to see if you’re approved to participate in the
                   NUCLEUS VISION Token Crowdsale. Please check
                   <a target="_blank" href=
                   "https://nucleus.vision" rel=
                   "noopener" class=
-                  "yellow-link">https://nucleus.vision</a>
+                  "yellow-link">HTTPS://NUCLEUS.VISION</a>
                   for further updates.
                 </h5>
               </div>
