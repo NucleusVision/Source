@@ -36,7 +36,7 @@ if(g_captcha_verify($ip, $captcha))
         
         if ($user_data !== false) {
 			
-            if($user_data['email_activated'] == 1){
+            //if($user_data['email_activated'] == 1){
                 $token = bin2hex(openssl_random_pseudo_bytes(16));
                 $created_at = date("Y-m-d H:i:s");
 
@@ -53,16 +53,16 @@ if(g_captcha_verify($ip, $captcha))
                 }	
                 
 
-            }else{
-                    $code = 400;
-                    $status = "Failed";
-                    $message = "Your email is not verified.Please check your email for activation link.";
-            }
+            //}else{
+                    //$code = 400;
+                    //$status = "Failed";
+                    //$message = "Your email is not verified.Please check your email for activation link.";
+            //}
 			
         } else {
                     $code = 400;
                     $status = "Failed";
-                    $message = "Your email need to be verified.Please visit http://tokensaleregistration.enterstargate.com to complete verification process.";
+                    $message = "Sorry. Email not found in whitelist signup list.";
         }
         
 		if($code != 400 || $code==""){
